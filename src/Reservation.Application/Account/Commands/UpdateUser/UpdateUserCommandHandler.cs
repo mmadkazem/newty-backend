@@ -1,0 +1,28 @@
+
+namespace Reservation.Application.Account.Commands.UpdateUser;
+
+public sealed class UpdateUserCommandHandler(IUnitOfWork uow) : IRequestHandler<UpdateUserCommandRequest>
+{
+    private readonly IUnitOfWork _uow = uow;
+
+    public async Task Handle(UpdateUserCommandRequest request, CancellationToken cancellationToken)
+    {
+        var user = await _uow.Users.FindAsync(request.Id, cancellationToken)
+            ?? throw new UserNotFoundException();
+
+        if (user.PhoneNumber != request.PhoneNumber && !await _uow.Users.AnyAsync(request.PhoneNumber, cancellationToken))
+        {
+            throw new PhonNumberAlreadyExistException();
+        }
+
+        var city = await _uow.Cities.FindAsyncByName(request.City, cancellationToken)
+            ?? throw new CityNotFoundException();
+
+        user.FullName = request.FullName;
+        user.PhoneNumber = request.PhoneNumber;
+        user.City = city;
+        user.ModifiedOn = DateTime.Now;
+
+        await _uow.SaveChangeAsync(cancellationToken);
+    }
+}
