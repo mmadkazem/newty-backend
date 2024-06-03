@@ -1,0 +1,9 @@
+@Reservation_HostAddress = http://localhost:5125/
+
+GET {{Reservation_HostAddress}}/api/Account/Register
+Accept: application/json
+{
+    "phoneNumber": "09386743145"
+}
+
+###
