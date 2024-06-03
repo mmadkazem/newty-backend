@@ -1,0 +1,46 @@
+namespace Reservation.Controllers.Categories;
+
+[ApiController]
+[Route("api/[controller]")]
+public class CategoriesController(ISender sender) : ControllerBase
+{
+    private readonly ISender _sender = sender;
+
+    [HttpPost]
+    // [Authorize("")]
+    public async Task<IActionResult> Post([FromBody] CreateCategoryCommandRequest request)
+    {
+        await _sender.Send(request);
+        return Ok();
+    }
+
+    [HttpPut("{Id:guid}")]
+    public async Task<IActionResult> Put([FromRoute] Guid Id,  UpdateCategoryDTO model)
+    {
+        var request = UpdateCategoryCommandRequest.Create(Id, model);
+        await _sender.Send(request);
+        return Ok();
+    }
+
+    [HttpGet("{Id:guid}/SubCategory")]
+    public async Task<IActionResult> Get([FromRoute] GetSubCategoryByCategoryIdQueryRequest request)
+    {
+        var result = await _sender.Send(request);
+        return Ok(result);
+    }
+
+    [HttpGet("{Id:guid}")]
+    public async Task<IActionResult> Get([FromRoute] GetCategoryQueryRequest request)
+    {
+        var result = await _sender.Send(request);
+        return Ok(result);
+    }
+
+    [HttpGet("{Page:int}")]
+    public async Task<IActionResult> Get([FromRoute] GetCategoriesQueryRequest request)
+    {
+        var results = await _sender.Send(request);
+        return Ok(results);
+    }
+
+}
