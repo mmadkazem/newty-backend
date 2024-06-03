@@ -23,7 +23,7 @@ public class CategoriesController(ISender sender) : ControllerBase
     }
 
     [HttpGet("{Id:guid}/SubCategory")]
-    public async Task<IActionResult> Get([FromRoute] GetSubCategoryByCategoryIdQueryRequest request)
+    public async Task<IActionResult> Get([FromRoute] GetSubCategoriesByCategoryIdQueryRequest request)
     {
         var result = await _sender.Send(request);
         return Ok(result);
