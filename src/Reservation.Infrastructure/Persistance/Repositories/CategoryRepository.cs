@@ -33,7 +33,7 @@ public class CategoryRepository(ReservationDbContext context) : ICategoryReposit
         => await _context.SubCategories.AsQueryable()
                                         .Where(c => c.Category.Id == id)
                                         .AsNoTracking()
-                                        .Select(c => new GetSubCategoryByCategoryIdQueryResponse
+                                        .Select(c => new GetSubCategoriesByCategoryIdQueryResponse
                                         (
                                             c.Id,
                                             c.Title,
