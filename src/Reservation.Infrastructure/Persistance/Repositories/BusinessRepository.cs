@@ -1,7 +1,10 @@
+using Reservation.Application.Posts.Queries.GetPost;
+using Reservation.Application.Posts.Queries.GetPosts;
+
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 
-public class BusinessRepository(ReservationDbContext context) : IBusinessRepository
+public sealed class BusinessRepository(ReservationDbContext context) : IBusinessRepository
 {
     private readonly ReservationDbContext _context = context;
 
@@ -11,6 +14,9 @@ public class BusinessRepository(ReservationDbContext context) : IBusinessReposit
     public void AddArtist(Artist artist)
         => _context.Artists.Add(artist);
 
+    public void AddPost(Post post)
+        => _context.Posts.Add(post);
+
     public void AddService(Service service)
         => _context.Services.Add(service);
 
@@ -18,10 +24,22 @@ public class BusinessRepository(ReservationDbContext context) : IBusinessReposit
         => await _context.Businesses.AsQueryable()
                                     .AnyAsync(b => b.PhoneNumber == phoneNumber, cancellationToken);
 
+    public async Task<bool> AnyAsync(Guid businessId, CancellationToken cancellationToken = default)
+        => await _context.Businesses.AsQueryable()
+                                    .AnyAsync(b => b.Id == businessId, cancellationToken);
+
+
     public async Task<bool> AnyAsyncArtist(string name, CancellationToken cancellationToken = default)
         => await _context.Artists.AsQueryable()
                                     .AnyAsync(b => b.Name == name, cancellationToken);
 
+    public async Task<bool> AnyAsyncArtist(Guid artistId, CancellationToken cancellationToken = default)
+        => await _context.Artists.AsQueryable()
+                                    .AnyAsync(b => b.Id == artistId, cancellationToken);
+
+    public async Task<bool> AnyAsyncPost(string title, CancellationToken cancellationToken)
+        => await _context.Posts.AsQueryable()
+                                .AnyAsync(b => b.Title == title, cancellationToken);
 
     public async Task<bool> AnyAsyncService(string name, CancellationToken cancellationToken = default)
         => await _context.Services.AsQueryable()
@@ -90,6 +108,34 @@ public class BusinessRepository(ReservationDbContext context) : IBusinessReposit
                                                                 s.Active
                                                             )).ToList()
                                     ).FirstOrDefaultAsync(cancellationToken);
+
+    public async Task<IResponse> GetPost(Guid id, CancellationToken cancellationToken)
+        => await _context.Posts.AsQueryable()
+                                .AsNoTracking()
+                                .Where(p => p.Id == id)
+                                .Select(p => new GetPostQueryResponse
+                                (
+                                    p.Id,
+                                    p.Title,
+                                    p.Description,
+                                    p.CoverImagePath
+                                ))
+                                .FirstOrDefaultAsync(cancellationToken);
+
+    public async Task<IEnumerable<IResponse>> GetPosts(int page, Guid businessId, CancellationToken cancellationToken)
+        => await _context.Posts.AsQueryable()
+                                .AsNoTracking()
+                                .Where(p => p.BusinessId == businessId)
+                                .Select(p => new GetPostsQueryResponse
+                                (
+                                    p.Id,
+                                    p.Title,
+                                    p.CoverImagePath
+                                ))
+                                .Skip((page - 1) * 25)
+                                .Take(25)
+                                .ToListAsync(cancellationToken);
+
     public async Task<IEnumerable<IResponse>> GetServiceByBusinessId(Guid businessId, CancellationToken cancellationToken)
         => await _context.Services.AsQueryable()
                                     .Where(c => c.BusinessId == businessId)

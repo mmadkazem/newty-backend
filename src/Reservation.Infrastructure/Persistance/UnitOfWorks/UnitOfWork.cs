@@ -8,13 +8,19 @@ public sealed class UnitOfWork : IUnitOfWork
         IUserRepository users,
         ICityRepository cities,
         IBusinessRepository businesses,
-        ICategoryRepository categories)
+        ICategoryRepository categories,
+        IReserveTimeRepository reserveTimes,
+        IBusinessRequestPayRepository businessRequestPays,
+        IUserRequestPayRepository userRequestPays)
     {
         _users = users;
         _context = context;
         _cities = cities;
         _businesses = businesses;
         _categories = categories;
+        _reserveTimes = reserveTimes;
+        _businessRequestPays = businessRequestPays;
+        _userRequestPays = userRequestPays;
     }
 
     private readonly IUserRepository _users;
@@ -28,6 +34,18 @@ public sealed class UnitOfWork : IUnitOfWork
 
     private readonly ICategoryRepository _categories;
     public ICategoryRepository Categories => _categories;
+
+    private readonly IReserveTimeRepository _reserveTimes;
+    public IReserveTimeRepository ReserveTimes =>
+        _reserveTimes;
+
+    private readonly IBusinessRequestPayRepository _businessRequestPays;
+    public IBusinessRequestPayRepository BusinessRequestPays
+        => _businessRequestPays;
+
+    private readonly IUserRequestPayRepository _userRequestPays;
+    public IUserRequestPayRepository UserRequestPays
+        => _userRequestPays;
 
     public async Task SaveChangeAsync(CancellationToken cancellationToken)
     {

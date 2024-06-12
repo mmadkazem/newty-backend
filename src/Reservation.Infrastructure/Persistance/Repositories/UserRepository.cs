@@ -14,6 +14,11 @@ public sealed class UserRepository(ReservationDbContext context) : IUserReposito
             .AsQueryable()
             .AnyAsync(u => u.PhoneNumber == phoneNumber, cancellationToken);
 
+    public async Task<bool> AnyAsync(Guid userId, CancellationToken cancellationToken = default)
+        => await _context.Users
+            .AsQueryable()
+            .AnyAsync(u => u.Id == userId, cancellationToken);
+
     public async Task<User> FindAsync(Guid id, CancellationToken cancellationToken = default)
         => await _context.Users.AsQueryable()
                                 .Where(u => u.Id == id)

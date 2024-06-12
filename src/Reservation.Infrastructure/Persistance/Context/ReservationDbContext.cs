@@ -1,5 +1,3 @@
-using Reservation.Domain.Entities.Wallets;
-
 namespace Reservation.Infrastructure.Persistance.Context;
 
 public sealed class ReservationDbContext : DbContext
@@ -23,7 +21,8 @@ public sealed class ReservationDbContext : DbContext
     public DbSet<SmsTemplate> SmsTemplates { get; set; }
 
     // Reserve
-    public DbSet<ReserveTime> ReserveTimes { get; set; }
+    public DbSet<ReserveTimeOut> ReserveTimesOut { get; set; }
+    public DbSet<ReserveTimeIn> ReserveTimesIn { get; set; }
     public DbSet<ReserveItem> ReserveItems { get; set; }
 
     // Category

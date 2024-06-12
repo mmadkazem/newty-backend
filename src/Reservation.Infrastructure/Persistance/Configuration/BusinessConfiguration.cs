@@ -12,5 +12,14 @@ public class BusinessConfiguration : IEntityTypeConfiguration<Business>
             .WithOne(s => s.Business)
             .HasForeignKey<SmsCredit>(s => s.BusinessId);
 
+        builder
+            .HasMany(b => b.ReserveTimesIn)
+            .WithOne(s => s.BusinessIn)
+            .HasForeignKey(s => s.BusinessInId);
+
+        builder
+            .HasMany(b => b.ReserveTimesOut)
+            .WithOne(s => s.Business)
+            .HasForeignKey(r => r.BusinessId);
     }
 }

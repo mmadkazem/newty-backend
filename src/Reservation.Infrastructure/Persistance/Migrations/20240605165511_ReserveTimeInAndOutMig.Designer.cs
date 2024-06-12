@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Reservation.Infrastructure.Persistance.Context;
@@ -11,9 +12,11 @@ using Reservation.Infrastructure.Persistance.Context;
 namespace Reservation.Infrastructure.Persistance.Migrations
 {
     [DbContext(typeof(ReservationDbContext))]
-    partial class ReservationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240605165511_ReserveTimeInAndOutMig")]
+    partial class ReserveTimeInAndOutMig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -603,7 +606,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                     b.ToTable("Points");
                 });
 
-            modelBuilder.Entity("Reservation.Domain.Entities.Reserve.ReserveItem", b =>
+            modelBuilder.Entity("Reservation.Domain.Entities.Reserve.ReserveItemIn", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -633,6 +636,48 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                     b.Property<Guid?>("ReserveTimeInId")
                         .HasColumnType("uuid");
 
+                    b.Property<Guid>("ServiceId")
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReserveTimeInId");
+
+                    b.HasIndex("ServiceId");
+
+                    b.ToTable("ReserveItemsIn");
+                });
+
+            modelBuilder.Entity("Reservation.Domain.Entities.Reserve.ReserveItemOut", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uuid");
+
+                    b.Property<DateTime>("CreatedOn")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("DeletedOn")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<DateTime>("EndDate")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<bool>("Finished")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<DateTime>("ModifiedOn")
+                        .HasColumnType("timestamp without time zone");
+
+                    b.Property<int>("Price")
+                        .HasColumnType("integer");
+
                     b.Property<Guid?>("ReserveTimeOutId")
                         .HasColumnType("uuid");
 
@@ -644,13 +689,11 @@ namespace Reservation.Infrastructure.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("ReserveTimeInId");
-
                     b.HasIndex("ReserveTimeOutId");
 
                     b.HasIndex("ServiceId");
 
-                    b.ToTable("ReserveItems");
+                    b.ToTable("ReserveItemsOut");
                 });
 
             modelBuilder.Entity("Reservation.Domain.Entities.Reserve.ReserveTimeIn", b =>
@@ -991,12 +1034,23 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Reservation.Domain.Entities.Reserve.ReserveItem", b =>
+            modelBuilder.Entity("Reservation.Domain.Entities.Reserve.ReserveItemIn", b =>
                 {
                     b.HasOne("Reservation.Domain.Entities.Reserve.ReserveTimeIn", null)
                         .WithMany("ReserveItems")
                         .HasForeignKey("ReserveTimeInId");
 
+                    b.HasOne("Reservation.Domain.Entities.Businesses.Service", "Service")
+                        .WithMany()
+                        .HasForeignKey("ServiceId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Service");
+                });
+
+            modelBuilder.Entity("Reservation.Domain.Entities.Reserve.ReserveItemOut", b =>
+                {
                     b.HasOne("Reservation.Domain.Entities.Reserve.ReserveTimeOut", null)
                         .WithMany("ReserveItems")
                         .HasForeignKey("ReserveTimeOutId");
