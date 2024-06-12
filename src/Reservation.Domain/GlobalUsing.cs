@@ -1,9 +1,10 @@
 global using Reservation.Domain.Entities.Businesses;
 global using Reservation.Domain.Entities.Categories;
+global using Reservation.Domain.Entities.Finances;
+global using Reservation.Domain.Entities.Wallets;
 global using Reservation.Domain.Entities.Account;
 global using Reservation.Domain.Entities.Reserve;
 global using Reservation.Domain.Entities.Cities;
 global using Reservation.Domain.Entities.Points;
 global using Reservation.Share.Abstract.Helper;
 global using Reservation.Domain.Repositories;
-global using Reservation.Domain.Entities.Wallets;

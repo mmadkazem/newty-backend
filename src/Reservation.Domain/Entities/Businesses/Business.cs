@@ -37,4 +37,8 @@ public class Business : BaseClass
 
     // Business Template
     public ICollection<SmsTemplate> SmsTemplates { get; set; }
+
+    // Business Reserve Time
+    public ICollection<ReserveTimeIn> ReserveTimesIn { get; set; }
+    public ICollection<ReserveTimeOut> ReserveTimesOut { get; set; }
 }

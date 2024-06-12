@@ -11,4 +11,7 @@ public class Service : BaseClass
     // Business Service
     public Business Business { get; set; }
     public Guid BusinessId { get; set; }
+
+    // Artist
+    public Artist Artist { get; set; }
 }
