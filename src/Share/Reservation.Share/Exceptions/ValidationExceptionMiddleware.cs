@@ -1,4 +1,4 @@
-namespace Liaro.Share.Exceptions;
+namespace Reservation.Share.Exceptions;
 
 public sealed class ValidationsExceptionMiddleware : IMiddleware
 {
