@@ -8,8 +8,14 @@ public class Business : BaseClass
     public string CoverImagePath { get; set; }
     public string ParvaneKasbImagePath { get; set; }
     public string Address { get; set; }
+    public double Average { get; set; }
     public bool Active { get; set; } = true;
     public string PhoneNumber { get; set; }
+    public DateTime StartHoursOfWor { get; set; }
+    public DateTime EndHoursOfWor { get; set; }
+
+    // Business Wallet
+    public Wallet Wallet { get; set; }
 
     // User VIP and Normal User
     public ICollection<UserVIP> UsersVIP { get; set; }
@@ -39,6 +45,9 @@ public class Business : BaseClass
     public ICollection<SmsTemplate> SmsTemplates { get; set; }
 
     // Business Reserve Time
-    public ICollection<ReserveTimeIn> ReserveTimesIn { get; set; }
-    public ICollection<ReserveTimeOut> ReserveTimesOut { get; set; }
+    public ICollection<ReserveTimeSender> ReserveTimesSender { get; set; }
+    public ICollection<ReserveTimeReceipt> ReserveTimesReceipt { get; set; }
+
+    // Business Wallet
+    
 }
