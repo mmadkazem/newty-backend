@@ -6,5 +6,5 @@ public record GetSubCategoryByIdQueryResponse
     string Title,
     string Description,
     string CoverImagePath,
-    int AveragePoint
+    double AveragePoint
 ) : IResponse;

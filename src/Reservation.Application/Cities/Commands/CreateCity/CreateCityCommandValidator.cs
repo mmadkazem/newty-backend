@@ -1,5 +1,3 @@
-
-
 namespace Reservation.Application.Cities.Commands.CreateCity;
 
 public class CreateCityCommandValidator : AbstractValidator<CreateCityCommandRequest>

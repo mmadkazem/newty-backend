@@ -1,6 +1,3 @@
-
-using Reservation.Domain.Entities.Categories;
-
 namespace Reservation.Application.Categories.Commands.CreateCategory;
 
 

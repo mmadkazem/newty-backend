@@ -3,5 +3,5 @@ namespace Reservation.Application.Categories.Queries.GetCategories;
 public record GetCategoriesQueryResponse
 (
     Guid Id, string Title, string Description,
-    string CoverImagePath, int AveragePoint
+    string CoverImagePath, double AveragePoint
 ) : IResponse;
