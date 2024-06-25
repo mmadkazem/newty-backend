@@ -11,7 +11,13 @@ public sealed class UnitOfWork : IUnitOfWork
         ICategoryRepository categories,
         IReserveTimeRepository reserveTimes,
         IBusinessRequestPayRepository businessRequestPays,
-        IUserRequestPayRepository userRequestPays)
+        IUserRequestPayRepository userRequestPays,
+        IWalletRepository wallets,
+        IServiceRepository services,
+        IArtistRepository artists,
+        IPostRepository posts,
+        ISmsCreditRepository smsCredits,
+        ISmsTemplateRepository smsTemplates)
     {
         _users = users;
         _context = context;
@@ -21,6 +27,12 @@ public sealed class UnitOfWork : IUnitOfWork
         _reserveTimes = reserveTimes;
         _businessRequestPays = businessRequestPays;
         _userRequestPays = userRequestPays;
+        _wallets = wallets;
+        _services = services;
+        _artists = artists;
+        _posts = posts;
+        _smsCredits = smsCredits;
+        _smsTemplates = smsTemplates;
     }
 
     private readonly IUserRepository _users;
@@ -47,8 +59,32 @@ public sealed class UnitOfWork : IUnitOfWork
     public IUserRequestPayRepository UserRequestPays
         => _userRequestPays;
 
+    private readonly IWalletRepository _wallets;
+    public IWalletRepository Wallets
+        => _wallets;
+
+    private readonly IServiceRepository _services;
+    public IServiceRepository Services
+        => _services;
+
+    private readonly IArtistRepository _artists;
+    public IArtistRepository Artists
+        => _artists;
+
+    private readonly IPostRepository _posts;
+    public IPostRepository Posts
+        => _posts;
+
+    private readonly ISmsCreditRepository _smsCredits;
+    public ISmsCreditRepository SmsCredits
+        => _smsCredits;
+
+    private readonly ISmsTemplateRepository _smsTemplates;
+    public ISmsTemplateRepository SmsTemplates
+        => _smsTemplates;
+
     public async Task SaveChangeAsync(CancellationToken cancellationToken)
-    {
-        await _context.SaveChangesAsync(cancellationToken);
-    }
+        => await _context.SaveChangesAsync(cancellationToken);
+
+
 }

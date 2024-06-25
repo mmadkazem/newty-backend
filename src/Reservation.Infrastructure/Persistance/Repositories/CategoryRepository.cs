@@ -1,3 +1,4 @@
+
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 
@@ -24,10 +25,21 @@ public class CategoryRepository(ReservationDbContext context) : ICategoryReposit
                                     .Where(c => c.Id == Id)
                                     .FirstOrDefaultAsync(cancellationToken);
 
+    public async Task<Category> FindAsyncByIncludePoints(Guid categoryId, CancellationToken cancellationToken)
+        => await _context.Categories.AsQueryable()
+                                    .Include(c => c.Points)
+                                    .Where(c => c.Id == categoryId)
+                                    .FirstOrDefaultAsync(cancellationToken);
     public async Task<SubCategory> FindAsyncSubCategory(Guid Id, CancellationToken cancellationToken = default)
         => await _context.SubCategories.AsQueryable()
                                         .Where(c => c.Id == Id)
                                         .FirstOrDefaultAsync(cancellationToken);
+
+    public async Task<SubCategory> FindAsyncSubCategoryByIncludePoints(Guid categoryId, CancellationToken cancellationToken)
+        => await _context.SubCategories.AsQueryable()
+                                    .Include(c => c.Points)
+                                    .Where(c => c.Id == categoryId)
+                                    .FirstOrDefaultAsync(cancellationToken);
 
     public async Task<IEnumerable<IResponse>> Get(Guid id, CancellationToken cancellationToken = default)
         => await _context.SubCategories.AsQueryable()
@@ -42,6 +54,12 @@ public class CategoryRepository(ReservationDbContext context) : ICategoryReposit
                                             c.AveragePoint
                                         ))
                                         .ToListAsync(cancellationToken);
+
+    public async Task<double> GetAveragePoints(Guid categoryId, CancellationToken cancellationToken)
+        => await _context.Categories.AsQueryable()
+                                .Where(a => a.Id == categoryId)
+                                .Select(a => a.Points.Average(p => p.Rate))
+                                .FirstOrDefaultAsync(cancellationToken);
 
     public async Task<IEnumerable<IResponse>> GetCategories(int page, CancellationToken cancellationToken = default)
         => await _context.Categories.AsQueryable()
@@ -99,6 +117,12 @@ public class CategoryRepository(ReservationDbContext context) : ICategoryReposit
                                             c.AveragePoint
                                         ))
                                         .FirstOrDefaultAsync(cancellationToken);
+
+    public async Task<double> GetSubCategoryAveragePoints(Guid categoryId, CancellationToken cancellationToken)
+        => await _context.SubCategories.AsQueryable()
+                                .Where(a => a.Id == categoryId)
+                                .Select(a => a.Points.Average(p => p.Rate))
+                                .FirstOrDefaultAsync(cancellationToken);
 
     public async Task<IEnumerable<IResponse>> Top3(CancellationToken cancellationToken = default)
         => await _context.Categories.AsQueryable()
