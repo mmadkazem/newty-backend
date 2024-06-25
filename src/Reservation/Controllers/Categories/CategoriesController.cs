@@ -2,7 +2,7 @@ namespace Reservation.Controllers.Categories;
 
 [ApiController]
 [Route("api/[controller]")]
-public class CategoriesController(ISender sender) : ControllerBase
+public sealed class CategoriesController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;
 
@@ -10,6 +10,16 @@ public class CategoriesController(ISender sender) : ControllerBase
     // [Authorize("")]
     public async Task<IActionResult> Post([FromBody] CreateCategoryCommandRequest request)
     {
+        await _sender.Send(request);
+        return Ok();
+    }
+
+    [HttpPost("Points")]
+    [Authorize(AuthenticationSchemes = AuthScheme.UserScheme)]
+    [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
+    public async Task<IActionResult> Post([FromBody] AddCategoryPointDTO model)
+    {
+        var request = AddCategoryPointCommandRequest.Create(User.UserId(), model);
         await _sender.Send(request);
         return Ok();
     }

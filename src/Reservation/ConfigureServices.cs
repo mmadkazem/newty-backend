@@ -1,10 +1,3 @@
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
-using Microsoft.OpenApi.Models;
-using Reservation.Common;
-using Reservation.Infrastructure.ExternalServices.Jwt;
-
 namespace Reservation;
 
 

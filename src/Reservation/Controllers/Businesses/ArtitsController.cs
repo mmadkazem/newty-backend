@@ -15,6 +15,16 @@ public sealed class ArtistsController(ISender sender) : ControllerBase
         return Ok();
     }
 
+    [HttpPost("Points")]
+    [Authorize(AuthenticationSchemes = AuthScheme.UserScheme)]
+    [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
+    public async Task<IActionResult> Post([FromBody] AddArtistPointDTO model)
+    {
+        var request = AddArtistPointCommandRequest.Create(User.UserId(), model);
+        await _sender.Send(request);
+        return Ok();
+    }
+
     [HttpPost("{artistId:guid}/Services/{serviceId:guid}")]
     public async Task<IActionResult> Post(Guid artistId, Guid serviceId)
     {
@@ -38,7 +48,7 @@ public sealed class ArtistsController(ISender sender) : ControllerBase
         return Ok(results);
     }
 
-    [HttpGet("Business/{BusinessId:guid}")]
+    [HttpGet("Businesses/{BusinessId:guid}")]
     [AllowAnonymous]
     public async Task<IActionResult> GetArtistByBusinessId([FromRoute] GetArtistByBusinessIdQueryRequest request)
     {

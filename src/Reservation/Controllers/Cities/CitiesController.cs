@@ -1,13 +1,9 @@
-using Reservation.Application.Cities.Commands.CreateCity;
-using Reservation.Application.Cities.Commands.UpdateCity;
-using Reservation.Application.Cities.Queries.GetCities;
-
 namespace Reservation.Controllers.Cities;
 
 
 [ApiController]
 [Route("api/[controller]")]
-public class CitiesController(ISender sender) : ControllerBase
+public sealed class CitiesController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;
 

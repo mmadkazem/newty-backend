@@ -1,5 +1,3 @@
-using Reservation.Application;
-
 var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
@@ -26,6 +24,8 @@ var app = builder.Build();
 
     app.UseHttpsRedirection();
     app.UseShared();
+    app.UseAuthentication();
+    app.UseAuthorization();
     app.MapControllers();
     app.Run();
 }

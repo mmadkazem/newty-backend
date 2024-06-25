@@ -2,3 +2,6 @@
 
 # IDE0022: Use block body for method
 csharp_style_expression_bodied_methods = false
+
+# CA1711: Identifiers should not have incorrect suffix
+dotnet_diagnostic.CA1711.severity = none

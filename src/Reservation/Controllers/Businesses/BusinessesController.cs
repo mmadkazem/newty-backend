@@ -13,9 +13,20 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
         return Ok();
     }
 
-    [HttpGet("{Page:int}/Key/{Key}")]
-    public async Task<IActionResult> Search([FromQuery] SearchBusinessRequest request)
+    [HttpPost("Points")]
+    [Authorize(AuthenticationSchemes = AuthScheme.UserScheme)]
+    [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
+    public async Task<IActionResult> Post([FromBody] AddBusinessPointDTO model)
     {
+        var request = AddBusinessPointCommandRequest.Create(User.UserId(), model);
+        await _sender.Send(request);
+        return Ok();
+    }
+
+    [HttpGet("{page:int}/Key/{key}")]
+    public async Task<IActionResult> Search(int page, string key)
+    {
+        var request = SearchBusinessRequest.Create(page, key);
         var results = await _sender.Send(request);
         return Ok(results);
     }

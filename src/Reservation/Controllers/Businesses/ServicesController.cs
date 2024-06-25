@@ -2,12 +2,12 @@ namespace Reservation.Controllers.Businesses;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
 public sealed class ServicesController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;
 
     [HttpPost]
-    [Authorize(AuthScheme.BusinessScheme)]
     public async Task<IActionResult> Post([FromBody] CreateServiceDTO model)
     {
         var request = CreateServiceCommandRequest.Create(User.UserId(), model);
@@ -15,7 +15,7 @@ public sealed class ServicesController(ISender sender) : ControllerBase
         return Ok();
     }
 
-    [HttpGet("{BusinessId:guid}")]
+    [HttpGet("Businesses/{BusinessId:guid}/Page/{Page:int}")]
     [AllowAnonymous]
     public async Task<IActionResult> GetByBusinessId([FromRoute] GetServicesByBusinessIdQueryRequest request)
     {
@@ -24,7 +24,6 @@ public sealed class ServicesController(ISender sender) : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
-    [Authorize(AuthScheme.BusinessScheme)]
     public async Task<IActionResult> Put(Guid id, [FromBody] UpdateServiceDTO model)
     {
         var request = UpdateServiceCommandRequest.Create(id, model);

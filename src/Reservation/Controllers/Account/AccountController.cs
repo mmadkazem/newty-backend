@@ -49,19 +49,4 @@ public sealed class AccountController(ISender sender) : ControllerBase
         await _sender.Send(request);
         return Ok();
     }
-
-    [HttpGet]
-    [Authorize(AuthenticationSchemes = AuthScheme.UserScheme)]
-    [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
-    public IActionResult GetInformation()
-    {
-
-        return Ok(new
-        {
-            Id = User.UserId(),
-            Name = User.UserName(),
-            Role = User.Roles(),
-            PhoneNumber = User.UserPhoneNumber()
-        });
-    }
 }
