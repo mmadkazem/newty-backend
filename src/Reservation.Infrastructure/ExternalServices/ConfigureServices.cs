@@ -1,6 +1,3 @@
-using Reservation.Infrastructure.ExternalServices.Jwt;
-using Reservation.Infrastructure.ExternalServices.SmsProvider;
-
 namespace Reservation.Infrastructure.ExternalServices;
 
 public static class ConfigureServices
@@ -10,8 +7,8 @@ public static class ConfigureServices
         // DI Services
         services.AddScoped<ITempTokenValidatorService, TempTokenValidatorService>();
         services.AddTransient<ITokenFactoryService, TokenFactoryService>();
+        services.AddTransient<IUploadImageProvider, UploadImageProvider>();
         services.AddTransient<ISmsProvider, KavenegarProvider>();
-
         // DI Options
         services.AddOptions<TempTokenOption>()
                 .Bind(configuration.GetSection("TempToken"));

@@ -23,15 +23,15 @@ public sealed class TokenFactoryService : ITokenFactoryService
         var claims = new List<Claim>
         {
             // Add Role (Business or User or Admin)
-            new Claim(ClaimTypes.Role, role, ClaimValueTypes.String, _optionTemp.Value.Issuer),
+            new(ClaimTypes.Role, role, ClaimValueTypes.String, _optionTemp.Value.Issuer),
             // Issuer
-            new Claim(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Iss, _optionTemp.Value.Issuer, ClaimValueTypes.String, _optionTemp.Value.Issuer),
+            new(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Iss, _optionTemp.Value.Issuer, ClaimValueTypes.String, _optionTemp.Value.Issuer),
             // Issued at
-            new Claim(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64, _optionTemp.Value.Issuer),
+            new(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64, _optionTemp.Value.Issuer),
             // Serial Number at
-            new Claim(ClaimTypes.SerialNumber, code, "Code", _optionTemp.Value.Issuer),
+            new(ClaimTypes.SerialNumber, code, "Code", _optionTemp.Value.Issuer),
             // custom data
-            new Claim(ClaimTypes.UserData, phoneNumber, "PhoneNumber", _optionTemp.Value.Issuer)
+            new(ClaimTypes.UserData, phoneNumber, "PhoneNumber", _optionTemp.Value.Issuer)
         };
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_optionTemp.Value.Key));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -56,28 +56,28 @@ public sealed class TokenFactoryService : ITokenFactoryService
         return new(accessToken, refreshToken);
     }
     public JwtTokensData CreateBusinessToken(Business business)
-        {
-            var accessToken = createBusinessAccessToken(business);
-            var refreshToken = createRefreshToken(business.Id, Role.Business);
-            return new(accessToken, refreshToken);
-        }
+    {
+        var accessToken = createBusinessAccessToken(business);
+        var refreshToken = createRefreshToken(business.Id, Role.Business);
+        return new(accessToken, refreshToken);
+    }
 
     private string createRefreshToken(Guid id, string role)
     {
         var claims = new List<Claim>
         {
             // Unique Id for all Jwt tokes
-            new Claim(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Jti, StringUtils.CreateCryptographicallySecureGuid(), ClaimValueTypes.String, _optionsRefresh.Value.Issuer),
+            new(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Jti, StringUtils.CreateCryptographicallySecureGuid(), ClaimValueTypes.String, _optionsRefresh.Value.Issuer),
             // Issuer
-            new Claim(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Iss, _optionsRefresh.Value.Issuer, ClaimValueTypes.String, _optionsRefresh.Value.Issuer),
+            new(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Iss, _optionsRefresh.Value.Issuer, ClaimValueTypes.String, _optionsRefresh.Value.Issuer),
             // Issued at
-            new Claim(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64, _optionsRefresh.Value.Issuer),
+            new(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64, _optionsRefresh.Value.Issuer),
             // for invalidation
-            new Claim(ClaimTypes.SerialNumber, StringUtils.CreateCryptographicallySecureGuid(), ClaimValueTypes.String, _optionsRefresh.Value.Issuer),
+            new(ClaimTypes.SerialNumber, StringUtils.CreateCryptographicallySecureGuid(), ClaimValueTypes.String, _optionsRefresh.Value.Issuer),
             // custom data
-            new Claim(ClaimTypes.NameIdentifier, id.ToString(), ClaimValueTypes.String, _optionsRefresh.Value.Issuer),
+            new(ClaimTypes.NameIdentifier, id.ToString(), ClaimValueTypes.String, _optionsRefresh.Value.Issuer),
             // add roles
-            new Claim(ClaimTypes.Role, role, ClaimValueTypes.String, _optionsRefresh.Value.Issuer)
+            new(ClaimTypes.Role, role, ClaimValueTypes.String, _optionsRefresh.Value.Issuer)
         };
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_optionsRefresh.Value.Key));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
@@ -96,17 +96,16 @@ public sealed class TokenFactoryService : ITokenFactoryService
         var claims = new List<Claim>
         {
             // Unique Id for all Jwt tokes
-            new Claim(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Jti, StringUtils.CreateCryptographicallySecureGuid(), ClaimValueTypes.String, _optionUser.Value.Issuer),
+            new(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Jti, StringUtils.CreateCryptographicallySecureGuid(), ClaimValueTypes.String, _optionUser.Value.Issuer),
             // Issuer
-            new Claim(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Iss, _optionUser.Value.Issuer, ClaimValueTypes.String, _optionUser.Value.Issuer),
+            new(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Iss, _optionUser.Value.Issuer, ClaimValueTypes.String, _optionUser.Value.Issuer),
             // Issued at
-            new Claim(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64, _optionUser.Value.Issuer),
-            new Claim(ClaimTypes.NameIdentifier, user.Id.ToString(), ClaimValueTypes.String, _optionUser.Value.Issuer),
+            new(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64, _optionUser.Value.Issuer),
+            new(ClaimTypes.NameIdentifier, user.Id.ToString(), ClaimValueTypes.String, _optionUser.Value.Issuer),
             // custom data
-            new Claim(ClaimTypes.Name, user.FullName, ClaimValueTypes.String, _optionUser.Value.Issuer),
-            new Claim(ClaimTypes.UserData, user.PhoneNumber, ClaimValueTypes.String, _optionUser.Value.Issuer),
+            new(ClaimTypes.UserData, user.PhoneNumber, ClaimValueTypes.String, _optionUser.Value.Issuer),
             // add roles
-            new Claim(ClaimTypes.Role, Role.User, ClaimValueTypes.String, _optionUser.Value.Issuer)
+            new(ClaimTypes.Role, Role.User, ClaimValueTypes.String, _optionUser.Value.Issuer)
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_optionUser.Value.Key));
@@ -127,17 +126,16 @@ public sealed class TokenFactoryService : ITokenFactoryService
         var claims = new List<Claim>
         {
             // Unique Id for all Jwt tokes
-            new Claim(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Jti, StringUtils.CreateCryptographicallySecureGuid(), ClaimValueTypes.String, _optionBusiness.Value.Issuer),
+            new(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Jti, StringUtils.CreateCryptographicallySecureGuid(), ClaimValueTypes.String, _optionBusiness.Value.Issuer),
             // Issuer
-            new Claim(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Iss, _optionBusiness.Value.Issuer, ClaimValueTypes.String, _optionBusiness.Value.Issuer),
+            new(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Iss, _optionBusiness.Value.Issuer, ClaimValueTypes.String, _optionBusiness.Value.Issuer),
             // Issued at
-            new Claim(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64, _optionBusiness.Value.Issuer),
-            new Claim(ClaimTypes.NameIdentifier, business.Id.ToString(), ClaimValueTypes.String, _optionBusiness.Value.Issuer),
+            new(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64, _optionBusiness.Value.Issuer),
+            new(ClaimTypes.NameIdentifier, business.Id.ToString(), ClaimValueTypes.String, _optionBusiness.Value.Issuer),
             // custom data
-            new Claim(ClaimTypes.Name, business.Name, ClaimValueTypes.String, _optionBusiness.Value.Issuer),
-            new Claim(ClaimTypes.UserData, business.PhoneNumber, ClaimValueTypes.String, _optionBusiness.Value.Issuer),
+            new(ClaimTypes.UserData, business.PhoneNumber, ClaimValueTypes.String, _optionBusiness.Value.Issuer),
             // add roles
-            new Claim(ClaimTypes.Role, Role.Business, ClaimValueTypes.String, _optionBusiness.Value.Issuer)
+            new(ClaimTypes.Role, Role.Business, ClaimValueTypes.String, _optionBusiness.Value.Issuer)
         };
 
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_optionBusiness.Value.Key));

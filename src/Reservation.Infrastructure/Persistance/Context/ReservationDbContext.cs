@@ -20,26 +20,26 @@ public sealed class ReservationDbContext : DbContext
     public DbSet<SmsCredit> SmsCredits { get; set; }
     public DbSet<SmsTemplate> SmsTemplates { get; set; }
 
-    // Reserve
-    public DbSet<ReserveTimeOut> ReserveTimesOut { get; set; }
-    public DbSet<ReserveTimeIn> ReserveTimesIn { get; set; }
+    // // Reserve
+    public DbSet<ReserveTimeReceipt> ReserveTimesReceipt { get; set; }
+    public DbSet<ReserveTimeSender> ReserveTimesSender { get; set; }
     public DbSet<ReserveItem> ReserveItems { get; set; }
 
-    // Category
+    // // Category
     public DbSet<Category> Categories { get; set; }
     public DbSet<SubCategory> SubCategories { get; set; }
 
-    // Point
+    // // Point
     public DbSet<Point> Points { get; set; }
 
-    // City
+    // // City
     public DbSet<City> Cities { get; set; }
 
-    // Finance
+    // // Finance
     public DbSet<BusinessRequestPay> BusinessRequestPays { get; set; }
     public DbSet<UserRequestPay> UserRequestPays { get; set; }
 
-    // Wallet
+    // // Wallet
     public DbSet<Wallet> Wallets { get; set; }
     public DbSet<Transaction> Transactions { get; set; }
 
