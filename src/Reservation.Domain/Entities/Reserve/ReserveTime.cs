@@ -1,7 +1,7 @@
 namespace Reservation.Domain.Entities.Reserve;
 
 
-public class ReserveTimeOut : BaseClass
+public class ReserveTimeReceipt : BaseClass
 {
     public DateTime TotalStartDate { get; set; }
     public DateTime TotalEndDate { get; set; }
@@ -21,7 +21,7 @@ public class ReserveTimeOut : BaseClass
     public ICollection<ReserveItem> ReserveItems { get; set; }
 }
 
-public class ReserveTimeIn : BaseClass
+public class ReserveTimeSender : BaseClass
 {
     public DateTime TotalStartDate { get; set; }
     public DateTime TotalEndDate { get; set; }
@@ -30,12 +30,12 @@ public class ReserveTimeIn : BaseClass
     public bool Finished { get; set; } = false;
 
     // Business Reserve Time In
-    public Business BusinessIn { get; set; }
-    public Guid BusinessInId { get; set; }
+    public Business BusinessSender { get; set; }
+    public Guid BusinessSenderId { get; set; }
 
     // Business Reserve Time Out
-    public Business BusinessOut { get; set; }
-    public Guid BusinessOutId { get; set; }
+    public Business BusinessReceipt { get; set; }
+    public Guid BusinessReceiptId { get; set; }
 
     // Reserve Item
     public ICollection<ReserveItem> ReserveItems { get; set; }
