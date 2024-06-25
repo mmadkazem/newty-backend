@@ -3,11 +3,11 @@ namespace Reservation.Domain.Entities.Finances;
 
 public class BusinessRequestPay : BaseClass
 {
-    public int Price { get; set; }
+    public int Amount { get; set; }
     public bool IsPay { get; set; } = false;
     public DateTime PayDate { get; set; }
     public string Authorizy { get; set; } = null!;
-    public int? RefId { get; set; } = null!;
+    public int RefId { get; set; }
 
     // Request Pay Business
     public Business Business { get; set; }
