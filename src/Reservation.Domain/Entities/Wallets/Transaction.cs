@@ -2,12 +2,21 @@ namespace Reservation.Domain.Entities.Wallets;
 
 public class Transaction : BaseClass
 {
-    public int Amount { get; set; }
-    public string Description { get; set; } = null!;
+    public decimal Amount { get; set; }
+    public TransactionType Type { get; set; }
 
     // Wallet Transaction
     public Wallet Wallet { get; set; }
+    public Guid WalletId { get; set; }
 
     // Transaction for Reserve Time
-    public ReserveTimeOut ReserveTime { get; set; }
+    public ReserveTimeReceipt ReserveTime { get; set; }
+}
+
+public enum TransactionType
+{
+    Withdraw = 0,
+    Charge = 1,
+    ReserveTimeSender = 2,
+    ReserveTimeReceipt = 3
 }
