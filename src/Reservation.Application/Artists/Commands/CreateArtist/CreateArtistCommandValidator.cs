@@ -22,5 +22,5 @@ public sealed class CreateArtistCommandValidator : AbstractValidator<CreateArtis
     }
 
     private async Task<bool> ArtistNameAlreadyExist(string name, CancellationToken cancellationToken)
-        => !await _uow.Businesses.AnyAsyncArtist(name, cancellationToken);
+        => !await _uow.Artists.AnyAsync(name, cancellationToken);
 }

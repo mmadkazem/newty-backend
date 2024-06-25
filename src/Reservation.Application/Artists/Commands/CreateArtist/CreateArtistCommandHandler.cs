@@ -9,15 +9,25 @@ public sealed class CreateArtistCommandHandler(IUnitOfWork uow) : IRequestHandle
         var business = await _uow.Businesses.FindAsync(request.BusinessId, cancellationToken)
             ?? throw new BusinessesNotFoundException();
 
+        List<Service> services = [];
+        foreach (var serviceId in request.Services)
+        {
+            var service = await _uow.Services.FindAsync(serviceId, cancellationToken)
+            ?? throw new ServiceNotFoundException();
+
+            services.Add(service);
+        }
+
         Artist artist = new()
         {
             Name = request.Name,
             CoverImagePath = request.CoverImagePath,
             Description = request.Description,
-            Business = business
+            Business = business,
+            Services = services
         };
 
-        _uow.Businesses.AddArtist(artist);
+        _uow.Artists.Add(artist);
         await _uow.SaveChangeAsync(cancellationToken);
     }
 }
