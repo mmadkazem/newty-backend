@@ -11,7 +11,6 @@ public class User : BaseClass
 
     // User Wallet
     public Wallet Wallet { get; set; }
-    public Guid WalletId { get; set; }
 
     // Business
     public ICollection<Business> Businesses { get; set; }
