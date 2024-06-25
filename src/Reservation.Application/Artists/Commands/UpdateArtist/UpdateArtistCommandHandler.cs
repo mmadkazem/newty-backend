@@ -7,9 +7,9 @@ public sealed class UpdateArtistCommandHandler(IUnitOfWork uow) : IRequestHandle
 
     public async Task Handle(UpdateArtistCommandRequest request, CancellationToken cancellationToken)
     {
-        var artist = await _uow.Businesses.FindAsyncArtist(request.Id, cancellationToken)
+        var artist = await _uow.Artists.FindAsync(request.Id, cancellationToken)
             ?? throw new ArtistNotFoundException();
-        if (artist.Name != request.Name && !await _uow.Businesses.AnyAsyncArtist(request.Name, cancellationToken))
+        if (artist.Name != request.Name && !await _uow.Artists.AnyAsync(request.Name, cancellationToken))
         {
             throw new ArtistNameAlreadyExistException();
         }

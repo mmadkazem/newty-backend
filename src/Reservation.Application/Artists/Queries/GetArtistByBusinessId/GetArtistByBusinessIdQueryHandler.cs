@@ -6,7 +6,7 @@ public sealed class GetArtistByBusinessIdQueryHandler(IUnitOfWork uow) : IReques
 
     public async Task<IEnumerable<IResponse>> Handle(GetArtistByBusinessIdQueryRequest request, CancellationToken cancellationToken)
     {
-        var artists = await _uow.Businesses.GetArtistByBusinessId(request.BusinessId, cancellationToken);
+        var artists = await _uow.Artists.GetArtistByBusinessId(request.BusinessId, cancellationToken);
         if (!artists.Any())
         {
             throw new ArtistNotFoundException();

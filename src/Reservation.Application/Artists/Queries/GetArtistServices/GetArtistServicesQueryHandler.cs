@@ -7,7 +7,7 @@ public sealed class GetArtistServicesQueryHandler(IUnitOfWork uow) : IRequestHan
 
     public async Task<IEnumerable<IResponse>> Handle(GetArtistServicesQueryRequest request, CancellationToken cancellationToken)
     {
-        var services = await _uow.Businesses.GetArtistServices(request.ArtistId, cancellationToken); 
+        var services = await _uow.Services.GetArtistServices(request.ArtistId, cancellationToken); 
         if (!services.Any())
         {
             throw new ServiceNotFoundException();
