@@ -8,9 +8,9 @@ public sealed class ReserveTimesReceiptController(ISender sender) : ControllerBa
 
     [HttpPost]
     [Authorize(AuthenticationSchemes = AuthScheme.UserScheme)]
-    public async Task<IActionResult> Post([FromBody] CreateReserveTimeDTO model)
+    public async Task<IActionResult> Post([FromBody] CreateReserveTimeReceiptDTO model)
     {
-        var request = CreateReserveTimeCommandRequest.Create(User.UserId(), model);
+        var request = CreateReserveTimeReceiptCommandRequest.Create(User.UserId(), model);
         await _sender.Send(request);
         return Ok();
     }
@@ -18,9 +18,9 @@ public sealed class ReserveTimesReceiptController(ISender sender) : ControllerBa
     [HttpPut("{id:guid}")]
     [Authorize(AuthenticationSchemes = AuthScheme.UserScheme)]
     [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
-    public async Task<IActionResult> Put(Guid id, [FromBody] UpdateStateReserveTimeDTO model)
+    public async Task<IActionResult> Put(Guid id, [FromBody] UpdateStateReserveTimeReceiptDTO model)
     {
-        var request = UpdateStateReserveTimeCommandRequest.Create(id, model);
+        var request = UpdateStateReserveTimeReceiptCommandRequest.Create(id, model);
         await _sender.Send(request);
         return Ok();
     }
@@ -29,7 +29,7 @@ public sealed class ReserveTimesReceiptController(ISender sender) : ControllerBa
     [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
     public async Task<IActionResult> GetBusinessReserveTime(int page, bool finished)
     {
-        var request = GetBusinessReserveTimeQueryRequest.Create(page, User.UserId(), finished);
+        var request = GetBusinessReserveTimeReceiptQueryRequest.Create(page, User.UserId(), finished);
         var results = await _sender.Send(request);
         return Ok(results);
     }
@@ -55,7 +55,7 @@ public sealed class ReserveTimesReceiptController(ISender sender) : ControllerBa
     [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
     public async Task<IActionResult> GetBusinessReserveTimeByState(int page, ReserveState state)
     {
-        var request = GetBusinessReserveTimeByStateQueryRequest.Create(page, state, User.UserId());
+        var request = GetBusinessReserveTimeByStateReceiptQueryRequest.Create(page, state, User.UserId());
         var results = await _sender.Send(request);
         return Ok(results);
     }
