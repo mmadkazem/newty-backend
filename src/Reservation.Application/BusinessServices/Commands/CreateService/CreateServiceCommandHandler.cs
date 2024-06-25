@@ -17,7 +17,7 @@ public sealed class CreateServiceCommandHandler(IUnitOfWork uow) : IRequestHandl
             Business = business
         };
 
-        _uow.Businesses.AddService(service);
+        _uow.Services.Add(service);
         await _uow.SaveChangeAsync(cancellationToken);
 
     }

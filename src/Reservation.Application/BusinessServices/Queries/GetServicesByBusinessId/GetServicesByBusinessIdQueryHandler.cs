@@ -6,7 +6,7 @@ public sealed class GetServicesByBusinessIdQueryHandler(IUnitOfWork uow) : IRequ
 
     public async Task<IEnumerable<IResponse>> Handle(GetServicesByBusinessIdQueryRequest request, CancellationToken cancellationToken)
     {
-        var services = await _uow.Businesses.GetServiceByBusinessId(request.BusinessId, cancellationToken);
+        var services = await _uow.Services.GetServiceByBusinessId(request.Page, request.BusinessId, cancellationToken);
 
         if (!services.Any())
         {

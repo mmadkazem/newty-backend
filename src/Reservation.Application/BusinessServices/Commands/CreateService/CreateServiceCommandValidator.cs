@@ -26,5 +26,5 @@ public sealed class CreateServiceCommandValidator : AbstractValidator<CreateServ
         => time.Minute > 5
         && time.Hour < 10;
     private async Task<bool> AlreadyExistServiceName(string name, CancellationToken cancellationToken)
-        => !await _uow.Businesses.AnyAsyncService(name, cancellationToken);
+        => !await _uow.Services.AnyAsync(name, cancellationToken);
 }
