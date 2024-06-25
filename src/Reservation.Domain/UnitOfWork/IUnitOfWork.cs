@@ -9,5 +9,11 @@ public interface IUnitOfWork
     IReserveTimeRepository ReserveTimes { get; }
     IBusinessRequestPayRepository BusinessRequestPays { get; }
     IUserRequestPayRepository UserRequestPays { get; }
+    IWalletRepository Wallets { get; }
+    IServiceRepository Services { get; }
+    IArtistRepository Artists { get; }
+    IPostRepository Posts { get; }
+    ISmsCreditRepository SmsCredits { get; }
+    ISmsTemplateRepository SmsTemplates { get; }
     Task SaveChangeAsync(CancellationToken cancellationToken = default);
 }
