@@ -16,12 +16,12 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Price = table.Column<int>(type: "integer", nullable: false),
+                    Amount = table.Column<int>(type: "integer", nullable: false),
                     IsPay = table.Column<bool>(type: "boolean", nullable: false),
                     PayDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     Authorizy = table.Column<string>(type: "text", nullable: true),
                     RefId = table.Column<int>(type: "integer", nullable: false),
-                    BusinessId = table.Column<Guid>(type: "uuid", nullable: true),
+                    BusinessId = table.Column<Guid>(type: "uuid", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
@@ -34,7 +34,8 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         name: "FK_BusinessRequestPays_Businesses_BusinessId",
                         column: x => x.BusinessId,
                         principalTable: "Businesses",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -42,13 +43,12 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Price = table.Column<int>(type: "integer", nullable: false),
+                    Amount = table.Column<int>(type: "integer", nullable: false),
                     IsPay = table.Column<bool>(type: "boolean", nullable: false),
                     PayDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     Authorizy = table.Column<string>(type: "text", nullable: true),
                     RefId = table.Column<int>(type: "integer", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: true),
-                    ReserveTimeId = table.Column<Guid>(type: "uuid", nullable: true),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
@@ -58,26 +58,17 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 {
                     table.PrimaryKey("PK_UserRequestPays", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_UserRequestPays_ReserveTimes_ReserveTimeId",
-                        column: x => x.ReserveTimeId,
-                        principalTable: "ReserveTimes",
-                        principalColumn: "Id");
-                    table.ForeignKey(
                         name: "FK_UserRequestPays_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
                 name: "IX_BusinessRequestPays_BusinessId",
                 table: "BusinessRequestPays",
                 column: "BusinessId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserRequestPays_ReserveTimeId",
-                table: "UserRequestPays",
-                column: "ReserveTimeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_UserRequestPays_UserId",
