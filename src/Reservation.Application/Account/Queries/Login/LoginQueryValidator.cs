@@ -1,9 +1,9 @@
 namespace Reservation.Application.Account.Queries.Login;
 
 
-public class LoginCommandValidator : AbstractValidator<LoginCommandRequest>
+public class LoginQueryValidator : AbstractValidator<LoginQueryRequest>
 {
-    public LoginCommandValidator()
+    public LoginQueryValidator()
     {
         RuleFor(r => r.PhoneNumber)
             .NotEmpty().WithMessage("شماره همراه نمی تواند خالی باشد")

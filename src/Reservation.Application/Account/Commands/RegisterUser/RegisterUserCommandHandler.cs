@@ -1,20 +1,11 @@
 namespace Reservation.Application.Account.Commands.RegisterUser;
 
 
-public sealed class RegisterUserCommandHandler(IUnitOfWork uow)
-    : IRequestHandler<RegisterUserCommandRequest>
+public sealed class RegisterUserCommandHandler(ICacheProvider cache)
+        : IRequestHandler<RegisterUserCommandRequest>
 {
-    private readonly IUnitOfWork _uow = uow;
+        private readonly ICacheProvider _cache = cache;
 
-    public async Task Handle(RegisterUserCommandRequest request, CancellationToken cancellationToken)
-    {
-        var user = new User
-        {
-            FullName = request.FullName,
-            PhoneNumber = request.PhoneNumber
-        };
-
-        _uow.Users.Add(user);
-        await _uow.SaveChangeAsync(cancellationToken);
-    }
+        public async Task Handle(RegisterUserCommandRequest request, CancellationToken cancellationToken)
+                => await _cache.SetAsync<UserCacheVM>(nameof(User) + request.PhoneNumber, new(request.FullName, request.PhoneNumber));
 }

@@ -26,7 +26,7 @@ public sealed class AccountController(ISender sender) : ControllerBase
     [Authorize]
     public async Task<IActionResult> Login([FromQuery] string code)
     {
-        var request = new LoginCommandRequest
+        var request = new LoginQueryRequest
             (code, User.UserCode(), User.UserPhoneNumber(), User.Roles());
 
         var result = await _sender.Send(request);

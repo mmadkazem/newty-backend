@@ -1,21 +1,18 @@
 namespace Reservation.Application.Businesses.Commands.RegisterBusiness;
 
 
-public sealed class RegisterBusinessCommandHandler(IUnitOfWork uow)
+public sealed class RegisterBusinessCommandHandler(IUnitOfWork uow, ICacheProvider cache)
     : IRequestHandler<RegisterBusinessCommandRequest>
 {
     private readonly IUnitOfWork _uow = uow;
+    private readonly ICacheProvider _cache = cache;
 
     public async Task Handle(RegisterBusinessCommandRequest request, CancellationToken cancellationToken)
     {
         var city = await _uow.Cities.FindAsyncByName(request.City, cancellationToken);
-        Business business = new()
-        {
-            PhoneNumber = request.PhoneNumber,
-            City = city
-        };
+        BusinessCacheVM business = new(city.Name, request.PhoneNumber);
 
-        _uow.Businesses.Add(business);
+        await _cache.SetAsync(nameof(Business) + request.PhoneNumber, business);
         await _uow.SaveChangeAsync(cancellationToken);
     }
 }
