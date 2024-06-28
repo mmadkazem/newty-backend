@@ -1,3 +1,5 @@
+using Reservation.Application.Account.Queries.LogoutUser;
+
 namespace Reservation.Controllers.Account;
 
 [ApiController]
@@ -31,6 +33,7 @@ public sealed class AccountController(ISender sender) : ControllerBase
         var result = await _sender.Send(request);
         return Ok(result);
     }
+
     [HttpGet]
     [Authorize(AuthenticationSchemes = AuthScheme.RefreshTokenScheme)]
     public async Task<IActionResult> LoginByRefreshToken()
@@ -46,6 +49,15 @@ public sealed class AccountController(ISender sender) : ControllerBase
     {
         var request = new UpdateUserCommandRequest(User.UserId(), model.FullName, model.PhoneNumber, model.City);
         await _sender.Send(request);
+        return Ok();
+    }
+
+    [HttpGet]
+    [Authorize(AuthenticationSchemes = AuthScheme.UserScheme)]
+    [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
+    public async Task<IActionResult> Logout()
+    {
+        await _sender.Send(new LogoutQueryRequest(User.UserId()));
         return Ok();
     }
 }
