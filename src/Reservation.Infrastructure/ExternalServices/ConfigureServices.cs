@@ -1,3 +1,5 @@
+using Reservation.Infrastructure.ExternalServices.Jwt.TokenValidators;
+
 namespace Reservation.Infrastructure.ExternalServices;
 
 public static class ConfigureServices

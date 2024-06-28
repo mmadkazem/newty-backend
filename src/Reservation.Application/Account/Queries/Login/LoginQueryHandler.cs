@@ -14,61 +14,69 @@ public sealed class LoginQueryHandler(IUnitOfWork uow,
     {
         if (request.Role == Role.User)
         {
-            if (request.CodeActual == request.CodeExpected)
+            var user = await _uow.Users.FindAsyncByNumber(request.PhoneNumber, cancellationToken);
+            if (user is null)
             {
-                var user = await _uow.Users.FindByNumber(request.PhoneNumber, cancellationToken);
-                if (user is null)
+                var userCacheVM = await _cache.GetAsync<UserCacheVM>(nameof(User) + request.PhoneNumber);
+                if (userCacheVM.OTPCode != request.Code)
                 {
-                    var userCacheVM = await _cache.GetAsync<UserCacheVM>(nameof(User) + request.PhoneNumber);
-
-                    User finalUser = new()
-                    {
-                        FullName = userCacheVM.Name,
-                        PhoneNumber = userCacheVM.PhoneNumber,
-                        Role = Role.User
-                    };
-                    _uow.Users.Add(finalUser);
-                    await _uow.SaveChangeAsync(cancellationToken);
-
-                    return _tokenFactory.CreateUserToken(finalUser);
+                    throw new NotEqualActualAndExpectedException();
                 }
 
-                return _tokenFactory.CreateUserToken(user); ;
+                User finalUser = new()
+                {
+                    FullName = userCacheVM.Name,
+                    PhoneNumber = userCacheVM.PhoneNumber,
+                    Role = Role.User,
+                    IsActive = true
+                };
+                _uow.Users.Add(finalUser);
+                await _uow.SaveChangeAsync(cancellationToken);
 
+                return _tokenFactory.CreateUserToken(finalUser);
             }
-            else
+
+            if (user.OTPCode != request.Code)
             {
                 throw new NotEqualActualAndExpectedException();
             }
+
+            user.IsActive = true;
+            return _tokenFactory.CreateUserToken(user);
 
         }
         else if (request.Role == Role.Business)
         {
-            if (request.CodeActual == request.CodeExpected)
+            var business = await _uow.Businesses.FindAsyncByPhoneNumber(request.PhoneNumber, cancellationToken);
+            if (business is null)
             {
-                var business = await _uow.Businesses.FindAsyncByPhoneNumber(request.PhoneNumber, cancellationToken);
-                if (business is null)
+                var businessCacheVM = await _cache.GetAsync<BusinessCacheVM>(nameof(Business) + request.PhoneNumber);
+                if (businessCacheVM.OTPCode != request.Code)
                 {
-                    var businessCacheVM = await _cache.GetAsync<BusinessCacheVM>(nameof(Business) + request.PhoneNumber);
-
-                    var city = await _uow.Cities.FindAsyncByName(businessCacheVM.City, cancellationToken);
-                    Business finalBusiness = new()
-                    {
-                        City = city,
-                        PhoneNumber = businessCacheVM.PhoneNumber,
-                    };
-                    _uow.Businesses.Add(finalBusiness);
-                    await _uow.SaveChangeAsync(cancellationToken);
-
-                    return _tokenFactory.CreateBusinessToken(finalBusiness);
+                    throw new NotEqualActualAndExpectedException();
                 }
 
-                return _tokenFactory.CreateBusinessToken(business);
+                var city = await _uow.Cities.FindAsyncByName(businessCacheVM.City, cancellationToken);
+                Business finalBusiness = new()
+                {
+                    City = city,
+                    PhoneNumber = businessCacheVM.PhoneNumber,
+                    IsActive = true
+                };
+                _uow.Businesses.Add(finalBusiness);
+                await _uow.SaveChangeAsync(cancellationToken);
+
+                return _tokenFactory.CreateBusinessToken(finalBusiness);
             }
-            else
+
+            if (business.OTPCode != request.Code)
             {
                 throw new NotEqualActualAndExpectedException();
             }
+
+            business.IsActive = true;
+            return _tokenFactory.CreateBusinessToken(business);
+
         }
 
         throw new UserOrBusinessNotExistException();

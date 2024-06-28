@@ -5,6 +5,8 @@ public class User : BaseClass
     public string FullName { get; set; }
     public string PhoneNumber { get; set; }
     public string Role { get; set; }
+    public string OTPCode { get; set; }
+    public bool IsActive { get; set; }
 
     // User City
     public City City { get; set; }

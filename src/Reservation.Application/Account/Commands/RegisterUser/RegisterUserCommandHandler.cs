@@ -7,5 +7,5 @@ public sealed class RegisterUserCommandHandler(ICacheProvider cache)
         private readonly ICacheProvider _cache = cache;
 
         public async Task Handle(RegisterUserCommandRequest request, CancellationToken cancellationToken)
-                => await _cache.SetAsync<UserCacheVM>(nameof(User) + request.PhoneNumber, new(request.FullName, request.PhoneNumber));
+                => await _cache.SetAsync<UserCacheVM>(nameof(User) + request.PhoneNumber, new(request.FullName, request.PhoneNumber, StringUtils.GetUniqueKey(5)));
 }

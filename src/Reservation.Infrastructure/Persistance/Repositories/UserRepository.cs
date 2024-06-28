@@ -24,7 +24,7 @@ public sealed class UserRepository(ReservationDbContext context) : IUserReposito
                                 .Where(u => u.Id == id)
                                 .FirstOrDefaultAsync(cancellationToken);
 
-    public async Task<User> FindByNumber(string phoneNumber, CancellationToken cancellationToken)
+    public async Task<User> FindAsyncByNumber(string phoneNumber, CancellationToken cancellationToken)
         => await _context.Users.AsQueryable()
                                 .Where(u => u.PhoneNumber == phoneNumber)
                                 .FirstOrDefaultAsync(cancellationToken);

@@ -1,4 +1,4 @@
-namespace Reservation.Infrastructure.ExternalServices.Jwt;
+namespace Reservation.Infrastructure.ExternalServices.Jwt.TokenValidators;
 
 
 public interface ITempTokenValidatorService
@@ -6,7 +6,7 @@ public interface ITempTokenValidatorService
     void ValidateAsync(TokenValidatedContext context);
 }
 
-public class TempTokenValidatorService(IUnitOfWork uow) : ITempTokenValidatorService
+public sealed class TempTokenValidatorService(IUnitOfWork uow) : ITempTokenValidatorService
 {
     private readonly IUnitOfWork _uow = uow;
 
@@ -27,8 +27,7 @@ public class TempTokenValidatorService(IUnitOfWork uow) : ITempTokenValidatorSer
             return;
         }
 
-        var accessToken = context.SecurityToken as JsonWebToken;
-        if (accessToken == null || string.IsNullOrWhiteSpace(accessToken.EncodedToken))
+        if (context.SecurityToken is not JsonWebToken accessToken || string.IsNullOrWhiteSpace(accessToken.EncodedToken))
         {
             context.Fail("This Token not valid");
             return;

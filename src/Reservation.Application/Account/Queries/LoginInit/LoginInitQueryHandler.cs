@@ -12,35 +12,37 @@ public sealed class LoginInitQueryHandler
 
     public async Task<string> Handle(LoginInitQueryRequest request, CancellationToken cancellationToken)
     {
-        var anyUser = await _uow.Users.AnyAsync(request.PhoneNumber, cancellationToken);
+        var user = await _uow.Users.FindAsyncByNumber(request.PhoneNumber, cancellationToken);
         var code = StringUtils.GetUniqueKey(5);
-        if (anyUser)
+        if (user is not null)
         {
+            user.OTPCode = code;
             // await _smsProvider.SendLookup(request.PhoneNumber, code);
             return _tokenFactory.CreateTempToken(code, request.PhoneNumber, Role.User).TempToken;
         }
 
-        var anyBusiness = await _uow.Businesses.AnyAsync(request.PhoneNumber, cancellationToken);
-        if (anyBusiness)
+        var business = await _uow.Businesses.FindAsyncByPhoneNumber(request.PhoneNumber, cancellationToken);
+        if (business is not null)
         {
+            business.OTPCode = code;
             // await _smsProvider.SendLookup(request.PhoneNumber, code);
             return _tokenFactory.CreateTempToken(code, request.PhoneNumber, Role.Business).TempToken;
         }
         try
         {
-            var user = await _cache.GetAsync<UserCacheVM>(nameof(User) + request.PhoneNumber);
-            if (user is not null)
+            var userCache = await _cache.GetAsync<UserCacheVM>(nameof(User) + request.PhoneNumber);
+            if (userCache is not null)
             {
-                return  _tokenFactory.CreateTempToken(code, request.PhoneNumber, Role.User).TempToken;
+                return  _tokenFactory.CreateTempToken(userCache.OTPCode, request.PhoneNumber, Role.User).TempToken;
             }
         }
         catch (Exception) { }
         try
         {
-            var business = await _cache.GetAsync<BusinessCacheVM>(nameof(Business) + request.PhoneNumber);
-            if (business is not null)
+            var businessCache = await _cache.GetAsync<BusinessCacheVM>(nameof(Business) + request.PhoneNumber);
+            if (businessCache is not null)
             {
-                return _tokenFactory.CreateTempToken(code, request.PhoneNumber, Role.Business).TempToken;
+                return _tokenFactory.CreateTempToken(businessCache.OTPCode, request.PhoneNumber, Role.Business).TempToken;
             }
         }
         catch (Exception) { }

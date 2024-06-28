@@ -7,5 +7,5 @@ public interface ICacheProvider
     Task<T> GetAsync<T>(string key);
 }
 
-public record UserCacheVM(string Name, string PhoneNumber);
-public record BusinessCacheVM(string City, string PhoneNumber);
+public record UserCacheVM(string Name, string PhoneNumber, string OTPCode);
+public record BusinessCacheVM(string City, string PhoneNumber, string OTPCode);

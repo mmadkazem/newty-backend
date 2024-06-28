@@ -29,10 +29,10 @@ public sealed class BusinessRequestPaysController(ISender sender) : ControllerBa
         return Ok(result);
     }
 
-    [HttpGet("Businesses/{BusinessId:guid}/Page/{Page:int}")]
-    public async Task<IActionResult> Get([FromRoute] GetBusinessRequestPaysQueryRequest request)
+    [HttpGet("Page/{Page:int}")]
+    public async Task<IActionResult> Get(int page)
     {
-        var results = await _sender.Send(request);
+        var results = await _sender.Send(new GetBusinessRequestPaysQueryRequest(page, User.UserId()));
         return Ok(results);
     }
 }

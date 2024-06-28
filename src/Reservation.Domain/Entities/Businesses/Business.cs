@@ -9,10 +9,11 @@ public class Business : BaseClass
     public string ParvaneKasbImagePath { get; set; }
     public string Address { get; set; }
     public double Average { get; set; }
-    public bool Active { get; set; } = true;
     public string PhoneNumber { get; set; }
-    public DateTime StartHoursOfWor { get; set; }
-    public DateTime EndHoursOfWor { get; set; }
+    public string OTPCode { get; set; }
+    public bool IsActive { get; set; }
+    public TimeSpan StartHoursOfWor { get; set; }
+    public TimeSpan EndHoursOfWor { get; set; }
 
     // Business Wallet
     public Wallet Wallet { get; set; }

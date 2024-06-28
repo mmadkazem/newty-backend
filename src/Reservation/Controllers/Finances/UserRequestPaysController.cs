@@ -30,10 +30,10 @@ public class UserRequestPaysController(ISender sender) : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("Users/{UserId:guid}/Page/{Page:int}")]
-    public async Task<IActionResult> Get([FromRoute] GetUserRequestPaysQueryRequest request)
+    [HttpGet("Page/{Page:int}")]
+    public async Task<IActionResult> Get(int page)
     {
-        var results = await _sender.Send(request);
+        var results = await _sender.Send(new GetUserRequestPaysQueryRequest(User.UserId(), page));
         return Ok(results);
     }
 }

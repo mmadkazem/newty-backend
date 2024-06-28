@@ -12,7 +12,7 @@ using Reservation.Infrastructure.Persistance.Context;
 namespace Reservation.Infrastructure.Persistance.Migrations
 {
     [DbContext(typeof(ReservationDbContext))]
-    [Migration("20240620152710_WalletMig")]
+    [Migration("20240628095921_WalletMig")]
     partial class WalletMig
     {
         /// <inheritdoc />
@@ -58,11 +58,17 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                     b.Property<string>("FullName")
                         .HasColumnType("text");
 
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
+
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("ModifiedOn")
                         .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("OTPCode")
+                        .HasColumnType("text");
 
                     b.Property<string>("PhoneNumber")
                         .HasColumnType("text");
@@ -82,6 +88,20 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                     b.HasIndex("WalletId");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = new Guid("826d40b6-dc20-4f34-a03c-73dacc439703"),
+                            CreatedOn = new DateTime(2024, 6, 28, 13, 29, 21, 487, DateTimeKind.Local).AddTicks(2485),
+                            DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FullName = "Admin",
+                            IsActive = false,
+                            IsDeleted = false,
+                            ModifiedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            PhoneNumber = "09111111111",
+                            Role = "Admin"
+                        });
                 });
 
             modelBuilder.Entity("Reservation.Domain.Entities.Businesses.Artist", b =>
@@ -133,9 +153,6 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<bool>("Active")
-                        .HasColumnType("boolean");
-
                     b.Property<string>("Address")
                         .HasColumnType("text");
 
@@ -157,8 +174,11 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                     b.Property<string>("Description")
                         .HasColumnType("text");
 
-                    b.Property<DateTime>("EndHoursOfWor")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<TimeSpan>("EndHoursOfWor")
+                        .HasColumnType("interval");
+
+                    b.Property<bool>("IsActive")
+                        .HasColumnType("boolean");
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
@@ -167,6 +187,9 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         .HasColumnType("timestamp without time zone");
 
                     b.Property<string>("Name")
+                        .HasColumnType("text");
+
+                    b.Property<string>("OTPCode")
                         .HasColumnType("text");
 
                     b.Property<string>("ParvaneKasbImagePath")
@@ -178,8 +201,8 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                     b.Property<Guid>("SmsCreditId")
                         .HasColumnType("uuid");
 
-                    b.Property<DateTime>("StartHoursOfWor")
-                        .HasColumnType("timestamp without time zone");
+                    b.Property<TimeSpan>("StartHoursOfWor")
+                        .HasColumnType("interval");
 
                     b.Property<Guid?>("SubCategoryId")
                         .HasColumnType("uuid");
@@ -244,7 +267,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
 
-                    b.Property<Guid?>("ArtistId")
+                    b.Property<Guid>("ArtistId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("BusinessId")
@@ -724,13 +747,10 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("BusinessInId")
+                    b.Property<Guid>("BusinessReceiptId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("BusinessOutId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("BusinessReceiptId")
+                    b.Property<Guid>("BusinessSenderId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedOn")
@@ -762,9 +782,9 @@ namespace Reservation.Infrastructure.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BusinessInId");
-
                     b.HasIndex("BusinessReceiptId");
+
+                    b.HasIndex("BusinessSenderId");
 
                     b.ToTable("ReserveTimesSender");
                 });
@@ -911,7 +931,9 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 {
                     b.HasOne("Reservation.Domain.Entities.Businesses.Artist", "Artist")
                         .WithMany("Services")
-                        .HasForeignKey("ArtistId");
+                        .HasForeignKey("ArtistId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Reservation.Domain.Entities.Businesses.Business", "Business")
                         .WithMany("Services")
@@ -1055,15 +1077,17 @@ namespace Reservation.Infrastructure.Persistance.Migrations
 
             modelBuilder.Entity("Reservation.Domain.Entities.Reserve.ReserveTimeSender", b =>
                 {
-                    b.HasOne("Reservation.Domain.Entities.Businesses.Business", "BusinessSender")
-                        .WithMany("ReserveTimesSender")
-                        .HasForeignKey("BusinessInId")
+                    b.HasOne("Reservation.Domain.Entities.Businesses.Business", "BusinessReceipt")
+                        .WithMany()
+                        .HasForeignKey("BusinessReceiptId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Reservation.Domain.Entities.Businesses.Business", "BusinessReceipt")
-                        .WithMany()
-                        .HasForeignKey("BusinessReceiptId");
+                    b.HasOne("Reservation.Domain.Entities.Businesses.Business", "BusinessSender")
+                        .WithMany("ReserveTimesSender")
+                        .HasForeignKey("BusinessSenderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("BusinessReceipt");
 

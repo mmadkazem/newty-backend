@@ -10,7 +10,7 @@ public sealed class RegisterBusinessCommandHandler(IUnitOfWork uow, ICacheProvid
     public async Task Handle(RegisterBusinessCommandRequest request, CancellationToken cancellationToken)
     {
         var city = await _uow.Cities.FindAsyncByName(request.City, cancellationToken);
-        BusinessCacheVM business = new(city.Name, request.PhoneNumber);
+        BusinessCacheVM business = new(city.Name, request.PhoneNumber, StringUtils.GetUniqueKey(5));
 
         await _cache.SetAsync(nameof(Business) + request.PhoneNumber, business);
         await _uow.SaveChangeAsync(cancellationToken);

@@ -21,7 +21,6 @@ public sealed class UpdateBusinessCommandHandler(IUnitOfWork uow) : IRequestHand
 
         business.PhoneNumber = request.PhoneNumber;
         business.Name = request.Name;
-        business.Active = request.Active;
         business.Description = request.Description;
         business.Address = request.Address;
         business.City = city;
