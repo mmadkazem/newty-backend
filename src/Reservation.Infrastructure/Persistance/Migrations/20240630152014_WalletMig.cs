@@ -16,6 +16,10 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 table: "Businesses");
 
             migrationBuilder.DropForeignKey(
+                name: "FK_ReserveTimesReceipt_Businesses_BusinessId",
+                table: "ReserveTimesReceipt");
+
+            migrationBuilder.DropForeignKey(
                 name: "FK_ReserveTimesSender_Businesses_BusinessInId",
                 table: "ReserveTimesSender");
 
@@ -43,6 +47,10 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 name: "IX_ReserveTimesSender_BusinessInId",
                 table: "ReserveTimesSender");
 
+            migrationBuilder.DropIndex(
+                name: "IX_ReserveTimesReceipt_BusinessId",
+                table: "ReserveTimesReceipt");
+
             migrationBuilder.DropPrimaryKey(
                 name: "PK_Wallet",
                 table: "Wallet");
@@ -51,9 +59,17 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 name: "PK_Transaction",
                 table: "Transaction");
 
+            migrationBuilder.DropIndex(
+                name: "IX_Transaction_ReserveTimeId",
+                table: "Transaction");
+
             migrationBuilder.DropColumn(
                 name: "BusinessInId",
                 table: "ReserveTimesSender");
+
+            migrationBuilder.DropColumn(
+                name: "ReserveTimeId",
+                table: "Transaction");
 
             migrationBuilder.RenameTable(
                 name: "Wallet",
@@ -69,6 +85,11 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 newName: "BusinessSenderId");
 
             migrationBuilder.RenameColumn(
+                name: "BusinessId",
+                table: "ReserveTimesReceipt",
+                newName: "TransactionSenderId");
+
+            migrationBuilder.RenameColumn(
                 name: "Active",
                 table: "Businesses",
                 newName: "IsActive");
@@ -77,11 +98,6 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 name: "IX_Transaction_WalletId",
                 table: "Transactions",
                 newName: "IX_Transactions_WalletId");
-
-            migrationBuilder.RenameIndex(
-                name: "IX_Transaction_ReserveTimeId",
-                table: "Transactions",
-                newName: "IX_Transactions_ReserveTimeId");
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "WalletId",
@@ -124,6 +140,27 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 oldType: "uuid",
                 oldNullable: true);
 
+            migrationBuilder.AddColumn<Guid>(
+                name: "BusinessReceiptId",
+                table: "ReserveTimesReceipt",
+                type: "uuid",
+                nullable: false,
+                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
+
+            migrationBuilder.AddColumn<Guid>(
+                name: "BusinessSenderId",
+                table: "ReserveTimesReceipt",
+                type: "uuid",
+                nullable: false,
+                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
+
+            migrationBuilder.AddColumn<Guid>(
+                name: "TransactionReceiptId",
+                table: "ReserveTimesReceipt",
+                type: "uuid",
+                nullable: false,
+                defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
+
             migrationBuilder.AlterColumn<Guid>(
                 name: "WalletId",
                 table: "Businesses",
@@ -152,6 +189,13 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 nullable: false,
                 defaultValue: new TimeSpan(0, 0, 0, 0, 0));
 
+            migrationBuilder.AddColumn<int>(
+                name: "State",
+                table: "Transactions",
+                type: "integer",
+                nullable: false,
+                defaultValue: 0);
+
             migrationBuilder.AddPrimaryKey(
                 name: "PK_Wallets",
                 table: "Wallets",
@@ -165,12 +209,34 @@ namespace Reservation.Infrastructure.Persistance.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "CityId", "CreatedOn", "DeletedOn", "FullName", "IsActive", "IsDeleted", "ModifiedOn", "OTPCode", "PhoneNumber", "Role", "WalletId" },
-                values: new object[] { new Guid("826d40b6-dc20-4f34-a03c-73dacc439703"), null, new DateTime(2024, 6, 28, 13, 29, 21, 487, DateTimeKind.Local).AddTicks(2485), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Admin", false, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "09111111111", "Admin", null });
+                values: new object[] { new Guid("fb079e36-1b6c-4f0d-8a1c-6e96e0c4e251"), null, new DateTime(2024, 6, 30, 18, 50, 14, 465, DateTimeKind.Local).AddTicks(3009), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Admin", false, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "09111111111", "Admin", null });
 
             migrationBuilder.CreateIndex(
                 name: "IX_ReserveTimesSender_BusinessSenderId",
                 table: "ReserveTimesSender",
                 column: "BusinessSenderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReserveTimesReceipt_BusinessReceiptId",
+                table: "ReserveTimesReceipt",
+                column: "BusinessReceiptId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReserveTimesReceipt_BusinessSenderId",
+                table: "ReserveTimesReceipt",
+                column: "BusinessSenderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReserveTimesReceipt_TransactionReceiptId",
+                table: "ReserveTimesReceipt",
+                column: "TransactionReceiptId",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReserveTimesReceipt_TransactionSenderId",
+                table: "ReserveTimesReceipt",
+                column: "TransactionSenderId",
+                unique: true);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Businesses_Wallets_WalletId",
@@ -178,6 +244,38 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 column: "WalletId",
                 principalTable: "Wallets",
                 principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_ReserveTimesReceipt_Businesses_BusinessReceiptId",
+                table: "ReserveTimesReceipt",
+                column: "BusinessReceiptId",
+                principalTable: "Businesses",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_ReserveTimesReceipt_Businesses_BusinessSenderId",
+                table: "ReserveTimesReceipt",
+                column: "BusinessSenderId",
+                principalTable: "Businesses",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_ReserveTimesReceipt_Transactions_TransactionReceiptId",
+                table: "ReserveTimesReceipt",
+                column: "TransactionReceiptId",
+                principalTable: "Transactions",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_ReserveTimesReceipt_Transactions_TransactionSenderId",
+                table: "ReserveTimesReceipt",
+                column: "TransactionSenderId",
+                principalTable: "Transactions",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
                 name: "FK_ReserveTimesSender_Businesses_BusinessReceiptId",
@@ -204,13 +302,6 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 onDelete: ReferentialAction.Cascade);
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Transactions_ReserveTimesReceipt_ReserveTimeId",
-                table: "Transactions",
-                column: "ReserveTimeId",
-                principalTable: "ReserveTimesReceipt",
-                principalColumn: "Id");
-
-            migrationBuilder.AddForeignKey(
                 name: "FK_Transactions_Wallets_WalletId",
                 table: "Transactions",
                 column: "WalletId",
@@ -234,6 +325,22 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 table: "Businesses");
 
             migrationBuilder.DropForeignKey(
+                name: "FK_ReserveTimesReceipt_Businesses_BusinessReceiptId",
+                table: "ReserveTimesReceipt");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_ReserveTimesReceipt_Businesses_BusinessSenderId",
+                table: "ReserveTimesReceipt");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_ReserveTimesReceipt_Transactions_TransactionReceiptId",
+                table: "ReserveTimesReceipt");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_ReserveTimesReceipt_Transactions_TransactionSenderId",
+                table: "ReserveTimesReceipt");
+
+            migrationBuilder.DropForeignKey(
                 name: "FK_ReserveTimesSender_Businesses_BusinessReceiptId",
                 table: "ReserveTimesSender");
 
@@ -244,10 +351,6 @@ namespace Reservation.Infrastructure.Persistance.Migrations
             migrationBuilder.DropForeignKey(
                 name: "FK_Services_Artists_ArtistId",
                 table: "Services");
-
-            migrationBuilder.DropForeignKey(
-                name: "FK_Transactions_ReserveTimesReceipt_ReserveTimeId",
-                table: "Transactions");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_Transactions_Wallets_WalletId",
@@ -261,6 +364,22 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 name: "IX_ReserveTimesSender_BusinessSenderId",
                 table: "ReserveTimesSender");
 
+            migrationBuilder.DropIndex(
+                name: "IX_ReserveTimesReceipt_BusinessReceiptId",
+                table: "ReserveTimesReceipt");
+
+            migrationBuilder.DropIndex(
+                name: "IX_ReserveTimesReceipt_BusinessSenderId",
+                table: "ReserveTimesReceipt");
+
+            migrationBuilder.DropIndex(
+                name: "IX_ReserveTimesReceipt_TransactionReceiptId",
+                table: "ReserveTimesReceipt");
+
+            migrationBuilder.DropIndex(
+                name: "IX_ReserveTimesReceipt_TransactionSenderId",
+                table: "ReserveTimesReceipt");
+
             migrationBuilder.DropPrimaryKey(
                 name: "PK_Wallets",
                 table: "Wallets");
@@ -272,7 +391,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
             migrationBuilder.DeleteData(
                 table: "Users",
                 keyColumn: "Id",
-                keyValue: new Guid("826d40b6-dc20-4f34-a03c-73dacc439703"));
+                keyValue: new Guid("fb079e36-1b6c-4f0d-8a1c-6e96e0c4e251"));
 
             migrationBuilder.DropColumn(
                 name: "IsActive",
@@ -281,6 +400,18 @@ namespace Reservation.Infrastructure.Persistance.Migrations
             migrationBuilder.DropColumn(
                 name: "OTPCode",
                 table: "Users");
+
+            migrationBuilder.DropColumn(
+                name: "BusinessReceiptId",
+                table: "ReserveTimesReceipt");
+
+            migrationBuilder.DropColumn(
+                name: "BusinessSenderId",
+                table: "ReserveTimesReceipt");
+
+            migrationBuilder.DropColumn(
+                name: "TransactionReceiptId",
+                table: "ReserveTimesReceipt");
 
             migrationBuilder.DropColumn(
                 name: "EndHoursOfWor",
@@ -293,6 +424,10 @@ namespace Reservation.Infrastructure.Persistance.Migrations
             migrationBuilder.DropColumn(
                 name: "StartHoursOfWor",
                 table: "Businesses");
+
+            migrationBuilder.DropColumn(
+                name: "State",
+                table: "Transactions");
 
             migrationBuilder.RenameTable(
                 name: "Wallets",
@@ -308,6 +443,11 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 newName: "BusinessOutId");
 
             migrationBuilder.RenameColumn(
+                name: "TransactionSenderId",
+                table: "ReserveTimesReceipt",
+                newName: "BusinessId");
+
+            migrationBuilder.RenameColumn(
                 name: "IsActive",
                 table: "Businesses",
                 newName: "Active");
@@ -316,11 +456,6 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 name: "IX_Transactions_WalletId",
                 table: "Transaction",
                 newName: "IX_Transaction_WalletId");
-
-            migrationBuilder.RenameIndex(
-                name: "IX_Transactions_ReserveTimeId",
-                table: "Transaction",
-                newName: "IX_Transaction_ReserveTimeId");
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "WalletId",
@@ -365,6 +500,12 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 oldType: "uuid",
                 oldNullable: true);
 
+            migrationBuilder.AddColumn<Guid>(
+                name: "ReserveTimeId",
+                table: "Transaction",
+                type: "uuid",
+                nullable: true);
+
             migrationBuilder.AddPrimaryKey(
                 name: "PK_Wallet",
                 table: "Wallet",
@@ -380,11 +521,29 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 table: "ReserveTimesSender",
                 column: "BusinessInId");
 
+            migrationBuilder.CreateIndex(
+                name: "IX_ReserveTimesReceipt_BusinessId",
+                table: "ReserveTimesReceipt",
+                column: "BusinessId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Transaction_ReserveTimeId",
+                table: "Transaction",
+                column: "ReserveTimeId");
+
             migrationBuilder.AddForeignKey(
                 name: "FK_Businesses_Wallet_WalletId",
                 table: "Businesses",
                 column: "WalletId",
                 principalTable: "Wallet",
+                principalColumn: "Id",
+                onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_ReserveTimesReceipt_Businesses_BusinessId",
+                table: "ReserveTimesReceipt",
+                column: "BusinessId",
+                principalTable: "Businesses",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
 

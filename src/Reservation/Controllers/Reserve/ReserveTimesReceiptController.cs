@@ -15,12 +15,12 @@ public sealed class ReserveTimesReceiptController(ISender sender) : ControllerBa
         return Ok();
     }
 
-    [HttpPut("{id:guid}")]
+    [HttpPut("{id:guid}/State/{state}")]
     [Authorize(AuthenticationSchemes = AuthScheme.UserScheme)]
     [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
-    public async Task<IActionResult> Put(Guid id, [FromBody] UpdateStateReserveTimeReceiptDTO model)
+    public async Task<IActionResult> Put(Guid id, ReserveState state)
     {
-        var request = UpdateStateReserveTimeReceiptCommandRequest.Create(id, model);
+        var request = new UpdateStateReserveTimeReceiptCommandRequest(id, state, User.Roles());
         await _sender.Send(request);
         return Ok();
     }

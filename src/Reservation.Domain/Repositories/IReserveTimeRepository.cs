@@ -4,7 +4,8 @@ public interface IReserveTimeRepository
 {
     void Add(ReserveTimeReceipt reserveTime);
     void Add(ReserveTimeSender reserveTime);
-    Task<ReserveTimeReceipt> FindAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<ReserveTimeReceipt> FindAsyncIncludeService(Guid id, CancellationToken cancellationToken = default);
+    Task<ReserveTimeReceipt> FindAsyncIncludeTransaction(Guid id, CancellationToken cancellationToken = default);
     Task<ReserveTimeSender> FindAsyncReserveTimeSender(Guid id, CancellationToken cancellationToken = default);
     Task<List<ReserveTimeReceipt>> FindAsyncByBusinessId(Guid businessId, CancellationToken cancellationToken = default);
     Task<List<ReserveTimeSender>> FindAsyncBusinessSenderId(Guid businessSenderId, CancellationToken cancellationToken);

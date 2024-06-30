@@ -4,17 +4,18 @@ namespace Reservation.Application.ReserveTimes.Commands.CreateReserveTimeSender;
 public record CreateReserveTimeSenderCommandRequest
 (
     Guid BusinessSenderId, Guid BusinessReceiptId,
-    IEnumerable<Guid> Services,
-    IEnumerable<Guid> Artists, DateTime DateTime
+    DateTime DateTime,
+    IEnumerable<ArtistService> ArtistServices
 ) : IRequest
 {
-    public static CreateReserveTimeSenderCommandRequest Create(Guid BusinessReceiptId, CreateReserveTimeSenderDTO model)
-        => new(BusinessReceiptId, model.BusinessSenderId, model.Services, model.Artists, model.DateTime);
+    public static CreateReserveTimeSenderCommandRequest Create(Guid BusinessSenderId, CreateReserveTimeSenderDTO model)
+        => new(BusinessSenderId, model.BusinessReceiptId, model.DateTime, model.ArtistServices);
 }
+public record ArtistService(Guid ArtistId, Guid ServiceId);
 
 public record CreateReserveTimeSenderDTO
 (
-    Guid BusinessSenderId,
-    IEnumerable<Guid> Services,
-    IEnumerable<Guid> Artists, DateTime DateTime
+    Guid BusinessReceiptId,
+    DateTime DateTime,
+    IEnumerable<ArtistService> ArtistServices
 );

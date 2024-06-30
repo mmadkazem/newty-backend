@@ -64,4 +64,8 @@ public sealed class WalletRepository(ReservationDbContext context) : IWalletRepo
                                 .Where(u => u.Id == businessId)
                                 .Select(u => u.Wallet.Id)
                                 .FirstOrDefaultAsync(cancellationToken);
+
+    public async Task<Transaction> FindAsyncTransaction(Guid transactionId, CancellationToken cancellationToken)
+        => await _context.Transactions.AsQueryable()
+                                .FirstOrDefaultAsync(t => t.Id == transactionId, cancellationToken);
 }

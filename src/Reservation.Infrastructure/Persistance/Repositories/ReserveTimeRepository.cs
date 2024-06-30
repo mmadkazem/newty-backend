@@ -12,7 +12,7 @@ public sealed class ReserveTimeRepository(ReservationDbContext context)
     public void Add(ReserveTimeSender reserveTime)
         => _context.ReserveTimesSender.Add(reserveTime);
 
-    public async Task<ReserveTimeReceipt> FindAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<ReserveTimeReceipt> FindAsyncIncludeService(Guid id, CancellationToken cancellationToken)
         => await _context.ReserveTimesReceipt.AsQueryable()
                                         .Include(r => r.ReserveItems)
                                         .ThenInclude(r => r.Service)
@@ -25,7 +25,7 @@ public sealed class ReserveTimeRepository(ReservationDbContext context)
                                         .Include(r => r.ReserveItems)
                                         .ThenInclude(r => r.Service)
                                         .ThenInclude(s => s.Artist)
-                                        .Where(r => r.BusinessId == businessId && !r.Finished)
+                                        .Where(r => r.BusinessReceiptId == businessId && !r.Finished)
                                         .ToListAsync(cancellationToken);
 
     public async Task<IEnumerable<ReserveTimeReceipt>> FindAsyncByUserId(Guid userId, CancellationToken cancellationToken = default)
@@ -69,7 +69,7 @@ public sealed class ReserveTimeRepository(ReservationDbContext context)
     public async Task<IEnumerable<IResponse>> GetBusinessReserveTimeByState(int page, ReserveState state, Guid businessId, CancellationToken cancellationToken)
         => await _context.ReserveTimesReceipt.AsQueryable()
                                         .AsNoTracking()
-                                        .Where(r => r.BusinessId == businessId && r.State == state)
+                                        .Where(r => r.BusinessReceiptId == businessId && r.State == state)
                                         .Select(c => new GetReserveTimeQueryResponse
                                         (
                                             c.Id,
@@ -93,7 +93,7 @@ public sealed class ReserveTimeRepository(ReservationDbContext context)
     public async Task<IEnumerable<IResponse>> GetBusinessReserveTimes(int page, Guid businessId, bool finished, CancellationToken cancellationToken)
         => await _context.ReserveTimesReceipt.AsQueryable()
                                         .AsNoTracking()
-                                        .Where(r => r.BusinessId == businessId && r.Finished == finished && r.State == ReserveState.Confirmed)
+                                        .Where(r => r.BusinessReceiptId == businessId && r.Finished == finished && r.State == ReserveState.Confirmed)
                                         .Select(c => new GetReserveTimeQueryResponse
                                         (
                                             c.Id,
@@ -117,7 +117,7 @@ public sealed class ReserveTimeRepository(ReservationDbContext context)
     public async Task<IEnumerable<IResponse>> GetBusinessReserveTimesSender(int page, bool finished, Guid businessId, CancellationToken cancellationToken)
         => await _context.ReserveTimesReceipt.AsQueryable()
                                         .AsNoTracking()
-                                        .Where(r => r.BusinessId == businessId && r.Finished == finished)
+                                        .Where(r => r.BusinessReceiptId == businessId && r.Finished == finished)
                                         .Select(c => new GetReserveTimeSenderQueryResponse
                                         (
                                             c.Id,
@@ -142,7 +142,7 @@ public sealed class ReserveTimeRepository(ReservationDbContext context)
     public async Task<IEnumerable<IResponse>> GetBusinessReserveTimesSenderByState(int page, ReserveState state, Guid businessId, CancellationToken cancellationToken)
         => await _context.ReserveTimesReceipt.AsQueryable()
                                         .AsNoTracking()
-                                        .Where(r => r.BusinessId == businessId && r.State == state)
+                                        .Where(r => r.BusinessReceiptId == businessId && r.State == state)
                                         .Select(c => new GetReserveTimeSenderQueryResponse
                                         (
                                             c.Id,
@@ -217,6 +217,14 @@ public sealed class ReserveTimeRepository(ReservationDbContext context)
                                         .Include(r => r.ReserveItems)
                                         .ThenInclude(r => r.Service)
                                         .ThenInclude(s => s.Artist)
+                                        .Where(r => r.Id == id)
+                                        .FirstOrDefaultAsync(cancellationToken);
+
+    public async Task<ReserveTimeReceipt> FindAsyncIncludeTransaction(Guid id, CancellationToken cancellationToken = default)
+        => await _context.ReserveTimesReceipt.AsQueryable()
+                                        .Include(r => r.TransactionReceipt)
+                                        .Include(r => r.TransactionSender)
+                                        .AsSplitQuery()
                                         .Where(r => r.Id == id)
                                         .FirstOrDefaultAsync(cancellationToken);
 }

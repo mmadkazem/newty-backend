@@ -95,7 +95,6 @@ public sealed class TokenFactoryService(IOptions<TempTokenOption> optionTemp,
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
-
     private string createRefreshToken(Guid id, string role)
     {
         var claims = new List<Claim>

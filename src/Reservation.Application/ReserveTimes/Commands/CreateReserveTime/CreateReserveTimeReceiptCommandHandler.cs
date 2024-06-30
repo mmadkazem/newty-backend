@@ -7,19 +7,17 @@ public sealed class CreateReserveTimeReceiptCommandHandler(IUnitOfWork uow)
 
     public async Task Handle(CreateReserveTimeReceiptCommandRequest request, CancellationToken cancellationToken)
     {
-        // var wallet = await _uow.Wallets.FindAsyncByUserId(request.UserId, cancellationToken)
-        //     ?? throw new WalletNotFoundException();
 
         var startDate = request.DateTime;
         var endDate = request.DateTime;
         int totalPrice = 0;
         List<ReserveItem> reserveItems = [];
-        foreach (var serviceId in request.Services)
+        foreach (var artistService in request.ArtistServices)
         {
-            var service = await _uow.Services.FindAsync(serviceId, cancellationToken)
+            var service = await _uow.Services.FindAsync(artistService.ServiceId, cancellationToken)
                 ?? throw new ServiceNotFoundException();
 
-            if (!request.Artists.Any(a => a == service.ArtistId))
+            if (service.ArtistId != artistService.ArtistId)
             {
                 throw new ArtistNotFoundException();
             }
@@ -30,6 +28,7 @@ public sealed class CreateReserveTimeReceiptCommandHandler(IUnitOfWork uow)
                 Service = service,
                 Price = service.Price
             };
+
             endDate += service.Time.ToTimeSpan();
             totalPrice += service.Price;
             item.EndDate = endDate;
@@ -45,7 +44,7 @@ public sealed class CreateReserveTimeReceiptCommandHandler(IUnitOfWork uow)
             {
                 foreach (var item in time.ReserveItems)
                 {
-                    if (request.Artists.Any(a => a == item.Service.ArtistId))
+                    if (request.ArtistServices.Any(a => a.ArtistId == item.Service.ArtistId))
                     {
                         if (item.StartDate <= endDate && startDate <= item.EndDate)
                         {
@@ -72,33 +71,49 @@ public sealed class CreateReserveTimeReceiptCommandHandler(IUnitOfWork uow)
             }
         }
         #endregion
-        // if (wallet.Credit - totalPrice < 0)
-        // {
-        //     throw new BalanceInsufficientException();
-        // }
-        // wallet.Credit -= totalPrice;
 
+        var user = await _uow.Users.FindAsync(request.UserId, cancellationToken)
+            ?? throw new UserNotFoundException();
         ReserveTimeReceipt reserveTime = new()
         {
             TotalPrice = totalPrice,
             TotalStartDate = startDate,
             TotalEndDate = endDate,
             ReserveItems = reserveItems,
-            UserId = request.UserId,
-            BusinessId = request.BusinessId,
+            User = user,
+            BusinessReceiptId = request.BusinessId,
             State = ReserveState.Waiting
         };
 
-        // Transaction transaction = new()
-        // {
-        //     Amount = totalPrice,
-        //     ReserveTime = reserveTime,
-        //      Wallet = wallet
-        // };
+        #region Create Transaction
+        var userWallet = await _uow.Wallets.FindAsyncByUserId(request.UserId, cancellationToken)
+            ?? throw new WalletNotFoundException();
+
+        var businessWallet = await _uow.Wallets.FindAsyncByBusinessId(request.BusinessId, cancellationToken)
+            ?? throw new WalletNotFoundException();
+
+        Transaction transactionReceipt = new()
+        {
+            Amount = totalPrice,
+            ReserveTime = reserveTime,
+            Wallet = businessWallet,
+            State = TransactionState.Waiting
+        };
+
+        Transaction transactionSender = new()
+        {
+            Amount = totalPrice,
+            ReserveTime = reserveTime,
+            Wallet = userWallet,
+        };
+
+        reserveTime.TransactionReceipt = transactionReceipt;
+        reserveTime.TransactionSender = transactionSender;
+        #endregion
 
         _uow.ReserveTimes.Add(reserveTime);
-        // _uow.Wallets.AddTransaction(transaction);
 
         await _uow.SaveChangeAsync(cancellationToken);
+
     }
 }

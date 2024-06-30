@@ -16,10 +16,10 @@ public class ReserveTimesSenderController(ISender sender) : ControllerBase
         return Ok();
     }
 
-    [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Put(Guid id, [FromBody] UpdateStateReserveTimeSenderDTO model)
+    [HttpPut("{id:guid}/State/{state}")]
+    public async Task<IActionResult> Put(Guid id, ReserveState state)
     {
-        var request = UpdateStateReserveTimeSenderCommandRequest.Create(id, model);
+        var request = new UpdateStateReserveTimeSenderCommandRequest(id, User.UserId(), state);
         await _sender.Send(request);
         return Ok();
     }

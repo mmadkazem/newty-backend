@@ -19,7 +19,7 @@ public class BusinessConfiguration : IEntityTypeConfiguration<Business>
 
         builder
             .HasMany(b => b.ReserveTimesReceipt)
-            .WithOne(s => s.Business)
-            .HasForeignKey(r => r.BusinessId);
+            .WithOne(s => s.BusinessReceipt)
+            .HasForeignKey(r => r.BusinessReceiptId);
     }
 }

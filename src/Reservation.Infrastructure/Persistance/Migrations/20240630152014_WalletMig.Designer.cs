@@ -12,7 +12,7 @@ using Reservation.Infrastructure.Persistance.Context;
 namespace Reservation.Infrastructure.Persistance.Migrations
 {
     [DbContext(typeof(ReservationDbContext))]
-    [Migration("20240628095921_WalletMig")]
+    [Migration("20240630152014_WalletMig")]
     partial class WalletMig
     {
         /// <inheritdoc />
@@ -92,8 +92,8 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("826d40b6-dc20-4f34-a03c-73dacc439703"),
-                            CreatedOn = new DateTime(2024, 6, 28, 13, 29, 21, 487, DateTimeKind.Local).AddTicks(2485),
+                            Id = new Guid("fb079e36-1b6c-4f0d-8a1c-6e96e0c4e251"),
+                            CreatedOn = new DateTime(2024, 6, 30, 18, 50, 14, 465, DateTimeKind.Local).AddTicks(3009),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FullName = "Admin",
                             IsActive = false,
@@ -699,7 +699,10 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<Guid>("BusinessId")
+                    b.Property<Guid>("BusinessReceiptId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("BusinessSenderId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedOn")
@@ -729,12 +732,26 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                     b.Property<DateTime>("TotalStartDate")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<Guid>("TransactionReceiptId")
+                        .HasColumnType("uuid");
+
+                    b.Property<Guid>("TransactionSenderId")
+                        .HasColumnType("uuid");
+
                     b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("BusinessId");
+                    b.HasIndex("BusinessReceiptId");
+
+                    b.HasIndex("BusinessSenderId");
+
+                    b.HasIndex("TransactionReceiptId")
+                        .IsUnique();
+
+                    b.HasIndex("TransactionSenderId")
+                        .IsUnique();
 
                     b.HasIndex("UserId");
 
@@ -810,8 +827,8 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                     b.Property<DateTime>("ModifiedOn")
                         .HasColumnType("timestamp without time zone");
 
-                    b.Property<Guid?>("ReserveTimeId")
-                        .HasColumnType("uuid");
+                    b.Property<int>("State")
+                        .HasColumnType("integer");
 
                     b.Property<int>("Type")
                         .HasColumnType("integer");
@@ -820,8 +837,6 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("ReserveTimeId");
 
                     b.HasIndex("WalletId");
 
@@ -1058,9 +1073,27 @@ namespace Reservation.Infrastructure.Persistance.Migrations
 
             modelBuilder.Entity("Reservation.Domain.Entities.Reserve.ReserveTimeReceipt", b =>
                 {
-                    b.HasOne("Reservation.Domain.Entities.Businesses.Business", "Business")
+                    b.HasOne("Reservation.Domain.Entities.Businesses.Business", "BusinessReceipt")
                         .WithMany("ReserveTimesReceipt")
-                        .HasForeignKey("BusinessId")
+                        .HasForeignKey("BusinessReceiptId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Reservation.Domain.Entities.Businesses.Business", "BusinessSender")
+                        .WithMany()
+                        .HasForeignKey("BusinessSenderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Reservation.Domain.Entities.Wallets.Transaction", "TransactionReceipt")
+                        .WithOne("ReserveTime")
+                        .HasForeignKey("Reservation.Domain.Entities.Reserve.ReserveTimeReceipt", "TransactionReceiptId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Reservation.Domain.Entities.Wallets.Transaction", "TransactionSender")
+                        .WithOne()
+                        .HasForeignKey("Reservation.Domain.Entities.Reserve.ReserveTimeReceipt", "TransactionSenderId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -1070,7 +1103,13 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Business");
+                    b.Navigation("BusinessReceipt");
+
+                    b.Navigation("BusinessSender");
+
+                    b.Navigation("TransactionReceipt");
+
+                    b.Navigation("TransactionSender");
 
                     b.Navigation("User");
                 });
@@ -1096,17 +1135,11 @@ namespace Reservation.Infrastructure.Persistance.Migrations
 
             modelBuilder.Entity("Reservation.Domain.Entities.Wallets.Transaction", b =>
                 {
-                    b.HasOne("Reservation.Domain.Entities.Reserve.ReserveTimeReceipt", "ReserveTime")
-                        .WithMany()
-                        .HasForeignKey("ReserveTimeId");
-
                     b.HasOne("Reservation.Domain.Entities.Wallets.Wallet", "Wallet")
                         .WithMany("Transactions")
                         .HasForeignKey("WalletId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("ReserveTime");
 
                     b.Navigation("Wallet");
                 });
@@ -1161,6 +1194,11 @@ namespace Reservation.Infrastructure.Persistance.Migrations
             modelBuilder.Entity("Reservation.Domain.Entities.Reserve.ReserveTimeSender", b =>
                 {
                     b.Navigation("ReserveItems");
+                });
+
+            modelBuilder.Entity("Reservation.Domain.Entities.Wallets.Transaction", b =>
+                {
+                    b.Navigation("ReserveTime");
                 });
 
             modelBuilder.Entity("Reservation.Domain.Entities.Wallets.Wallet", b =>

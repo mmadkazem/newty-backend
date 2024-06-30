@@ -10,4 +10,5 @@ public interface IWalletRepository
     Task<IResponse> GetUserWallet(Guid userId, CancellationToken cancellationToken);
     Task<IResponse> GetBusinessWallet(Guid businessId, CancellationToken cancellationToken);
     Task<IEnumerable<IResponse>> GetTransactions(int page, Guid walletId, CancellationToken cancellationToken);
+    Task<Transaction> FindAsyncTransaction(Guid transactionId, CancellationToken cancellationToken);
 }

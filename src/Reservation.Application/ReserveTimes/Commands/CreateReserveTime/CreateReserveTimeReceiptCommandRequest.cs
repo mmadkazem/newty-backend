@@ -3,17 +3,17 @@ namespace Reservation.Application.ReserveTimes.Commands.CreateReserveTime;
 public record CreateReserveTimeReceiptCommandRequest
 (
     Guid UserId, Guid BusinessId,
-    IEnumerable<Guid> Services,
-    IEnumerable<Guid> Artists, DateTime DateTime
+    DateTime DateTime,
+    IEnumerable<ArtistService> ArtistServices
 ) : IRequest
 {
     public static CreateReserveTimeReceiptCommandRequest Create(Guid userId, CreateReserveTimeReceiptDTO model)
-        => new(userId, model.BusinessId, model.Services, model.Artists, model.DateTime);
+        => new(userId, model.BusinessId, model.DateTime, model.ArtistServices);
 }
-
+public record ArtistService(Guid ArtistId, Guid ServiceId);
 public record CreateReserveTimeReceiptDTO
 (
     Guid BusinessId,
-    IEnumerable<Guid> Services,
-    IEnumerable<Guid> Artists, DateTime DateTime
+    DateTime DateTime,
+    IEnumerable<ArtistService> ArtistServices
 );

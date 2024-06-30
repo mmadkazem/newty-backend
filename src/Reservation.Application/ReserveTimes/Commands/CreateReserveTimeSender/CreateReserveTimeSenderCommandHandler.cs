@@ -6,28 +6,28 @@ public sealed class CreateReserveTimeSenderCommandHandler(IUnitOfWork uow) : IRe
 
     public async Task Handle(CreateReserveTimeSenderCommandRequest request, CancellationToken cancellationToken)
     {
-        // var wallet = await _uow.Wallets.FindAsyncByUserId(request.UserId, cancellationToken)
-        //     ?? throw new WalletNotFoundException();
 
         var startDate = request.DateTime;
         var endDate = request.DateTime;
         int totalPrice = 0;
         List<ReserveItem> reserveItems = [];
-        foreach (var serviceId in request.Services)
+        foreach (var artistService in request.ArtistServices)
         {
-            var service = await _uow.Services.FindAsync(serviceId, cancellationToken)
+            var service = await _uow.Services.FindAsync(artistService.ServiceId, cancellationToken)
                 ?? throw new ServiceNotFoundException();
 
-            if (!request.Artists.Any(a => a == service.ArtistId))
+            if (service.ArtistId != artistService.ArtistId)
             {
                 throw new ArtistNotFoundException();
             }
+
             ReserveItem item = new()
             {
                 StartDate = endDate,
                 Service = service,
                 Price = service.Price
             };
+
             endDate += service.Time.ToTimeSpan();
             totalPrice += service.Price;
             item.EndDate = endDate;
@@ -35,7 +35,7 @@ public sealed class CreateReserveTimeSenderCommandHandler(IUnitOfWork uow) : IRe
             reserveItems.Add(item);
         }
 
-        #region Check Business Time Conflict
+        #region Check Business Receipt Time Conflict
         var reserveTimesByBusinessReceiptId = await _uow.ReserveTimes.FindAsyncByBusinessId(request.BusinessReceiptId, cancellationToken);
         if (reserveTimesByBusinessReceiptId.Count != 0)
         {
@@ -43,7 +43,7 @@ public sealed class CreateReserveTimeSenderCommandHandler(IUnitOfWork uow) : IRe
             {
                 foreach (var item in time.ReserveItems)
                 {
-                    if (request.Artists.Any(a => a == item.Service.ArtistId))
+                    if (request.ArtistServices.Any(a => a.ArtistId == item.Service.ArtistId))
                     {
                         if (item.StartDate <= endDate && startDate <= item.EndDate)
                         {
@@ -54,7 +54,7 @@ public sealed class CreateReserveTimeSenderCommandHandler(IUnitOfWork uow) : IRe
             }
         }
         #endregion
-        #region  Check User Time Conflict
+        #region  Check Business Sender Time Conflict
         var reserveTimesByBusinessSenderId = await _uow.ReserveTimes.FindAsyncBusinessSenderId(request.BusinessSenderId, cancellationToken);
         if (reserveTimesByBusinessReceiptId.Count != 0)
         {
@@ -70,13 +70,8 @@ public sealed class CreateReserveTimeSenderCommandHandler(IUnitOfWork uow) : IRe
             }
         }
         #endregion
-        // if (wallet.Credit - totalPrice < 0)
-        // {
-        //     throw new BalanceInsufficientException();
-        // }
-        // wallet.Credit -= totalPrice;
 
-        ReserveTimeSender reserveTime = new()
+        ReserveTimeSender reserveTimeSender = new()
         {
             TotalPrice = totalPrice,
             TotalStartDate = startDate,
@@ -87,15 +82,49 @@ public sealed class CreateReserveTimeSenderCommandHandler(IUnitOfWork uow) : IRe
             State = ReserveState.Waiting
         };
 
-        // Transaction transaction = new()
-        // {
-        //     Amount = totalPrice,
-        //     ReserveTime = reserveTime,
-        //      Wallet = wallet
-        // };
+        var businessSender = await _uow.Businesses.FindAsync(request.BusinessSenderId, cancellationToken)
+            ?? throw new BusinessesNotFoundException();
 
-        _uow.ReserveTimes.Add(reserveTime);
-        // _uow.Wallets.AddTransaction(transaction);
+
+        ReserveTimeReceipt reserveTimeReceipt = new()
+        {
+            TotalPrice = totalPrice,
+            TotalStartDate = startDate,
+            TotalEndDate = endDate,
+            ReserveItems = reserveItems,
+            BusinessSender = businessSender,
+            BusinessReceiptId = request.BusinessReceiptId,
+            State = ReserveState.Waiting
+        };
+
+        #region Create Transaction
+        var walletSender = await _uow.Wallets.FindAsyncByBusinessId(request.BusinessSenderId, cancellationToken)
+            ?? throw new WalletNotFoundException();
+
+        var walletReceipt = await _uow.Wallets.FindAsyncByBusinessId(request.BusinessReceiptId, cancellationToken)
+            ?? throw new WalletNotFoundException();
+
+        Transaction transactionSender = new()
+        {
+            Amount = totalPrice,
+            Wallet = walletSender,
+            Type = TransactionType.ReserveTimeSender
+        };
+
+        Transaction transactionReceipt = new()
+        {
+            Amount = totalPrice,
+            Wallet = walletReceipt,
+            Type = TransactionType.ReserveTimeReceipt,
+            ReserveTime = reserveTimeReceipt
+        };
+
+        reserveTimeReceipt.TransactionReceipt = transactionReceipt;
+        reserveTimeReceipt.TransactionSender = transactionSender;
+
+        #endregion
+
+        _uow.ReserveTimes.Add(reserveTimeSender);
 
         await _uow.SaveChangeAsync(cancellationToken);
     }
