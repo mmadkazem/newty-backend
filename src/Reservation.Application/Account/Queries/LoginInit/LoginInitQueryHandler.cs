@@ -17,23 +17,33 @@ public sealed class LoginInitQueryHandler
         if (user is not null)
         {
             user.OTPCode = code;
+            await _uow.SaveChangeAsync(cancellationToken);
+
+            if (user.Role == Role.Admin)
+            {
+                return _tokenFactory.CreateTempToken(code, request.PhoneNumber, Role.Admin);
+            }
+
             // await _smsProvider.SendLookup(request.PhoneNumber, code);
-            return _tokenFactory.CreateTempToken(code, request.PhoneNumber, Role.User).TempToken;
+            return _tokenFactory.CreateTempToken(code, request.PhoneNumber, Role.User);
         }
 
         var business = await _uow.Businesses.FindAsyncByPhoneNumber(request.PhoneNumber, cancellationToken);
         if (business is not null)
         {
             business.OTPCode = code;
+            await _uow.SaveChangeAsync(cancellationToken);
+
             // await _smsProvider.SendLookup(request.PhoneNumber, code);
-            return _tokenFactory.CreateTempToken(code, request.PhoneNumber, Role.Business).TempToken;
+            return _tokenFactory.CreateTempToken(code, request.PhoneNumber, Role.Business);
         }
+
         try
         {
             var userCache = await _cache.GetAsync<UserCacheVM>(nameof(User) + request.PhoneNumber);
             if (userCache is not null)
             {
-                return  _tokenFactory.CreateTempToken(userCache.OTPCode, request.PhoneNumber, Role.User).TempToken;
+                return _tokenFactory.CreateTempToken(userCache.OTPCode, request.PhoneNumber, Role.User);
             }
         }
         catch (Exception) { }
@@ -42,7 +52,7 @@ public sealed class LoginInitQueryHandler
             var businessCache = await _cache.GetAsync<BusinessCacheVM>(nameof(Business) + request.PhoneNumber);
             if (businessCache is not null)
             {
-                return _tokenFactory.CreateTempToken(businessCache.OTPCode, request.PhoneNumber, Role.Business).TempToken;
+                return _tokenFactory.CreateTempToken(businessCache.OTPCode, request.PhoneNumber, Role.Business);
             }
         }
         catch (Exception) { }

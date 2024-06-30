@@ -5,6 +5,7 @@ global using Reservation.Application.Finances.UserRequestPays.Queries.GetUserReq
 global using Reservation.Application.BusinessServices.Queries.GetServicesByBusinessId;
 global using Reservation.Application.Categories.Queries.GetSubCategoryByCategoryId;
 global using Reservation.Infrastructure.ExternalServices.UploadImageProviders;
+global using Reservation.Infrastructure.ExternalServices.Jwt.TokenValidators;
 global using Reservation.Application.Artists.Queries.GetArtistByBusinessId;
 global using Reservation.Application.Categories.Queries.GetSubCategoryById;
 global using Reservation.Application.ExternalServices.UploadImageProvider;

@@ -1,4 +1,6 @@
+using Reservation.Application.Account.Queries.AdminLogin;
 using Reservation.Application.Account.Queries.LogoutUser;
+using Reservation.Controllers.Businesses;
 
 namespace Reservation.Controllers.Account;
 
@@ -59,5 +61,13 @@ public sealed class AccountController(ISender sender) : ControllerBase
     {
         await _sender.Send(new LogoutQueryRequest(User.UserId()));
         return Ok();
+    }
+
+    [HttpGet("/api/Account/Admin/Login")]
+    [Authorize(Role.Admin)]
+    public async Task<IActionResult> AdminLogin([FromQuery] string code)
+    {
+        var result = await _sender.Send(new AdminLoginQueryRequest(User.UserPhoneNumber(), code));
+        return Ok(result);
     }
 }

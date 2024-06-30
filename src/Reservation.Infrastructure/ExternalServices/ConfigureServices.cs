@@ -1,5 +1,3 @@
-using Reservation.Infrastructure.ExternalServices.Jwt.TokenValidators;
-
 namespace Reservation.Infrastructure.ExternalServices;
 
 public static class ConfigureServices
@@ -24,6 +22,9 @@ public static class ConfigureServices
 
                 services.AddOptions<RefreshTokenOption>()
                         .Bind(configuration.GetSection("RefreshToken"));
+
+                services.AddOptions<AdminTokenOption>()
+                        .Bind(configuration.GetSection("AdminToken"));
 
                 services.AddOptions<SmsProviderOption>()
                         .Bind(configuration.GetSection("SmsProvider"));

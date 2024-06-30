@@ -3,20 +3,18 @@ using Reservation.Share;
 namespace Reservation.Infrastructure.ExternalServices.Jwt;
 
 
-public sealed class TokenFactoryService : ITokenFactoryService
+public sealed class TokenFactoryService(IOptions<TempTokenOption> optionTemp,
+        IOptions<UserTokenOption> optionUser,
+        IOptions<BusinessTokenOption> optionBusiness,
+        IOptions<RefreshTokenOption> optionsRefresh,
+        IOptions<AdminTokenOption> optionsAdmin)
+    : ITokenFactoryService
 {
-    private readonly IOptions<TempTokenOption> _optionTemp;
-    private readonly IOptions<UserTokenOption> _optionUser;
-    private readonly IOptions<BusinessTokenOption> _optionBusiness;
-    private readonly IOptions<RefreshTokenOption> _optionsRefresh;
-
-    public TokenFactoryService(IOptions<TempTokenOption> optionTemp, IOptions<UserTokenOption> optionUser, IOptions<BusinessTokenOption> optionBusiness, IOptions<RefreshTokenOption> optionsRefresh)
-    {
-        _optionTemp = optionTemp;
-        _optionUser = optionUser;
-        _optionBusiness = optionBusiness;
-        _optionsRefresh = optionsRefresh;
-    }
+    private readonly IOptions<TempTokenOption> _optionTemp = optionTemp;
+    private readonly IOptions<UserTokenOption> _optionUser = optionUser;
+    private readonly IOptions<BusinessTokenOption> _optionBusiness = optionBusiness;
+    private readonly IOptions<RefreshTokenOption> _optionsRefresh = optionsRefresh;
+    private readonly IOptions<AdminTokenOption> _optionsAdmin = optionsAdmin;
 
     public JwtTempData CreateTempToken(string code, string phoneNumber, string role)
     {
@@ -60,6 +58,42 @@ public sealed class TokenFactoryService : ITokenFactoryService
         var accessToken = createBusinessAccessToken(business);
         var refreshToken = createRefreshToken(business.Id, Role.Business);
         return new(accessToken, refreshToken);
+    }
+
+    public JwtTokensData CreateAdminToken(User admin)
+    {
+        var accessToken = createAdminAccessToken(admin);
+        var refreshToken = createRefreshToken(admin.Id, Role.Admin);
+        return new(accessToken, refreshToken);
+    }
+
+    private string createAdminAccessToken(User admin)
+    {
+        var claims = new List<Claim>
+        {
+            // Unique Id for all Jwt tokes
+            new(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Jti, StringUtils.CreateCryptographicallySecureGuid(), ClaimValueTypes.String, _optionsAdmin.Value.Issuer),
+            // Issuer
+            new(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Iss, _optionsAdmin.Value.Issuer, ClaimValueTypes.String, _optionsAdmin.Value.Issuer),
+            // Issued at
+            new(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64, _optionsAdmin.Value.Issuer),
+            new(ClaimTypes.NameIdentifier, admin.Id.ToString(), ClaimValueTypes.String, _optionsAdmin.Value.Issuer),
+            // add roles
+            new(ClaimTypes.Role, Role.Admin, ClaimValueTypes.String, _optionsAdmin.Value.Issuer)
+        };
+
+        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_optionsAdmin.Value.Key));
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+        var now = DateTime.UtcNow;
+        var token = new JwtSecurityToken(
+            issuer: _optionsAdmin.Value.Issuer,
+            audience: _optionsAdmin.Value.Audience,
+            claims: claims,
+            notBefore: now,
+            expires: now.AddMinutes(_optionsAdmin.Value.AccessTokenExpirationMinutes),
+            signingCredentials: creds);
+
+        return new JwtSecurityTokenHandler().WriteToken(token);
     }
 
     private string createRefreshToken(Guid id, string role)
@@ -151,4 +185,5 @@ public sealed class TokenFactoryService : ITokenFactoryService
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
+
 }
