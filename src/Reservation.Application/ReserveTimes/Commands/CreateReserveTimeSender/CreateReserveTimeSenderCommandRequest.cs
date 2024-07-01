@@ -11,8 +11,6 @@ public record CreateReserveTimeSenderCommandRequest
     public static CreateReserveTimeSenderCommandRequest Create(Guid BusinessSenderId, CreateReserveTimeSenderDTO model)
         => new(BusinessSenderId, model.BusinessReceiptId, model.DateTime, model.ArtistServices);
 }
-public record ArtistService(Guid ArtistId, Guid ServiceId);
-
 public record CreateReserveTimeSenderDTO
 (
     Guid BusinessReceiptId,

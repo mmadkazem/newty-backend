@@ -1,3 +1,4 @@
+global using Reservation.Application.ReserveTimes.Commands.CreateReserveTime;
 global using Reservation.Application.Finances.BusinessRequestPays.Exceptions;
 global using Reservation.Application.ExternalServices.UploadImageProvider;
 global using Reservation.Application.Finances.UserRequestPays.Exceptions;
