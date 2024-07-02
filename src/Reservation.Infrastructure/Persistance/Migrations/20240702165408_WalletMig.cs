@@ -209,7 +209,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "CityId", "CreatedOn", "DeletedOn", "FullName", "IsActive", "IsDeleted", "ModifiedOn", "OTPCode", "PhoneNumber", "Role", "WalletId" },
-                values: new object[] { new Guid("fb079e36-1b6c-4f0d-8a1c-6e96e0c4e251"), null, new DateTime(2024, 6, 30, 18, 50, 14, 465, DateTimeKind.Local).AddTicks(3009), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Admin", false, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "09111111111", "Admin", null });
+                values: new object[] { new Guid("05328466-7352-4ee1-add8-fe1cb2607b11"), null, new DateTime(2024, 7, 2, 20, 24, 8, 225, DateTimeKind.Local).AddTicks(3966), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Admin", false, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "09111111111", "Admin", null });
 
             migrationBuilder.CreateIndex(
                 name: "IX_ReserveTimesSender_BusinessSenderId",
@@ -391,7 +391,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
             migrationBuilder.DeleteData(
                 table: "Users",
                 keyColumn: "Id",
-                keyValue: new Guid("fb079e36-1b6c-4f0d-8a1c-6e96e0c4e251"));
+                keyValue: new Guid("05328466-7352-4ee1-add8-fe1cb2607b11"));
 
             migrationBuilder.DropColumn(
                 name: "IsActive",

@@ -64,3 +64,4 @@ global using Amazon.Runtime;
 global using System.Text;
 global using Amazon.S3;
 global using DotNetEnv;
+global using Microsoft.EntityFrameworkCore.Diagnostics;

@@ -89,8 +89,8 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("fb079e36-1b6c-4f0d-8a1c-6e96e0c4e251"),
-                            CreatedOn = new DateTime(2024, 6, 30, 18, 50, 14, 465, DateTimeKind.Local).AddTicks(3009),
+                            Id = new Guid("05328466-7352-4ee1-add8-fe1cb2607b11"),
+                            CreatedOn = new DateTime(2024, 7, 2, 20, 24, 8, 225, DateTimeKind.Local).AddTicks(3966),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FullName = "Admin",
                             IsActive = false,
