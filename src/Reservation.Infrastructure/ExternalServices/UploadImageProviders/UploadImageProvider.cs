@@ -27,7 +27,7 @@ public sealed class UploadImageProvider : IUploadImageProvider
         var result = response.S3Objects.Any(s => s.Key == objectKey);
         if (!result)
         {
-            return string.Empty;
+            return null;
         }
 
         GetPreSignedUrlRequest urlRequest = new()
@@ -40,7 +40,7 @@ public sealed class UploadImageProvider : IUploadImageProvider
         return await client.GetPreSignedURLAsync(urlRequest);
     }
 
-    public async Task<string> Insert(IFormFile file)
+    public async Task<string> Insert(IFormFile file, Guid subjectId)
     {
         Env.Load();
 
@@ -54,7 +54,7 @@ public sealed class UploadImageProvider : IUploadImageProvider
 
         var credentials = new BasicAWSCredentials(Env.GetString("LIARA_ACCESS_KEY"), Env.GetString("LIARA_SECRET_KEY"));
         using var client = new AmazonS3Client(credentials, config);
-        var objectKey = Guid.NewGuid().ToString() + file.FileName;
+        var objectKey = $"{Guid.NewGuid()}{file.FileName.Replace(" ", "")}@{subjectId}";
 
         try
         {
@@ -92,10 +92,26 @@ public sealed class UploadImageProvider : IUploadImageProvider
             ForcePathStyle = true,
             SignatureVersion = "4"
         };
+
         try
         {
             var credentials = new BasicAWSCredentials(Env.GetString("LIARA_ACCESS_KEY"), Env.GetString("LIARA_SECRET_KEY"));
             using var client = new AmazonS3Client(credentials, config);
+
+            #region Check Exist File
+            ListObjectsV2Request request = new()
+            {
+                BucketName = Env.GetString("LIARA_BUCKET_NAME"),
+            };
+
+            var response = await client.ListObjectsV2Async(request);
+            var result = response.S3Objects.Any(s => s.Key == objectKey);
+            if (!result)
+            {
+                return null;
+            }
+            #endregion
+
             DeleteObjectRequest deleteRequest = new()
             {
                 BucketName = Env.GetString("LIARA_BUCKET_NAME"),

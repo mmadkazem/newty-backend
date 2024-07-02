@@ -5,11 +5,16 @@ public static class ConfigureServices
         public static IServiceCollection RegisterExternalServices(this IServiceCollection services, IConfiguration configuration)
         {
                 // DI Services
-                services.AddScoped<ITempTokenValidatorService, TempTokenValidatorService>();
                 services.AddTransient<ITokenFactoryService, TokenFactoryService>();
                 services.AddTransient<IUploadImageProvider, UploadImageProvider>();
                 services.AddTransient<ISmsProvider, KavenegarProvider>();
                 services.AddTransient<ICacheProvider, CacheProvider>();
+
+                // DI Token Validators
+                services.AddScoped<IBusinessTokenValidatorService, BusinessTokenValidatorService>();
+                services.AddScoped<ITempTokenValidatorService, TempTokenValidatorService>();
+                services.AddScoped<IUserTokenValidatorService, UserTokenValidatorService>();
+
                 // DI Options
                 services.AddOptions<TempTokenOption>()
                         .Bind(configuration.GetSection("TempToken"));
@@ -29,6 +34,7 @@ public static class ConfigureServices
                 services.AddOptions<SmsProviderOption>()
                         .Bind(configuration.GetSection("SmsProvider"));
 
+                // DI Redis Cache
                 services.AddStackExchangeRedisCache(options =>
                         options.Configuration = configuration.GetConnectionString("Redis"));
 
