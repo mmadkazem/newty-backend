@@ -25,7 +25,7 @@ public sealed class UserWalletsController(ISender sender) : ControllerBase
 
     [HttpPut("Users/Found")]
     [Authorize(AuthenticationSchemes = AuthScheme.UserScheme)]
-    public async Task<IActionResult> PutUsers(decimal credit)
+    public async Task<IActionResult> PutFoundUsers(decimal credit)
     {
         var request = FoundUserWalletCommandRequest.Create(User.UserId(), credit);
         await _sender.Send(request);
@@ -34,9 +34,27 @@ public sealed class UserWalletsController(ISender sender) : ControllerBase
 
     [HttpPut("Businesses/Found")]
     [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
-    public async Task<IActionResult> PutBusiness(decimal credit)
+    public async Task<IActionResult> PutFoundBusiness(decimal credit)
     {
         var request = FoundBusinessWalletCommandRequest.Create(User.UserId(), credit);
+        await _sender.Send(request);
+        return Ok();
+    }
+
+    [HttpPut("Businesses/Withdraw")]
+    [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
+    public async Task<IActionResult> PutWithdrawBusiness(decimal amount)
+    {
+        var request = WithdrawBusinessWalletCommandRequest.Create(User.UserId(), amount);
+        await _sender.Send(request);
+        return Ok();
+    }
+
+    [HttpPut("Users/Withdraw")]
+    [Authorize(AuthenticationSchemes = AuthScheme.UserScheme)]
+    public async Task<IActionResult> PutWithdrawUsers(decimal amount)
+    {
+        var request = WithdrawUserWalletCommandRequest.Create(User.UserId(), amount);
         await _sender.Send(request);
         return Ok();
     }

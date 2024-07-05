@@ -8,6 +8,7 @@ public class ReserveTimeReceipt : BaseClass
     public int TotalPrice { get; set; }
     public ReserveState State { get; set; }
     public bool Finished { get; set; } = false;
+    public bool IsPay { get; set; } = false;
 
     // Business Receipt Reserve Time
     public Business BusinessReceipt { get; set; }
@@ -39,6 +40,7 @@ public class ReserveTimeSender : BaseClass
     public int TotalPrice { get; set; }
     public ReserveState State { get; set; }
     public bool Finished { get; set; } = false;
+    public bool IsPay { get; set; } = false;
 
     // Business Reserve Time In
     public Business BusinessSender { get; set; }

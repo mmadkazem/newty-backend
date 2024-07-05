@@ -1,3 +1,6 @@
+using Reservation.Application.ExternalServices.Job;
+using Reservation.Infrastructure.ExternalServices;
+
 var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;
@@ -16,16 +19,20 @@ var services = builder.Services;
 // Configure the HTTP request pipeline
 var app = builder.Build();
 {
-    // if (app.Environment.IsDevelopment())
-    // {
-        app.UseSwagger();
-        app.UseSwaggerUI();
-    // }
+    var payingReserveTimeJob = app.Services.GetService<IPayingReserveTimeJob>();
+    payingReserveTimeJob.Execute();
+
+    app.UseSwagger();
+    app.UseSwaggerUI();
 
     app.UseHttpsRedirection();
+    app.UseRouting();
     app.UseShared();
+
     app.UseAuthentication();
     app.UseAuthorization();
-    app.MapControllers();
+
+    app.UseJob();
+
     app.Run();
 }

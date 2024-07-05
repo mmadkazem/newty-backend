@@ -1,3 +1,5 @@
+using Hangfire.Dashboard;
+
 namespace Reservation.Infrastructure.ExternalServices;
 
 public static class ConfigureServices
@@ -14,6 +16,9 @@ public static class ConfigureServices
                 services.AddScoped<IBusinessTokenValidatorService, BusinessTokenValidatorService>();
                 services.AddScoped<ITempTokenValidatorService, TempTokenValidatorService>();
                 services.AddScoped<IUserTokenValidatorService, UserTokenValidatorService>();
+
+                // DI Job
+                services.AddSingleton<IPayingReserveTimeJob, PayingReserveTimeJob>();
 
                 // DI Options
                 services.AddOptions<TempTokenOption>()
@@ -38,6 +43,34 @@ public static class ConfigureServices
                 services.AddStackExchangeRedisCache(options =>
                         options.Configuration = configuration.GetConnectionString("Redis"));
 
+#pragma warning disable CS0618 // Type or member is obsolete
+                // DI Hangfire
+                services.AddHangfire
+                (
+                        c => c.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                                .UseSimpleAssemblyNameTypeSerializer()
+                                .UseRecommendedSerializerSettings()
+                                .UsePostgreSqlStorage(configuration.GetConnectionString("JobConnection"))
+                );
+                services.AddHangfireServer();
+#pragma warning restore CS0618 // Type or member is obsolete
+
                 return services;
+        }
+        public static IApplicationBuilder UseJob(this IApplicationBuilder app)
+        {
+                app.UseHangfireDashboard("/job/dashboard", new DashboardOptions()
+                {
+                        Authorization = [new AuthorizationDashboard()],
+                        IsReadOnlyFunc = (DashboardContext context) => true
+                });
+
+                app.UseEndpoints(endpoints =>
+                {
+                        endpoints.MapControllers();
+                        endpoints.MapHangfireDashboard();
+                });
+
+                return app;
         }
 }
