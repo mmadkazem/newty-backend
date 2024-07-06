@@ -1,4 +1,3 @@
-
 namespace Reservation.Application.Categories.Commands.AddCategoryPoint;
 
 

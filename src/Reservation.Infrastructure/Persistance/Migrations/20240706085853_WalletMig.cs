@@ -12,8 +12,16 @@ namespace Reservation.Infrastructure.Persistance.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
+                name: "FK_Businesses_SubCategories_SubCategoryId",
+                table: "Businesses");
+
+            migrationBuilder.DropForeignKey(
                 name: "FK_Businesses_Wallet_WalletId",
                 table: "Businesses");
+
+            migrationBuilder.DropForeignKey(
+                name: "FK_Points_SubCategories_SubCategoryId",
+                table: "Points");
 
             migrationBuilder.DropForeignKey(
                 name: "FK_ReserveTimesReceipt_Businesses_BusinessId",
@@ -43,6 +51,9 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 name: "FK_Users_Wallet_WalletId",
                 table: "Users");
 
+            migrationBuilder.DropTable(
+                name: "SubCategories");
+
             migrationBuilder.DropIndex(
                 name: "IX_ReserveTimesSender_BusinessInId",
                 table: "ReserveTimesSender");
@@ -50,6 +61,14 @@ namespace Reservation.Infrastructure.Persistance.Migrations
             migrationBuilder.DropIndex(
                 name: "IX_ReserveTimesReceipt_BusinessId",
                 table: "ReserveTimesReceipt");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Points_SubCategoryId",
+                table: "Points");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Businesses_SubCategoryId",
+                table: "Businesses");
 
             migrationBuilder.DropPrimaryKey(
                 name: "PK_Wallet",
@@ -66,6 +85,22 @@ namespace Reservation.Infrastructure.Persistance.Migrations
             migrationBuilder.DropColumn(
                 name: "BusinessInId",
                 table: "ReserveTimesSender");
+
+            migrationBuilder.DropColumn(
+                name: "SubCategoryId",
+                table: "Points");
+
+            migrationBuilder.DropColumn(
+                name: "AveragePoint",
+                table: "Categories");
+
+            migrationBuilder.DropColumn(
+                name: "SubCategoryId",
+                table: "Businesses");
+
+            migrationBuilder.DropColumn(
+                name: "Average",
+                table: "Artists");
 
             migrationBuilder.DropColumn(
                 name: "ReserveTimeId",
@@ -140,6 +175,13 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 oldType: "uuid",
                 oldNullable: true);
 
+            migrationBuilder.AddColumn<bool>(
+                name: "IsPay",
+                table: "ReserveTimesSender",
+                type: "boolean",
+                nullable: false,
+                defaultValue: false);
+
             migrationBuilder.AddColumn<Guid>(
                 name: "BusinessReceiptId",
                 table: "ReserveTimesReceipt",
@@ -154,12 +196,25 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 nullable: false,
                 defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
 
+            migrationBuilder.AddColumn<bool>(
+                name: "IsPay",
+                table: "ReserveTimesReceipt",
+                type: "boolean",
+                nullable: false,
+                defaultValue: false);
+
             migrationBuilder.AddColumn<Guid>(
                 name: "TransactionReceiptId",
                 table: "ReserveTimesReceipt",
                 type: "uuid",
                 nullable: false,
                 defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
+
+            migrationBuilder.AddColumn<Guid>(
+                name: "ParentCategoryId",
+                table: "Categories",
+                type: "uuid",
+                nullable: true);
 
             migrationBuilder.AlterColumn<Guid>(
                 name: "WalletId",
@@ -175,6 +230,12 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 type: "interval",
                 nullable: false,
                 defaultValue: new TimeSpan(0, 0, 0, 0, 0));
+
+            migrationBuilder.AddColumn<int[]>(
+                name: "Holidays",
+                table: "Businesses",
+                type: "integer[]",
+                nullable: true);
 
             migrationBuilder.AddColumn<string>(
                 name: "OTPCode",
@@ -206,10 +267,64 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 table: "Transactions",
                 column: "Id");
 
+            migrationBuilder.CreateTable(
+                name: "BusinessRequestPays",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Amount = table.Column<int>(type: "integer", nullable: false),
+                    IsPay = table.Column<bool>(type: "boolean", nullable: false),
+                    PayDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Authorizy = table.Column<string>(type: "text", nullable: true),
+                    RefId = table.Column<int>(type: "integer", nullable: false),
+                    BusinessId = table.Column<Guid>(type: "uuid", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    DeletedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BusinessRequestPays", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_BusinessRequestPays_Businesses_BusinessId",
+                        column: x => x.BusinessId,
+                        principalTable: "Businesses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UserRequestPays",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Amount = table.Column<int>(type: "integer", nullable: false),
+                    IsPay = table.Column<bool>(type: "boolean", nullable: false),
+                    PayDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Authorizy = table.Column<string>(type: "text", nullable: true),
+                    RefId = table.Column<int>(type: "integer", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    DeletedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_UserRequestPays", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_UserRequestPays_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.InsertData(
                 table: "Users",
                 columns: new[] { "Id", "CityId", "CreatedOn", "DeletedOn", "FullName", "IsActive", "IsDeleted", "ModifiedOn", "OTPCode", "PhoneNumber", "Role", "WalletId" },
-                values: new object[] { new Guid("05328466-7352-4ee1-add8-fe1cb2607b11"), null, new DateTime(2024, 7, 2, 20, 24, 8, 225, DateTimeKind.Local).AddTicks(3966), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Admin", false, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "09111111111", "Admin", null });
+                values: new object[] { new Guid("0a64004e-6eac-4aac-b74a-865b9113d2ff"), null, new DateTime(2024, 7, 6, 12, 28, 52, 661, DateTimeKind.Local).AddTicks(6705), new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), "Admin", false, false, new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified), null, "09111111111", "Admin", null });
 
             migrationBuilder.CreateIndex(
                 name: "IX_ReserveTimesSender_BusinessSenderId",
@@ -238,11 +353,33 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 column: "TransactionSenderId",
                 unique: true);
 
+            migrationBuilder.CreateIndex(
+                name: "IX_Categories_ParentCategoryId",
+                table: "Categories",
+                column: "ParentCategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_BusinessRequestPays_BusinessId",
+                table: "BusinessRequestPays",
+                column: "BusinessId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_UserRequestPays_UserId",
+                table: "UserRequestPays",
+                column: "UserId");
+
             migrationBuilder.AddForeignKey(
                 name: "FK_Businesses_Wallets_WalletId",
                 table: "Businesses",
                 column: "WalletId",
                 principalTable: "Wallets",
+                principalColumn: "Id");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Categories_Categories_ParentCategoryId",
+                table: "Categories",
+                column: "ParentCategoryId",
+                principalTable: "Categories",
                 principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
@@ -325,6 +462,10 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 table: "Businesses");
 
             migrationBuilder.DropForeignKey(
+                name: "FK_Categories_Categories_ParentCategoryId",
+                table: "Categories");
+
+            migrationBuilder.DropForeignKey(
                 name: "FK_ReserveTimesReceipt_Businesses_BusinessReceiptId",
                 table: "ReserveTimesReceipt");
 
@@ -360,6 +501,12 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 name: "FK_Users_Wallets_WalletId",
                 table: "Users");
 
+            migrationBuilder.DropTable(
+                name: "BusinessRequestPays");
+
+            migrationBuilder.DropTable(
+                name: "UserRequestPays");
+
             migrationBuilder.DropIndex(
                 name: "IX_ReserveTimesSender_BusinessSenderId",
                 table: "ReserveTimesSender");
@@ -380,6 +527,10 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 name: "IX_ReserveTimesReceipt_TransactionSenderId",
                 table: "ReserveTimesReceipt");
 
+            migrationBuilder.DropIndex(
+                name: "IX_Categories_ParentCategoryId",
+                table: "Categories");
+
             migrationBuilder.DropPrimaryKey(
                 name: "PK_Wallets",
                 table: "Wallets");
@@ -391,7 +542,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
             migrationBuilder.DeleteData(
                 table: "Users",
                 keyColumn: "Id",
-                keyValue: new Guid("05328466-7352-4ee1-add8-fe1cb2607b11"));
+                keyValue: new Guid("0a64004e-6eac-4aac-b74a-865b9113d2ff"));
 
             migrationBuilder.DropColumn(
                 name: "IsActive",
@@ -402,6 +553,10 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 table: "Users");
 
             migrationBuilder.DropColumn(
+                name: "IsPay",
+                table: "ReserveTimesSender");
+
+            migrationBuilder.DropColumn(
                 name: "BusinessReceiptId",
                 table: "ReserveTimesReceipt");
 
@@ -410,11 +565,23 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 table: "ReserveTimesReceipt");
 
             migrationBuilder.DropColumn(
+                name: "IsPay",
+                table: "ReserveTimesReceipt");
+
+            migrationBuilder.DropColumn(
                 name: "TransactionReceiptId",
                 table: "ReserveTimesReceipt");
 
             migrationBuilder.DropColumn(
+                name: "ParentCategoryId",
+                table: "Categories");
+
+            migrationBuilder.DropColumn(
                 name: "EndHoursOfWor",
+                table: "Businesses");
+
+            migrationBuilder.DropColumn(
+                name: "Holidays",
                 table: "Businesses");
 
             migrationBuilder.DropColumn(
@@ -490,6 +657,19 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 nullable: false,
                 defaultValue: new Guid("00000000-0000-0000-0000-000000000000"));
 
+            migrationBuilder.AddColumn<Guid>(
+                name: "SubCategoryId",
+                table: "Points",
+                type: "uuid",
+                nullable: true);
+
+            migrationBuilder.AddColumn<double>(
+                name: "AveragePoint",
+                table: "Categories",
+                type: "double precision",
+                nullable: false,
+                defaultValue: 0.0);
+
             migrationBuilder.AlterColumn<Guid>(
                 name: "WalletId",
                 table: "Businesses",
@@ -499,6 +679,19 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 oldClrType: typeof(Guid),
                 oldType: "uuid",
                 oldNullable: true);
+
+            migrationBuilder.AddColumn<Guid>(
+                name: "SubCategoryId",
+                table: "Businesses",
+                type: "uuid",
+                nullable: true);
+
+            migrationBuilder.AddColumn<double>(
+                name: "Average",
+                table: "Artists",
+                type: "double precision",
+                nullable: false,
+                defaultValue: 0.0);
 
             migrationBuilder.AddColumn<Guid>(
                 name: "ReserveTimeId",
@@ -516,6 +709,31 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 table: "Transaction",
                 column: "Id");
 
+            migrationBuilder.CreateTable(
+                name: "SubCategories",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    CategoryId = table.Column<Guid>(type: "uuid", nullable: true),
+                    AveragePoint = table.Column<double>(type: "double precision", nullable: false),
+                    CoverImagePath = table.Column<string>(type: "text", nullable: true),
+                    CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    DeletedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    Title = table.Column<string>(type: "text", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SubCategories", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SubCategories_Categories_CategoryId",
+                        column: x => x.CategoryId,
+                        principalTable: "Categories",
+                        principalColumn: "Id");
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_ReserveTimesSender_BusinessInId",
                 table: "ReserveTimesSender",
@@ -527,9 +745,31 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 column: "BusinessId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Points_SubCategoryId",
+                table: "Points",
+                column: "SubCategoryId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Businesses_SubCategoryId",
+                table: "Businesses",
+                column: "SubCategoryId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Transaction_ReserveTimeId",
                 table: "Transaction",
                 column: "ReserveTimeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SubCategories_CategoryId",
+                table: "SubCategories",
+                column: "CategoryId");
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Businesses_SubCategories_SubCategoryId",
+                table: "Businesses",
+                column: "SubCategoryId",
+                principalTable: "SubCategories",
+                principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_Businesses_Wallet_WalletId",
@@ -538,6 +778,13 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 principalTable: "Wallet",
                 principalColumn: "Id",
                 onDelete: ReferentialAction.Cascade);
+
+            migrationBuilder.AddForeignKey(
+                name: "FK_Points_SubCategories_SubCategoryId",
+                table: "Points",
+                column: "SubCategoryId",
+                principalTable: "SubCategories",
+                principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
                 name: "FK_ReserveTimesReceipt_Businesses_BusinessId",

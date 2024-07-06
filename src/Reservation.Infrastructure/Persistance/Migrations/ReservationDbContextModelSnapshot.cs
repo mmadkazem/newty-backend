@@ -89,8 +89,8 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("05328466-7352-4ee1-add8-fe1cb2607b11"),
-                            CreatedOn = new DateTime(2024, 7, 2, 20, 24, 8, 225, DateTimeKind.Local).AddTicks(3966),
+                            Id = new Guid("0a64004e-6eac-4aac-b74a-865b9113d2ff"),
+                            CreatedOn = new DateTime(2024, 7, 6, 12, 28, 52, 661, DateTimeKind.Local).AddTicks(6705),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FullName = "Admin",
                             IsActive = false,
@@ -109,9 +109,6 @@ namespace Reservation.Infrastructure.Persistance.Migrations
 
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
-
-                    b.Property<double>("Average")
-                        .HasColumnType("double precision");
 
                     b.Property<Guid>("BusinessId")
                         .HasColumnType("uuid");
@@ -174,6 +171,9 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                     b.Property<TimeSpan>("EndHoursOfWor")
                         .HasColumnType("interval");
 
+                    b.Property<int[]>("Holidays")
+                        .HasColumnType("integer[]");
+
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
@@ -201,17 +201,12 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                     b.Property<TimeSpan>("StartHoursOfWor")
                         .HasColumnType("interval");
 
-                    b.Property<Guid?>("SubCategoryId")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid?>("WalletId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CityId");
-
-                    b.HasIndex("SubCategoryId");
 
                     b.HasIndex("WalletId");
 
@@ -405,9 +400,6 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uuid");
 
-                    b.Property<double>("AveragePoint")
-                        .HasColumnType("double precision");
-
                     b.Property<string>("CoverImagePath")
                         .HasColumnType("text");
 
@@ -426,52 +418,17 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                     b.Property<DateTime>("ModifiedOn")
                         .HasColumnType("timestamp without time zone");
 
+                    b.Property<Guid?>("ParentCategoryId")
+                        .HasColumnType("uuid");
+
                     b.Property<string>("Title")
                         .HasColumnType("text");
 
                     b.HasKey("Id");
+
+                    b.HasIndex("ParentCategoryId");
 
                     b.ToTable("Categories");
-                });
-
-            modelBuilder.Entity("Reservation.Domain.Entities.Categories.SubCategory", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<double>("AveragePoint")
-                        .HasColumnType("double precision");
-
-                    b.Property<Guid?>("CategoryId")
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("CoverImagePath")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime>("DeletedOn")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime>("ModifiedOn")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Title")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("CategoryId");
-
-                    b.ToTable("SubCategories");
                 });
 
             modelBuilder.Entity("Reservation.Domain.Entities.Cities.City", b =>
@@ -619,9 +576,6 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                     b.Property<int>("Rate")
                         .HasColumnType("integer");
 
-                    b.Property<Guid?>("SubCategoryId")
-                        .HasColumnType("uuid");
-
                     b.Property<Guid?>("UserId")
                         .HasColumnType("uuid");
 
@@ -632,8 +586,6 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                     b.HasIndex("BusinessId");
 
                     b.HasIndex("CategoryId");
-
-                    b.HasIndex("SubCategoryId");
 
                     b.HasIndex("UserId");
 
@@ -714,6 +666,9 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
+                    b.Property<bool>("IsPay")
+                        .HasColumnType("boolean");
+
                     b.Property<DateTime>("ModifiedOn")
                         .HasColumnType("timestamp without time zone");
 
@@ -777,6 +732,9 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         .HasColumnType("boolean");
 
                     b.Property<bool>("IsDeleted")
+                        .HasColumnType("boolean");
+
+                    b.Property<bool>("IsPay")
                         .HasColumnType("boolean");
 
                     b.Property<DateTime>("ModifiedOn")
@@ -915,10 +873,6 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Reservation.Domain.Entities.Categories.SubCategory", null)
-                        .WithMany("Businesses")
-                        .HasForeignKey("SubCategoryId");
-
                     b.HasOne("Reservation.Domain.Entities.Wallets.Wallet", "Wallet")
                         .WithMany()
                         .HasForeignKey("WalletId");
@@ -993,13 +947,13 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Reservation.Domain.Entities.Categories.SubCategory", b =>
+            modelBuilder.Entity("Reservation.Domain.Entities.Categories.Category", b =>
                 {
-                    b.HasOne("Reservation.Domain.Entities.Categories.Category", "Category")
-                        .WithMany("SubCategories")
-                        .HasForeignKey("CategoryId");
+                    b.HasOne("Reservation.Domain.Entities.Categories.Category", "ParentCategory")
+                        .WithMany()
+                        .HasForeignKey("ParentCategoryId");
 
-                    b.Navigation("Category");
+                    b.Navigation("ParentCategory");
                 });
 
             modelBuilder.Entity("Reservation.Domain.Entities.Finances.BusinessRequestPay", b =>
@@ -1030,7 +984,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         .WithMany("Points")
                         .HasForeignKey("ArtistId");
 
-                    b.HasOne("Reservation.Domain.Entities.Businesses.Business", null)
+                    b.HasOne("Reservation.Domain.Entities.Businesses.Business", "Business")
                         .WithMany("Points")
                         .HasForeignKey("BusinessId");
 
@@ -1038,13 +992,11 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         .WithMany("Points")
                         .HasForeignKey("CategoryId");
 
-                    b.HasOne("Reservation.Domain.Entities.Categories.SubCategory", null)
-                        .WithMany("Points")
-                        .HasForeignKey("SubCategoryId");
-
                     b.HasOne("Reservation.Domain.Entities.Account.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId");
+
+                    b.Navigation("Business");
 
                     b.Navigation("User");
                 });
@@ -1171,15 +1123,6 @@ namespace Reservation.Infrastructure.Persistance.Migrations
 
             modelBuilder.Entity("Reservation.Domain.Entities.Categories.Category", b =>
                 {
-                    b.Navigation("Points");
-
-                    b.Navigation("SubCategories");
-                });
-
-            modelBuilder.Entity("Reservation.Domain.Entities.Categories.SubCategory", b =>
-                {
-                    b.Navigation("Businesses");
-
                     b.Navigation("Points");
                 });
 

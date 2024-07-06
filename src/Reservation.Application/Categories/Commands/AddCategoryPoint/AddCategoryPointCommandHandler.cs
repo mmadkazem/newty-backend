@@ -1,4 +1,3 @@
-
 namespace Reservation.Application.Categories.Commands.AddCategoryPoint;
 
 public class AddCategoryPointCommandHandler(IUnitOfWork uow)
@@ -13,8 +12,6 @@ public class AddCategoryPointCommandHandler(IUnitOfWork uow)
 
         var category = await _uow.Categories.FindAsyncByIncludePoints(request.CategoryId, cancellationToken)
             ?? throw new CategoryNotFoundException();
-
-        category.AveragePoint = await _uow.Categories.GetAveragePoints(request.CategoryId, cancellationToken);
 
         Point point = new()
         {

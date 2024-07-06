@@ -29,7 +29,6 @@ public sealed class ReservationDbContext : DbContext
 
     // Category
     public DbSet<Category> Categories { get; set; }
-    public DbSet<SubCategory> SubCategories { get; set; }
 
     // Point
     public DbSet<Point> Points { get; set; }

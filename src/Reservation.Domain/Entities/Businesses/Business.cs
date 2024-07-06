@@ -14,6 +14,7 @@ public class Business : BaseClass
     public bool IsActive { get; set; }
     public TimeSpan StartHoursOfWor { get; set; }
     public TimeSpan EndHoursOfWor { get; set; }
+    public ICollection<DayOfWeek> Holidays { get; set; } = [];
 
     // Business Wallet
     public Wallet Wallet { get; set; }
@@ -27,7 +28,7 @@ public class Business : BaseClass
     public Guid SmsCreditId { get; set; }
 
     // Business Point
-    public ICollection<Point> Points { get; set; }
+    public ICollection<Point> Points { get; set; } = [];
 
     // Business Services
     public ICollection<Service> Services { get; set; }
@@ -50,5 +51,5 @@ public class Business : BaseClass
     public ICollection<ReserveTimeReceipt> ReserveTimesReceipt { get; set; }
 
     // Business Wallet
-    
+
 }

@@ -8,10 +8,18 @@ public sealed class CategoriesController(ISender sender) : ControllerBase
 
     [HttpPost]
     // [Authorize("")]
-    public async Task<IActionResult> Post([FromBody] CreateCategoryCommandRequest request)
+    public async Task<IActionResult> Post(Guid? ParentId, CreateCategoryDTO model)
     {
+        var request = CreateCategoryCommandRequest.Create(model);
+        if (ParentId is null)
+        {
+            await _sender.Send(request);
+            return Ok();
+        }
+        request.ParentId = Guid.Parse(ParentId.ToString());
         await _sender.Send(request);
         return Ok();
+
     }
 
     [HttpPost("Points")]
@@ -25,7 +33,7 @@ public sealed class CategoriesController(ISender sender) : ControllerBase
     }
 
     [HttpPut("{Id:guid}")]
-    public async Task<IActionResult> Put([FromRoute] Guid Id,  UpdateCategoryDTO model)
+    public async Task<IActionResult> Put([FromRoute] Guid Id, UpdateCategoryDTO model)
     {
         var request = UpdateCategoryCommandRequest.Create(Id, model);
         await _sender.Send(request);
@@ -48,6 +56,13 @@ public sealed class CategoriesController(ISender sender) : ControllerBase
 
     [HttpGet("{Page:int}")]
     public async Task<IActionResult> Get([FromRoute] GetCategoriesQueryRequest request)
+    {
+        var results = await _sender.Send(request);
+        return Ok(results);
+    }
+
+    [HttpGet("Top3")]
+    public async Task<IActionResult> GetTop3([FromBody] GetTop3SubCategoryQueryRequest request)
     {
         var results = await _sender.Send(request);
         return Ok(results);

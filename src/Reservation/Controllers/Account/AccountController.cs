@@ -1,6 +1,5 @@
 using Reservation.Application.Account.Queries.AdminLogin;
 using Reservation.Application.Account.Queries.LogoutUser;
-using Reservation.Controllers.Businesses;
 
 namespace Reservation.Controllers.Account;
 

@@ -7,11 +7,9 @@ global using Reservation.Application.Categories.Queries.GetSubCategoryByCategory
 global using Reservation.Infrastructure.ExternalServices.UploadImageProviders;
 global using Reservation.Infrastructure.ExternalServices.Jwt.TokenValidators;
 global using Reservation.Application.Artists.Queries.GetArtistByBusinessId;
-global using Reservation.Application.Categories.Queries.GetSubCategoryById;
 global using Reservation.Application.ExternalServices.UploadImageProvider;
 global using Reservation.Application.Wallets.Queries.GetUserTransactions;
 global using Reservation.Application.Categories.Queries.GetTop3Category;
-global using Reservation.Application.Categories.Queries.GetSubCategory;
 global using Reservation.Application.Artists.Queries.GetArtistServices;
 global using Reservation.Application.Wallets.Queries.GetBusinessWallet;
 global using Reservation.Application.Categories.Queries.GetCategories;

@@ -10,10 +10,10 @@ public class SubCategory : BaseClass
 
     // Parent Category
     public Category Category { get; set; }
-    
+
     // Business Rel
     public ICollection<Business> Businesses { get; set; }
 
     // Sub Category Point
-    public ICollection<Point> Points { get; set; }
+    public ICollection<Point> Points { get; set; } = [];
 }

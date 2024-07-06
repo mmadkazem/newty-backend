@@ -6,7 +6,7 @@ public sealed class GetSubCategoriesByCategoryIdQueryHandler(IUnitOfWork uow) : 
 
     public async Task<IEnumerable<IResponse>> Handle(GetSubCategoriesByCategoryIdQueryRequest request, CancellationToken cancellationToken)
     {
-        return await _uow.Categories.Get(request.Id, cancellationToken)
+        return await _uow.Categories.GetSubCategoryByCategoryId(request.Id, cancellationToken)
             ?? throw new CategoryNotFoundException();
     }
 }

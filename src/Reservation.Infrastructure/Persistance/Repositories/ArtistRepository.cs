@@ -56,10 +56,4 @@ public sealed class ArtistRepository(ReservationDbContext context) : IArtistRepo
                                                                 s.Active
                                                             )).ToList()
                                     ).FirstOrDefaultAsync(cancellationToken);
-
-    public async Task<double> GetAveragePoints(Guid artistId, CancellationToken cancellationToken)
-        => await _context.Artists.AsQueryable()
-                                .Where(a => a.Id == artistId)
-                                .Select(a => a.Points.Average(p => p.Rate))
-                                .FirstOrDefaultAsync(cancellationToken);
 }

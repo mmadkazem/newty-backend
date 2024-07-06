@@ -13,8 +13,6 @@ public sealed class AddArtistPointCommandHandler(IUnitOfWork uow)
         var artist = await _uow.Artists.FindAsyncByIncludePoints(request.ArtistId, cancellationToken)
             ?? throw new ArtistNotFoundException();
 
-        artist.Average = await _uow.Artists.GetAveragePoints(request.ArtistId, cancellationToken);
-
         Point point = new()
         {
             Rate = request.Rate,

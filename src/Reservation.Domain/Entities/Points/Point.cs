@@ -6,4 +6,7 @@ public class Point : BaseClass
 
     // User For Rate
     public User User { get; set; }
+
+    // Business For Rate
+    public Business Business { get; set; }
 }
