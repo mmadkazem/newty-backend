@@ -77,10 +77,9 @@ public sealed class CategoriesController(ISender sender) : ControllerBase
 
     [HttpGet("Top3")]
     [AllowAnonymous]
-    public async Task<IActionResult> GetTop3([FromBody] GetTop3SubCategoryQueryRequest request,
-        CancellationToken token)
+    public async Task<IActionResult> GetTop3(CancellationToken token)
     {
-        var results = await _sender.Send(request, token);
+        var results = await _sender.Send(new GetTop3SubCategoryQueryRequest(), token);
         return Ok(results);
     }
 
