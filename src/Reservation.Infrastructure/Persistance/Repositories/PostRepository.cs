@@ -1,5 +1,3 @@
-
-
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 
@@ -10,9 +8,16 @@ public sealed class PostRepository(ReservationDbContext context) : IPostReposito
     public void Add(Post post)
         => _context.Posts.Add(post);
 
+    public void Remove(Post post)
+        => _context.Posts.Remove(post);
+
     public async Task<bool> AnyAsync(string title, CancellationToken cancellationToken)
         => await _context.Posts.AsQueryable()
                                 .AnyAsync(b => b.Title == title, cancellationToken);
+
+    public async Task<Post> FindAsync(Guid id, CancellationToken cancellationToken)
+        => await _context.Posts.AsQueryable()
+                                .FirstOrDefaultAsync(b => b.Id == id, cancellationToken);
 
     public async Task<IResponse> Get(Guid id, CancellationToken cancellationToken)
         => await _context.Posts.AsQueryable()
@@ -40,4 +45,5 @@ public sealed class PostRepository(ReservationDbContext context) : IPostReposito
                                 .Skip((page - 1) * 25)
                                 .Take(25)
                                 .ToListAsync(cancellationToken);
+
 }
