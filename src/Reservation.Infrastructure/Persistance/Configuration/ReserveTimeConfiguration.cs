@@ -7,10 +7,6 @@ public sealed class ReserveTimeConfiguration : IEntityTypeConfiguration<ReserveT
     public void Configure(EntityTypeBuilder<ReserveTimeReceipt> builder)
     {
         builder
-            .HasOne(r => r.TransactionReceipt)
-            .WithOne(r => r.ReserveTime);
-
-        builder
             .HasOne(r => r.TransactionSender)
             .WithOne();
     }
