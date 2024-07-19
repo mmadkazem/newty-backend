@@ -7,7 +7,7 @@ public sealed class CreatePostCommandHandler(IUnitOfWork uow) : IRequestHandler<
     public async Task Handle(CreatePostCommandRequest request, CancellationToken cancellationToken)
     {
         var business = await _uow.Businesses.FindAsync(request.BusinessId, cancellationToken)
-            ?? throw new BusinessesNotFoundException();
+            ?? throw new BusinessNotFoundException();
 
         Post post = new()
         {
