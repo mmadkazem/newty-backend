@@ -1,8 +1,9 @@
 namespace Reservation.Application.ReserveTimes.Commands.UpdateStateReserveTime;
 
-public sealed class UpdateStateReserveTimeReceiptCommandHandler(IUnitOfWork uow) : IRequestHandler<UpdateStateReserveTimeReceiptCommandRequest>
+public sealed class UpdateStateReserveTimeReceiptCommandHandler(IUnitOfWork uow, IFinishReserveTimeJob finishReserveTimeJob) : IRequestHandler<UpdateStateReserveTimeReceiptCommandRequest>
 {
     private readonly IUnitOfWork _uow = uow;
+    private readonly IFinishReserveTimeJob _finishReserveTimeJob = finishReserveTimeJob;
 
     public async Task Handle(UpdateStateReserveTimeReceiptCommandRequest request, CancellationToken cancellationToken)
     {
@@ -11,7 +12,16 @@ public sealed class UpdateStateReserveTimeReceiptCommandHandler(IUnitOfWork uow)
 
         if (request.State == ReserveState.Cancelled)
         {
-            reserveTime.Finished = true;
+            if (DateTime.Now.AddDays(1).Day <= reserveTime.TotalStartDate.Day)
+            {
+                throw new TimePassedCannotCancelException();
+            }
+
+            if (!reserveTime.BusinessReceipt.IsCancelReserveTime)
+            {
+                throw new BusinessCannotBeCanceledException();
+            }
+
             reserveTime.State = ReserveState.Cancelled;
             reserveTime.TransactionReceipt.State = TransactionState.Cancelled;
             reserveTime.TransactionSender.State = TransactionState.Cancelled;
@@ -46,16 +56,15 @@ public sealed class UpdateStateReserveTimeReceiptCommandHandler(IUnitOfWork uow)
             businessWallet.Credit += reserveTime.TransactionReceipt.Amount;
 
             // Final record of time
-            reserveTime.Finished = true;
             reserveTime.State = ReserveState.Confirmed;
             reserveTime.TransactionReceipt.State = TransactionState.Confirmed;
             reserveTime.TransactionSender.State = TransactionState.Confirmed;
             reserveTime.ModifiedOn = DateTime.Now;
 
             await _uow.SaveChangeAsync(cancellationToken);
-
-            return;
+            _finishReserveTimeJob.Execute(reserveTime.Id, reserveTime.TotalEndDate.AddMinutes(2));
         }
+
     }
 
 }
