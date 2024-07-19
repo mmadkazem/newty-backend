@@ -19,6 +19,7 @@ public static class ConfigureServices
 
                 // DI Job
                 services.AddSingleton<IPayingReserveTimeJob, PayingReserveTimeJob>();
+                services.AddTransient<IFinishReserveTimeJob, FinishReserveTimeJob>();
 
                 // DI Options
                 services.AddOptions<TempTokenOption>()
