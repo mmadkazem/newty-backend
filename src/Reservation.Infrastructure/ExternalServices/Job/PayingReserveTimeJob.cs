@@ -1,17 +1,10 @@
-using Microsoft.AspNetCore.Mvc;
-
 namespace Reservation.Infrastructure.ExternalServices.Job;
 
 
 
-public sealed class PayingReserveTimeJob : IPayingReserveTimeJob
+public sealed class PayingReserveTimeJob(IServiceScopeFactory scopeFactory) : IPayingReserveTimeJob
 {
-    private readonly IServiceScopeFactory _scopeFactory;
-
-    public PayingReserveTimeJob(IServiceScopeFactory scopeFactory)
-    {
-        _scopeFactory = scopeFactory;
-    }
+    private readonly IServiceScopeFactory _scopeFactory = scopeFactory;
 
     public void Execute()
     {
@@ -25,6 +18,7 @@ public sealed class PayingReserveTimeJob : IPayingReserveTimeJob
         using var serviceScope = _scopeFactory.CreateScope();
         using var _context = serviceScope.ServiceProvider.GetService<ReservationDbContext>();
         var count = 0;
+        // var WalletAdmin
         while (true)
         {
             var businessId = _context.Businesses.AsQueryable()
@@ -39,7 +33,12 @@ public sealed class PayingReserveTimeJob : IPayingReserveTimeJob
             for (int j = 0; true; j++)
             {
                 var reserveTimes = _context.ReserveTimesReceipt.AsQueryable()
-                                            .Where(r => r.BusinessReceiptId == businessId && r.TotalStartDate.Day == DateTime.Now.Day)
+                                            .Where
+                                            (
+                                                r => r.BusinessReceiptId == businessId &&
+                                                r.TotalStartDate.Day == DateTime.Now.AddDays(1).Day &&
+                                                r.State == ReserveState.Confirmed
+                                            )
                                             .Include(r => r.BusinessReceipt)
                                             .Include(r => r.BusinessSender)
                                             .Include(r => r.User)
@@ -79,16 +78,18 @@ public sealed class PayingReserveTimeJob : IPayingReserveTimeJob
                         }
 
                         // Deduct from the user wallet
-                        if (businessSenderWallet.Credit - reserveTime.TransactionReceipt.Amount < 0)
+                        if (businessSenderWallet.BlockCredit - reserveTime.TransactionReceipt.Amount < 0)
                         {
                             continue;
                         }
-                        businessSenderWallet.Credit -= reserveTime.TransactionReceipt.Amount;
+                        businessSenderWallet.BlockCredit -= reserveTime.TransactionReceipt.Amount;
 
                         // Transfer to business wallet
                         businessReceiptWallet.Credit += reserveTime.TransactionReceipt.Amount;
                         reserveTime.IsPay = true;
                         _context.SaveChanges();
+
+                        continue;
                     }
                     // Paying the hours of a user
                     if (reserveTime.User is not null)
@@ -101,11 +102,11 @@ public sealed class PayingReserveTimeJob : IPayingReserveTimeJob
                             continue;
                         }
                         // Deduct from the user wallet
-                        if (userWallet.Credit - reserveTime.TransactionReceipt.Amount < 0)
+                        if (userWallet.BlockCredit - reserveTime.TransactionReceipt.Amount < 0)
                         {
                             continue;
                         }
-                        userWallet.Credit -= reserveTime.TransactionReceipt.Amount;
+                        userWallet.BlockCredit -= reserveTime.TransactionReceipt.Amount;
 
                         // Transfer to business wallet
                         businessReceiptWallet.Credit += reserveTime.TransactionReceipt.Amount;
