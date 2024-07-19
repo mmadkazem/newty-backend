@@ -8,13 +8,13 @@ public class Business : BaseClass
     public string CoverImagePath { get; set; }
     public string ParvaneKasbImagePath { get; set; }
     public string Address { get; set; }
-    public double Average { get; set; }
     public string PhoneNumber { get; set; }
     public string OTPCode { get; set; }
     public bool IsActive { get; set; }
+    public bool IsCancelReserveTime { get; set; }
     public TimeSpan StartHoursOfWor { get; set; }
     public TimeSpan EndHoursOfWor { get; set; }
-    public ICollection<DayOfWeek> Holidays { get; set; } = [];
+    public List<DayOfWeek> Holidays { get; set; } = [];
 
     // Business Wallet
     public Wallet Wallet { get; set; }
@@ -50,6 +50,7 @@ public class Business : BaseClass
     public ICollection<ReserveTimeSender> ReserveTimesSender { get; set; }
     public ICollection<ReserveTimeReceipt> ReserveTimesReceipt { get; set; }
 
-    // Business Wallet
+    // Business Category
+    public ICollection<Category> Categories { get; set; } = [];
 
 }
