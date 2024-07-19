@@ -7,8 +7,13 @@ public sealed class UpdateSmsTemplateCommandHandler(IUnitOfWork uow)
 
     public async Task Handle(UpdateSmsTemplateCommandRequest request, CancellationToken cancellationToken)
     {
-        SmsTemplate smsTemplate = await _uow.SmsTemplates.FindAsync(request.Id, cancellationToken)
+        var smsTemplate = await _uow.SmsTemplates.FindAsync(request.Id, cancellationToken)
             ?? throw new SmsTemplateNotFoundException();
+
+        if (smsTemplate.BusinessId != request.BusinessId)
+        {
+            throw new DoNotAccessToRemoveItemException("تمپلیت پیامک");
+        }
 
         smsTemplate.Name = request.Name;
         smsTemplate.Description = request.Description;
