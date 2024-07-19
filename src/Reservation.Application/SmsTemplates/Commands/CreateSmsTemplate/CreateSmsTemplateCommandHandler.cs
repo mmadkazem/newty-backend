@@ -7,7 +7,7 @@ public class CreateSmsTemplateCommandHandler(IUnitOfWork uow) : IRequestHandler<
     public async Task Handle(CreateSmsTemplateCommandRequest request, CancellationToken cancellationToken)
     {
         var business = await _uow.Businesses.FindAsync(request.BusinessId, cancellationToken)
-            ?? throw new BusinessesNotFoundException();
+            ?? throw new BusinessNotFoundException();
 
         SmsTemplate smsTemplate = new()
         {
