@@ -11,9 +11,7 @@ public sealed class AddBusinessPointCommandHandler(IUnitOfWork uow)
             ?? throw new UserNotFoundException();
 
         var business = await _uow.Businesses.FindAsyncByIncludePoints(request.BusinessId, cancellationToken)
-            ?? throw new BusinessesNotFoundException();
-
-        business.Average = await _uow.Businesses.GetAveragePoints(request.BusinessId, cancellationToken);
+            ?? throw new BusinessNotFoundException();
 
         Point point = new()
         {
