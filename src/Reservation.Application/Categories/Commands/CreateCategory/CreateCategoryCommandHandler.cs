@@ -7,12 +7,23 @@ public sealed class CreateCategoryCommandHandler(IUnitOfWork uow) : IRequestHand
 
     public async Task Handle(CreateCategoryCommandRequest request, CancellationToken cancellationToken)
     {
+        var parentIdString = request.ParentId.ToString();
         Category category = new()
         {
             Title = request.Title,
             Description = request.Description,
             CoverImagePath = request.CoverImagePath,
         };
+
+        if (parentIdString is not null)
+        {
+            var parentId = Guid.Parse(parentIdString);
+
+            var parentCategory = await _uow.Categories.FindAsync(parentId, cancellationToken)
+                ?? throw new CategoryNotFoundException();
+
+            category.ParentCategory = parentCategory;
+        }
 
         _uow.Categories.Add(category);
         await _uow.SaveChangeAsync(cancellationToken);
