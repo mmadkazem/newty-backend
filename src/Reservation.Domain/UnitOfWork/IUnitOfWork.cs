@@ -15,5 +15,7 @@ public interface IUnitOfWork
     IPostRepository Posts { get; }
     ISmsCreditRepository SmsCredits { get; }
     ISmsTemplateRepository SmsTemplates { get; }
+    ISmsPlanRepository SmsPlans { get; }
+    ITransferFeeRepository TransferFees { get; }
     Task SaveChangeAsync(CancellationToken cancellationToken = default);
 }

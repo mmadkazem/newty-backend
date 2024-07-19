@@ -17,7 +17,9 @@ public sealed class UnitOfWork : IUnitOfWork
         IArtistRepository artists,
         IPostRepository posts,
         ISmsCreditRepository smsCredits,
-        ISmsTemplateRepository smsTemplates)
+        ISmsTemplateRepository smsTemplates,
+        ISmsPlanRepository smsPlans,
+        ITransferFeeRepository transferFees)
     {
         _users = users;
         _context = context;
@@ -33,6 +35,8 @@ public sealed class UnitOfWork : IUnitOfWork
         _posts = posts;
         _smsCredits = smsCredits;
         _smsTemplates = smsTemplates;
+        _smsPlans = smsPlans;
+        _transferFees = transferFees;
     }
 
     private readonly IUserRepository _users;
@@ -82,6 +86,14 @@ public sealed class UnitOfWork : IUnitOfWork
     private readonly ISmsTemplateRepository _smsTemplates;
     public ISmsTemplateRepository SmsTemplates
         => _smsTemplates;
+
+    private readonly ISmsPlanRepository _smsPlans;
+    public ISmsPlanRepository SmsPlans
+        => _smsPlans;
+
+    private readonly ITransferFeeRepository _transferFees;
+    public ITransferFeeRepository TransferFees
+        => _transferFees;
 
     public async Task SaveChangeAsync(CancellationToken cancellationToken)
         => await _context.SaveChangesAsync(cancellationToken);
