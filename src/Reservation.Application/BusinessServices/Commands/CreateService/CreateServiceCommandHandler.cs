@@ -7,7 +7,7 @@ public sealed class CreateServiceCommandHandler(IUnitOfWork uow) : IRequestHandl
     public async Task Handle(CreateServiceCommandRequest request, CancellationToken cancellationToken)
     {
         var business = await _uow.Businesses.FindAsync(request.BusinessId, cancellationToken)
-            ?? throw new BusinessesNotFoundException();
+            ?? throw new BusinessNotFoundException();
 
         Service service = new()
         {

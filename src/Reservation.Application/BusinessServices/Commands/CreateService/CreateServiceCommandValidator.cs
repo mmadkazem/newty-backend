@@ -22,9 +22,22 @@ public sealed class CreateServiceCommandValidator : AbstractValidator<CreateServ
 
     private bool IsValidPrice(int price)
         => price > 10_000;
+
     private bool IsValidTime(Time time)
-        => time.Minute > 5
-        && time.Hour < 10;
+    {
+        if (!(time.Minute >= 0 && time.Minute <= 60))
+        {
+            return false;
+        }
+
+        if (!(time.Hour >= 0 && time.Hour <= 24))
+        {
+            return false;
+        }
+
+        return true;
+    }
+
     private async Task<bool> AlreadyExistServiceName(string name, CancellationToken cancellationToken)
         => !await _uow.Services.AnyAsync(name, cancellationToken);
 }

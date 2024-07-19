@@ -8,7 +8,7 @@ public sealed class SearchBusinessHandler(IUnitOfWork uow) : IRequestHandler<Sea
         var businesses = await _uow.Businesses.Search(request.Page, request.Key, cancellationToken);
         if (!businesses.Any())
         {
-            throw new BusinessesNotFoundException();
+            throw new BusinessNotFoundException();
         }
 
         return businesses;
