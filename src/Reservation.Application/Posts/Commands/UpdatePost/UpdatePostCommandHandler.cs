@@ -6,12 +6,17 @@ public sealed class UpdatePostCommandHandler(IUnitOfWork uow) : IRequestHandler<
 
     public async Task Handle(UpdatePostCommandRequest request, CancellationToken cancellationToken)
     {
-        var post = await _uow.Categories.FindAsync(request.Id, cancellationToken)
+        var post = await _uow.Posts.FindAsync(request.Id, cancellationToken)
             ?? throw new PostNotFoundException();
 
         if (post.Title != request.Title && !await _uow.Posts.AnyAsync(request.Title, cancellationToken))
         {
             throw new TitleAlreadyExistException();
+        }
+
+        if (post.BusinessId != request.BusinessId)
+        {
+            throw new DoNotAccessToRemoveItemException("پست");
         }
 
         post.Title = request.Title;
