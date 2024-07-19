@@ -7,8 +7,13 @@ public sealed class UpdateUserRequestPayCommandHandler(IUnitOfWork uow)
 
     public async Task Handle(UpdateUserRequestPayCommandRequest request, CancellationToken cancellationToken)
     {
-        UserRequestPay userRequestPay = await _uow.UserRequestPays.FindAsync(request.Id, cancellationToken)
+        var userRequestPay = await _uow.UserRequestPays.FindAsync(request.Id, cancellationToken)
             ?? throw new UserRequestPayNotFoundException();
+
+        if (userRequestPay.UserId != request.UserId)
+        {
+            throw new DoNotAccessToRemoveItemException("درخواست پرداخت");
+        }
 
         userRequestPay.IsPay = request.IsPay;
         userRequestPay.Authorizy = request.Authorizy;
