@@ -10,6 +10,11 @@ public sealed class UpdateBusinessRequestPayCommandHandler(IUnitOfWork uow)
         var businessRequestPay = await _uow.BusinessRequestPays.FindAsync(request.Id, cancellationToken)
             ?? throw new BusinessRequestPayNotFoundException();
 
+        if (businessRequestPay.BusinessId != request.BusinessId)
+        {
+            throw new DoNotAccessToRemoveItemException("درخواست پرداخت");
+        }
+
         businessRequestPay.IsPay = request.IsPay;
         businessRequestPay.Authorizy = request.Authorizy;
         businessRequestPay.RefId = request.RefId;
