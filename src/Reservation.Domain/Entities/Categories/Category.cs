@@ -10,6 +10,9 @@ public class Category : BaseClass
     // Sub Categories Rel
     public Category ParentCategory { get; set; }
 
+    // Business Rel
+    public ICollection<Business> Businesses { get; set; }
+
     // Business Point
     public ICollection<Point> Points { get; set; } = [];
 }
