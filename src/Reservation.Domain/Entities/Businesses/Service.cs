@@ -14,5 +14,4 @@ public class Service : BaseClass
 
     // Artist
     public Artist Artist { get; set; }
-    public Guid ArtistId { get; set; }
 }
