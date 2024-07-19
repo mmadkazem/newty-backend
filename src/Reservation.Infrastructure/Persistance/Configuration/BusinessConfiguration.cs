@@ -1,5 +1,3 @@
-using Reservation.Domain.Entities.Businesses;
-
 namespace Reservation.Infrastructure.Persistance.Configuration;
 
 
@@ -21,5 +19,8 @@ public class BusinessConfiguration : IEntityTypeConfiguration<Business>
             .HasMany(b => b.ReserveTimesReceipt)
             .WithOne(s => s.BusinessReceipt)
             .HasForeignKey(r => r.BusinessReceiptId);
+        builder
+            .HasMany(b => b.Categories)
+            .WithMany(c => c.Businesses);
     }
 }
