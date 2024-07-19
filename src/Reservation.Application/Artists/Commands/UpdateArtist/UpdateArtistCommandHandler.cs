@@ -16,7 +16,7 @@ public sealed class UpdateArtistCommandHandler(IUnitOfWork uow) : IRequestHandle
 
         if (artist.BusinessId != request.BusinessId)
         {
-            throw new DoNotAccessToRemoveItem("آرتیست");
+            throw new DoNotAccessToRemoveItemException("آرتیست");
         }
 
         artist.Name = request.Name;

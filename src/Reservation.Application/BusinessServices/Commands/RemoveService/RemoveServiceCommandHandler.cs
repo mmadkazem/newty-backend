@@ -11,7 +11,7 @@ public sealed class RemoveServiceCommandHandler(IUnitOfWork uow) : IRequestHandl
 
         if (service.BusinessId != request.BusinessId)
         {
-            throw new DoNotAccessToRemoveItem("سرویس");
+            throw new DoNotAccessToRemoveItemException("سرویس");
         }
 
         _uow.Services.Remove(service);

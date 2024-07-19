@@ -16,7 +16,7 @@ public sealed class UpdateServiceCommandHandler(IUnitOfWork uow) : IRequestHandl
 
         if (service.BusinessId != request.BusinessId)
         {
-            throw new DoNotAccessToRemoveItem("سرویس");
+            throw new DoNotAccessToRemoveItemException("سرویس");
         }
 
         service.Name = request.Name;
