@@ -9,6 +9,9 @@ public sealed class BusinessRequestPayRepository(ReservationDbContext context)
     public void Add(BusinessRequestPay businessRequestPay)
         => _context.BusinessRequestPays.Add(businessRequestPay);
 
+    public void Remove(BusinessRequestPay businessRequestPay)
+        => _context.BusinessRequestPays.Remove(businessRequestPay);
+
     public async Task<BusinessRequestPay> FindAsync(Guid id, CancellationToken cancellationToken)
         => await _context.BusinessRequestPays.AsQueryable()
                                                 .FirstOrDefaultAsync(r => r.Id == id, cancellationToken);
@@ -42,4 +45,5 @@ public sealed class BusinessRequestPayRepository(ReservationDbContext context)
                                 .Skip((page - 1) * 25)
                                 .Take(25)
                                 .ToListAsync(cancellationToken);
+
 }
