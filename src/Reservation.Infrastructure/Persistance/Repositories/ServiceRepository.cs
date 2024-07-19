@@ -1,4 +1,3 @@
-
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 
@@ -9,6 +8,9 @@ public sealed class ServiceRepository(ReservationDbContext context) : IServiceRe
     public void Add(Service service)
         => _context.Services.Add(service);
 
+    public void Remove(Service service)
+        => _context.Services.Remove(service);
+
     public async Task<bool> AnyAsync(string name, CancellationToken cancellationToken = default)
         => await _context.Services.AsQueryable()
                                     .AnyAsync(s => s.Name == name, cancellationToken);
@@ -16,6 +18,12 @@ public sealed class ServiceRepository(ReservationDbContext context) : IServiceRe
     public async Task<Service> FindAsync(Guid id, CancellationToken cancellationToken)
         => await _context.Services.AsQueryable()
                                     .FirstOrDefaultAsync(b => b.Id == id, cancellationToken);
+
+    public async Task<Service> FindAsyncIncludeArtist(Guid serviceId, CancellationToken cancellationToken)
+        => await _context.Services.AsQueryable()
+                                    .Include(s => s.Artist)
+                                    .FirstOrDefaultAsync(b => b.Id == serviceId, cancellationToken);
+
 
     public async Task<IEnumerable<IResponse>> GetArtistServices(Guid artistId, CancellationToken cancellationToken)
         => await _context.Artists.AsQueryable()
@@ -48,4 +56,5 @@ public sealed class ServiceRepository(ReservationDbContext context) : IServiceRe
                                     .Skip((page - 1) * 25)
                                     .Take(25)
                                     .ToListAsync(cancellationToken);
+
 }
