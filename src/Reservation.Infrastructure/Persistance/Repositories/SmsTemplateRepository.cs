@@ -1,6 +1,3 @@
-using Reservation.Application.SmsTemplates.Queries.GetSmsTemplate;
-using Reservation.Application.SmsTemplates.Queries.GetSmsTemplates;
-
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 
@@ -11,6 +8,9 @@ public sealed class SmsTemplateRepository(ReservationDbContext context)
 
     public void Add(SmsTemplate smsTemplate)
         => _context.SmsTemplates.Add(smsTemplate);
+
+    public void Remove(SmsTemplate smsTemplate)
+        => _context.SmsTemplates.Remove(smsTemplate);
 
     public async Task<bool> AnyAsync(string name, CancellationToken cancellationToken)
         => await _context.SmsTemplates.AsQueryable()
@@ -43,4 +43,5 @@ public sealed class SmsTemplateRepository(ReservationDbContext context)
                                             s.Name
                                         ))
                                         .ToListAsync(cancellationToken);
+
 }
