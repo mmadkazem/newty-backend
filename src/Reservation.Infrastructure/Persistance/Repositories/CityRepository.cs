@@ -1,4 +1,3 @@
-
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 
@@ -8,6 +7,9 @@ public class CityRepository(ReservationDbContext context) : ICityRepository
 
     public void Add(City city)
         => _context.Cities.Add(city);
+
+    public void Remove(City city)
+        => _context.Cities.Remove(city);
 
     public async Task<bool> AnyAsync(string name, CancellationToken cancellationToken = default)
         => await _context.Cities.AsQueryable()
@@ -22,11 +24,6 @@ public class CityRepository(ReservationDbContext context) : ICityRepository
                                 .Where(c => c.Name == name)
                                 .FirstOrDefaultAsync(cancellationToken);
 
-    public Task<IResponse> Get(Guid Id, CancellationToken cancellationToken)
-    {
-        throw new NotImplementedException();
-    }
-
     public async Task<IEnumerable<IResponse>> GetAll(CancellationToken cancellationToken)
         => await _context.Cities.AsQueryable()
                                 .AsNoTracking()
@@ -37,4 +34,5 @@ public class CityRepository(ReservationDbContext context) : ICityRepository
                                     c.State
                                 ))
                                 .ToListAsync(cancellationToken);
+
 }
