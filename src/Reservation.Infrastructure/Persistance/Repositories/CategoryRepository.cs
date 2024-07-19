@@ -1,3 +1,6 @@
+using Reservation.Application.Categories.Queries.GetCategoryBusinesses;
+using Reservation.Application.Categories.Queries.SearchCategory;
+
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 
@@ -7,6 +10,9 @@ public class CategoryRepository(ReservationDbContext context) : ICategoryReposit
 
     public void Add(Category category)
         => _context.Categories.Add(category);
+
+    public void Remove(Category category)
+        => _context.Categories.Remove(category);
 
     public async Task<bool> AnyAsync(string title, CancellationToken cancellationToken)
         => await _context.Categories.AsQueryable()
@@ -33,7 +39,8 @@ public class CategoryRepository(ReservationDbContext context) : ICategoryReposit
                                         c.Title,
                                         c.Description,
                                         c.CoverImagePath,
-                                        c.Points.Average(p => p.Rate)
+                                        c.Points.Average(p => p.Rate),
+                                        c.ParentCategory.Id
                                     ))
                                     .ToListAsync(cancellationToken);
 
@@ -53,7 +60,8 @@ public class CategoryRepository(ReservationDbContext context) : ICategoryReposit
                                             c.Title,
                                             c.Description,
                                             c.CoverImagePath,
-                                            c.Points.Average(p => p.Rate)
+                                            c.Points.Average(p => p.Rate),
+                                            c.ParentCategory.Id
                                         ))
                                         .Skip((page - 1) * 25)
                                         .Take(25)
@@ -68,7 +76,8 @@ public class CategoryRepository(ReservationDbContext context) : ICategoryReposit
                                         c.Title,
                                         c.Description,
                                         c.CoverImagePath,
-                                        c.Points.Average(p => p.Rate)
+                                        c.Points.Average(p => p.Rate),
+                                        c.ParentCategory.Id
                                     ))
                                     .FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
 
@@ -86,5 +95,35 @@ public class CategoryRepository(ReservationDbContext context) : ICategoryReposit
                                         c.CoverImagePath,
                                         c.Points.Average(p => p.Rate)
                                     ))
+                                    .ToListAsync(cancellationToken);
+
+    public async Task<IEnumerable<IResponse>> GetBusiness(Guid categoryId, int page, CancellationToken cancellationToken)
+        => await _context.Businesses.AsQueryable()
+                                    .AsNoTracking()
+                                    .OrderBy(c => c.Points.Average(p => p.Rate))
+                                    .Where(b => b.Categories.Any(c => c.Id == categoryId))
+                                    .Select(b => new GetCategoryBusinessesQueryResponse
+                                    (
+                                        b.Id,
+                                        b.Name,
+                                        b.CoverImagePath,
+                                        b.City.Name
+                                    ))
+                                    .Skip((page - 1) * 25)
+                                    .Take(25)
+                                    .ToListAsync(cancellationToken);
+
+    public async Task<IEnumerable<IResponse>> Search(string key, int page, CancellationToken cancellationToken)
+        => await _context.Businesses.AsQueryable()
+                                    .AsNoTracking()
+                                    .Where(b => b.Name.Contains(key))
+                                    .Select(b => new SearchCategoryQueryResponse
+                                    (
+                                        b.Id,
+                                        b.Name,
+                                        b.CoverImagePath
+                                    ))
+                                    .Skip((page - 1) * 25)
+                                    .Take(25)
                                     .ToListAsync(cancellationToken);
 }
