@@ -1,4 +1,3 @@
-
 namespace Reservation.Application.Account.Queries.LoginByRefreshToken;
 
 public sealed class LoginByRefreshTokenQueryHandler(IUnitOfWork uow, ITokenFactoryService tokenFactory) : IRequestHandler<LoginByRefreshTokenQueryRequest, JwtTokensData>

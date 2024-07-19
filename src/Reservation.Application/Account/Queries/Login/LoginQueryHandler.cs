@@ -42,6 +42,8 @@ public sealed class LoginQueryHandler(IUnitOfWork uow,
             }
 
             user.IsActive = true;
+            await _uow.SaveChangeAsync(cancellationToken);
+
             return _tokenFactory.CreateUserToken(user);
 
         }
@@ -75,6 +77,7 @@ public sealed class LoginQueryHandler(IUnitOfWork uow,
             }
 
             business.IsActive = true;
+            await _uow.SaveChangeAsync(cancellationToken);
             return _tokenFactory.CreateBusinessToken(business);
 
         }
