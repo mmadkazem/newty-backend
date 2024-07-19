@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Reservation.Infrastructure.Persistance.Context;
@@ -11,9 +12,11 @@ using Reservation.Infrastructure.Persistance.Context;
 namespace Reservation.Infrastructure.Persistance.Migrations
 {
     [DbContext(typeof(ReservationDbContext))]
-    partial class ReservationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240712095540_CategoryMig")]
+    partial class CategoryMig
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,21 +24,6 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             NpgsqlModelBuilderExtensions.UseIdentityByDefaultColumns(modelBuilder);
-
-            modelBuilder.Entity("BusinessCategory", b =>
-                {
-                    b.Property<Guid>("BusinessesId")
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid>("CategoriesId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("BusinessesId", "CategoriesId");
-
-                    b.HasIndex("CategoriesId");
-
-                    b.ToTable("BusinessCategory");
-                });
 
             modelBuilder.Entity("BusinessUser", b =>
                 {
@@ -56,9 +44,6 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<Guid?>("CityId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedOn")
@@ -88,111 +73,12 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                     b.Property<string>("Role")
                         .HasColumnType("text");
 
-                    b.Property<Guid?>("WalletId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("CityId");
 
                     b.HasIndex("PhoneNumber")
                         .IsUnique();
 
-                    b.HasIndex("WalletId");
-
                     b.ToTable("Users");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("d68c296b-0e54-4652-9bdd-851907b6ad0c"),
-                            CreatedOn = new DateTime(2024, 7, 18, 14, 58, 39, 389, DateTimeKind.Local).AddTicks(672),
-                            DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            FullName = "Admin",
-                            IsActive = false,
-                            IsDeleted = false,
-                            ModifiedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            PhoneNumber = "09111111111",
-                            Role = "Admin"
-                        });
-                });
-
-            modelBuilder.Entity("Reservation.Domain.Entities.Admin.SmsPlan", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<string>("CoverImagePath")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime>("DeletedOn")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Description")
-                        .HasColumnType("text");
-
-                    b.Property<int>("Discount")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime>("ModifiedOn")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("numeric");
-
-                    b.Property<int>("SmsCount")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("SmsPlans");
-                });
-
-            modelBuilder.Entity("Reservation.Domain.Entities.Admin.TransferFee", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime>("DeletedOn")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime>("ModifiedOn")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<int>("Percent")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("TransferFees");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = new Guid("3d8fdefe-fd91-4ee4-b401-ccc74b01b164"),
-                            CreatedOn = new DateTime(2024, 7, 18, 14, 58, 39, 389, DateTimeKind.Local).AddTicks(2348),
-                            DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            IsDeleted = false,
-                            ModifiedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            Percent = 1
-                        });
                 });
 
             modelBuilder.Entity("Reservation.Domain.Entities.Businesses.Artist", b =>
@@ -244,8 +130,8 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                     b.Property<string>("Address")
                         .HasColumnType("text");
 
-                    b.Property<Guid>("CityId")
-                        .HasColumnType("uuid");
+                    b.Property<double>("Average")
+                        .HasColumnType("double precision");
 
                     b.Property<string>("CoverImagePath")
                         .HasColumnType("text");
@@ -268,7 +154,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("boolean");
 
-                    b.Property<bool>("IsCancelReserveTime")
+                    b.Property<bool>("IsCancel")
                         .HasColumnType("boolean");
 
                     b.Property<bool>("IsDeleted")
@@ -295,14 +181,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                     b.Property<TimeSpan>("StartHoursOfWor")
                         .HasColumnType("interval");
 
-                    b.Property<Guid?>("WalletId")
-                        .HasColumnType("uuid");
-
                     b.HasKey("Id");
-
-                    b.HasIndex("CityId");
-
-                    b.HasIndex("WalletId");
 
                     b.ToTable("Businesses");
                 });
@@ -353,7 +232,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                     b.Property<bool>("Active")
                         .HasColumnType("boolean");
 
-                    b.Property<Guid?>("ArtistId")
+                    b.Property<Guid>("ArtistId")
                         .HasColumnType("uuid");
 
                     b.Property<Guid>("BusinessId")
@@ -525,121 +404,6 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("Reservation.Domain.Entities.Cities.City", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime>("DeletedOn")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime>("ModifiedOn")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<string>("Name")
-                        .HasColumnType("text");
-
-                    b.Property<string>("State")
-                        .HasColumnType("text");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Cities");
-                });
-
-            modelBuilder.Entity("Reservation.Domain.Entities.Finances.BusinessRequestPay", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Amount")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Authorizy")
-                        .HasColumnType("text");
-
-                    b.Property<Guid>("BusinessId")
-                        .HasColumnType("uuid");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime>("DeletedOn")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IsPay")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime>("ModifiedOn")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime>("PayDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<int>("RefId")
-                        .HasColumnType("integer");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("BusinessId");
-
-                    b.ToTable("BusinessRequestPays");
-                });
-
-            modelBuilder.Entity("Reservation.Domain.Entities.Finances.UserRequestPay", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uuid");
-
-                    b.Property<int>("Amount")
-                        .HasColumnType("integer");
-
-                    b.Property<string>("Authorizy")
-                        .HasColumnType("text");
-
-                    b.Property<DateTime>("CreatedOn")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime>("DeletedOn")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("boolean");
-
-                    b.Property<bool>("IsPay")
-                        .HasColumnType("boolean");
-
-                    b.Property<DateTime>("ModifiedOn")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<DateTime>("PayDate")
-                        .HasColumnType("timestamp without time zone");
-
-                    b.Property<int>("RefId")
-                        .HasColumnType("integer");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uuid");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UserRequestPays");
-                });
-
             modelBuilder.Entity("Reservation.Domain.Entities.Points.Point", b =>
                 {
                     b.Property<Guid>("Id")
@@ -683,7 +447,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Points");
+                    b.ToTable("Point");
                 });
 
             modelBuilder.Entity("Reservation.Domain.Entities.Reserve.ReserveItem", b =>
@@ -888,7 +652,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
 
                     b.HasIndex("WalletId");
 
-                    b.ToTable("Transactions");
+                    b.ToTable("Transaction");
                 });
 
             modelBuilder.Entity("Reservation.Domain.Entities.Wallets.Wallet", b =>
@@ -917,22 +681,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Wallets");
-                });
-
-            modelBuilder.Entity("BusinessCategory", b =>
-                {
-                    b.HasOne("Reservation.Domain.Entities.Businesses.Business", null)
-                        .WithMany()
-                        .HasForeignKey("BusinessesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Reservation.Domain.Entities.Categories.Category", null)
-                        .WithMany()
-                        .HasForeignKey("CategoriesId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                    b.ToTable("Wallet");
                 });
 
             modelBuilder.Entity("BusinessUser", b =>
@@ -950,21 +699,6 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Reservation.Domain.Entities.Account.User", b =>
-                {
-                    b.HasOne("Reservation.Domain.Entities.Cities.City", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId");
-
-                    b.HasOne("Reservation.Domain.Entities.Wallets.Wallet", "Wallet")
-                        .WithMany()
-                        .HasForeignKey("WalletId");
-
-                    b.Navigation("City");
-
-                    b.Navigation("Wallet");
-                });
-
             modelBuilder.Entity("Reservation.Domain.Entities.Businesses.Artist", b =>
                 {
                     b.HasOne("Reservation.Domain.Entities.Businesses.Business", "Business")
@@ -974,23 +708,6 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         .IsRequired();
 
                     b.Navigation("Business");
-                });
-
-            modelBuilder.Entity("Reservation.Domain.Entities.Businesses.Business", b =>
-                {
-                    b.HasOne("Reservation.Domain.Entities.Cities.City", "City")
-                        .WithMany()
-                        .HasForeignKey("CityId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("Reservation.Domain.Entities.Wallets.Wallet", "Wallet")
-                        .WithMany()
-                        .HasForeignKey("WalletId");
-
-                    b.Navigation("City");
-
-                    b.Navigation("Wallet");
                 });
 
             modelBuilder.Entity("Reservation.Domain.Entities.Businesses.Post", b =>
@@ -1008,7 +725,9 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 {
                     b.HasOne("Reservation.Domain.Entities.Businesses.Artist", "Artist")
                         .WithMany("Services")
-                        .HasForeignKey("ArtistId");
+                        .HasForeignKey("ArtistId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Reservation.Domain.Entities.Businesses.Business", "Business")
                         .WithMany("Services")
@@ -1065,28 +784,6 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         .HasForeignKey("ParentCategoryId");
 
                     b.Navigation("ParentCategory");
-                });
-
-            modelBuilder.Entity("Reservation.Domain.Entities.Finances.BusinessRequestPay", b =>
-                {
-                    b.HasOne("Reservation.Domain.Entities.Businesses.Business", "Business")
-                        .WithMany()
-                        .HasForeignKey("BusinessId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Business");
-                });
-
-            modelBuilder.Entity("Reservation.Domain.Entities.Finances.UserRequestPay", b =>
-                {
-                    b.HasOne("Reservation.Domain.Entities.Account.User", "User")
-                        .WithMany()
-                        .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("Reservation.Domain.Entities.Points.Point", b =>

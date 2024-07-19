@@ -23,10 +23,6 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 table: "Point");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Point_SubCategories_SubCategoryId",
-                table: "Point");
-
-            migrationBuilder.DropForeignKey(
                 name: "FK_Point_Users_UserId",
                 table: "Point");
 
@@ -42,11 +38,6 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 name: "IX_Point_UserId",
                 table: "Points",
                 newName: "IX_Points_UserId");
-
-            migrationBuilder.RenameIndex(
-                name: "IX_Point_SubCategoryId",
-                table: "Points",
-                newName: "IX_Points_SubCategoryId");
 
             migrationBuilder.RenameIndex(
                 name: "IX_Point_CategoryId",
@@ -90,13 +81,6 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_Points_SubCategories_SubCategoryId",
-                table: "Points",
-                column: "SubCategoryId",
-                principalTable: "SubCategories",
-                principalColumn: "Id");
-
-            migrationBuilder.AddForeignKey(
                 name: "FK_Points_Users_UserId",
                 table: "Points",
                 column: "UserId",
@@ -120,10 +104,6 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 table: "Points");
 
             migrationBuilder.DropForeignKey(
-                name: "FK_Points_SubCategories_SubCategoryId",
-                table: "Points");
-
-            migrationBuilder.DropForeignKey(
                 name: "FK_Points_Users_UserId",
                 table: "Points");
 
@@ -139,11 +119,6 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 name: "IX_Points_UserId",
                 table: "Point",
                 newName: "IX_Point_UserId");
-
-            migrationBuilder.RenameIndex(
-                name: "IX_Points_SubCategoryId",
-                table: "Point",
-                newName: "IX_Point_SubCategoryId");
 
             migrationBuilder.RenameIndex(
                 name: "IX_Points_CategoryId",
@@ -184,13 +159,6 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 table: "Point",
                 column: "CategoryId",
                 principalTable: "Categories",
-                principalColumn: "Id");
-
-            migrationBuilder.AddForeignKey(
-                name: "FK_Point_SubCategories_SubCategoryId",
-                table: "Point",
-                column: "SubCategoryId",
-                principalTable: "SubCategories",
                 principalColumn: "Id");
 
             migrationBuilder.AddForeignKey(

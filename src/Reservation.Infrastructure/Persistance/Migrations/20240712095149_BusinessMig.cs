@@ -6,18 +6,30 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Reservation.Infrastructure.Persistance.Migrations
 {
     /// <inheritdoc />
-    public partial class UserMig : Migration
+    public partial class BusinessMig : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "City",
+                name: "Businesses",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
-                    State = table.Column<string>(type: "text", nullable: true),
+                    Description = table.Column<string>(type: "text", nullable: true),
+                    CoverImagePath = table.Column<string>(type: "text", nullable: true),
+                    ParvaneKasbImagePath = table.Column<string>(type: "text", nullable: true),
+                    Address = table.Column<string>(type: "text", nullable: true),
+                    Average = table.Column<double>(type: "double precision", nullable: false),
+                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
+                    OTPCode = table.Column<string>(type: "text", nullable: true),
+                    IsActive = table.Column<bool>(type: "boolean", nullable: false),
+                    IsCancel = table.Column<bool>(type: "boolean", nullable: false),
+                    StartHoursOfWor = table.Column<TimeSpan>(type: "interval", nullable: false),
+                    EndHoursOfWor = table.Column<TimeSpan>(type: "interval", nullable: false),
+                    Holidays = table.Column<int[]>(type: "integer[]", nullable: true),
+                    SmsCreditId = table.Column<Guid>(type: "uuid", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
@@ -25,7 +37,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_City", x => x.Id);
+                    table.PrimaryKey("PK_Businesses", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -34,6 +46,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Credit = table.Column<decimal>(type: "numeric", nullable: false),
+                    BlockCredit = table.Column<decimal>(type: "numeric", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
@@ -45,76 +58,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Business",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: true),
-                    Description = table.Column<string>(type: "text", nullable: true),
-                    CoverImagePath = table.Column<string>(type: "text", nullable: true),
-                    ParvaneKasbImagePath = table.Column<string>(type: "text", nullable: true),
-                    Address = table.Column<string>(type: "text", nullable: true),
-                    Average = table.Column<double>(type: "double precision", nullable: false),
-                    Active = table.Column<bool>(type: "boolean", nullable: false),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
-                    WalletId = table.Column<Guid>(type: "uuid", nullable: false),
-                    SmsCreditId = table.Column<Guid>(type: "uuid", nullable: false),
-                    CityId = table.Column<Guid>(type: "uuid", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Business", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Business_City_CityId",
-                        column: x => x.CityId,
-                        principalTable: "City",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Business_Wallet_WalletId",
-                        column: x => x.WalletId,
-                        principalTable: "Wallet",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Users",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    FullName = table.Column<string>(type: "text", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "text", nullable: true),
-                    Role = table.Column<string>(type: "text", nullable: true),
-                    CityId = table.Column<Guid>(type: "uuid", nullable: true),
-                    WalletId = table.Column<Guid>(type: "uuid", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Users", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Users_City_CityId",
-                        column: x => x.CityId,
-                        principalTable: "City",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Users_Wallet_WalletId",
-                        column: x => x.WalletId,
-                        principalTable: "Wallet",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Artist",
+                name: "Artists",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -123,7 +67,6 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                     Active = table.Column<bool>(type: "boolean", nullable: false),
                     Description = table.Column<string>(type: "text", nullable: true),
                     BusinessId = table.Column<Guid>(type: "uuid", nullable: false),
-                    Average = table.Column<double>(type: "double precision", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
@@ -131,17 +74,41 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Artist", x => x.Id);
+                    table.PrimaryKey("PK_Artists", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Artist_Business_BusinessId",
+                        name: "FK_Artists_Businesses_BusinessId",
                         column: x => x.BusinessId,
-                        principalTable: "Business",
+                        principalTable: "Businesses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "Post",
+                name: "BusinessUser",
+                columns: table => new
+                {
+                    BusinessesId = table.Column<Guid>(type: "uuid", nullable: false),
+                    UsersNormalId = table.Column<Guid>(type: "uuid", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BusinessUser", x => new { x.BusinessesId, x.UsersNormalId });
+                    table.ForeignKey(
+                        name: "FK_BusinessUser_Businesses_BusinessesId",
+                        column: x => x.BusinessesId,
+                        principalTable: "Businesses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_BusinessUser_Users_UsersNormalId",
+                        column: x => x.UsersNormalId,
+                        principalTable: "Users",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Posts",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -156,51 +123,17 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Post", x => x.Id);
+                    table.PrimaryKey("PK_Posts", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Post_Business_BusinessId",
+                        name: "FK_Posts_Businesses_BusinessId",
                         column: x => x.BusinessId,
-                        principalTable: "Business",
+                        principalTable: "Businesses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ReserveTimeSender",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    TotalStartDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    TotalEndDate = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    TotalPrice = table.Column<int>(type: "integer", nullable: false),
-                    State = table.Column<int>(type: "integer", nullable: false),
-                    Finished = table.Column<bool>(type: "boolean", nullable: false),
-                    BusinessInId = table.Column<Guid>(type: "uuid", nullable: false),
-                    BusinessReceiptId = table.Column<Guid>(type: "uuid", nullable: true),
-                    BusinessOutId = table.Column<Guid>(type: "uuid", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ReserveTimeSender", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ReserveTimeSender_Business_BusinessInId",
-                        column: x => x.BusinessInId,
-                        principalTable: "Business",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_ReserveTimeSender_Business_BusinessReceiptId",
-                        column: x => x.BusinessReceiptId,
-                        principalTable: "Business",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "SmsCredit",
+                name: "SmsCredits",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
@@ -213,22 +146,45 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SmsCredit", x => x.Id);
+                    table.PrimaryKey("PK_SmsCredits", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SmsCredit_Business_BusinessId",
+                        name: "FK_SmsCredits_Businesses_BusinessId",
                         column: x => x.BusinessId,
-                        principalTable: "Business",
+                        principalTable: "Businesses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "SmsTemplate",
+                name: "SmsTemplates",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uuid", nullable: false),
                     Name = table.Column<string>(type: "text", nullable: true),
                     Description = table.Column<string>(type: "text", nullable: true),
+                    BusinessId = table.Column<Guid>(type: "uuid", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    DeletedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SmsTemplates", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SmsTemplates_Businesses_BusinessId",
+                        column: x => x.BusinessId,
+                        principalTable: "Businesses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "UsersVIP",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: true),
                     BusinessId = table.Column<Guid>(type: "uuid", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
@@ -237,34 +193,107 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_SmsTemplate", x => x.Id);
+                    table.PrimaryKey("PK_UsersVIP", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_SmsTemplate_Business_BusinessId",
+                        name: "FK_UsersVIP_Businesses_BusinessId",
                         column: x => x.BusinessId,
-                        principalTable: "Business",
+                        principalTable: "Businesses",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_UsersVIP_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
                         principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
-                name: "BusinessUser",
+                name: "Transaction",
                 columns: table => new
                 {
-                    BusinessesId = table.Column<Guid>(type: "uuid", nullable: false),
-                    UsersNormalId = table.Column<Guid>(type: "uuid", nullable: false)
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Amount = table.Column<decimal>(type: "numeric", nullable: false),
+                    Type = table.Column<int>(type: "integer", nullable: false),
+                    State = table.Column<int>(type: "integer", nullable: false),
+                    WalletId = table.Column<Guid>(type: "uuid", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    DeletedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_BusinessUser", x => new { x.BusinessesId, x.UsersNormalId });
+                    table.PrimaryKey("PK_Transaction", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_BusinessUser_Business_BusinessesId",
-                        column: x => x.BusinessesId,
-                        principalTable: "Business",
+                        name: "FK_Transaction_Wallet_WalletId",
+                        column: x => x.WalletId,
+                        principalTable: "Wallet",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Point",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Rate = table.Column<int>(type: "integer", nullable: false),
+                    UserId = table.Column<Guid>(type: "uuid", nullable: true),
+                    BusinessId = table.Column<Guid>(type: "uuid", nullable: true),
+                    ArtistId = table.Column<Guid>(type: "uuid", nullable: true),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    DeletedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Point", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Point_Artists_ArtistId",
+                        column: x => x.ArtistId,
+                        principalTable: "Artists",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Point_Businesses_BusinessId",
+                        column: x => x.BusinessId,
+                        principalTable: "Businesses",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Point_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Services",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uuid", nullable: false),
+                    Name = table.Column<string>(type: "text", nullable: true),
+                    Time = table.Column<TimeOnly>(type: "time without time zone", nullable: false),
+                    Price = table.Column<int>(type: "integer", nullable: false),
+                    Active = table.Column<bool>(type: "boolean", nullable: false),
+                    BusinessId = table.Column<Guid>(type: "uuid", nullable: false),
+                    ArtistId = table.Column<Guid>(type: "uuid", nullable: false),
+                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
+                    CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    ModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
+                    DeletedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Services", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Services_Artists_ArtistId",
+                        column: x => x.ArtistId,
+                        principalTable: "Artists",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_BusinessUser_Users_UsersNormalId",
-                        column: x => x.UsersNormalId,
-                        principalTable: "Users",
+                        name: "FK_Services_Businesses_BusinessId",
+                        column: x => x.BusinessId,
+                        principalTable: "Businesses",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -279,8 +308,12 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                     TotalPrice = table.Column<int>(type: "integer", nullable: false),
                     State = table.Column<int>(type: "integer", nullable: false),
                     Finished = table.Column<bool>(type: "boolean", nullable: false),
+                    IsPay = table.Column<bool>(type: "boolean", nullable: false),
+                    BusinessReceiptId = table.Column<Guid>(type: "uuid", nullable: false),
                     UserId = table.Column<Guid>(type: "uuid", nullable: false),
-                    BusinessId = table.Column<Guid>(type: "uuid", nullable: false),
+                    BusinessSenderId = table.Column<Guid>(type: "uuid", nullable: false),
+                    TransactionSenderId = table.Column<Guid>(type: "uuid", nullable: false),
+                    TransactionReceiptId = table.Column<Guid>(type: "uuid", nullable: false),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
@@ -290,138 +323,33 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 {
                     table.PrimaryKey("PK_ReserveTimeReceipt", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_ReserveTimeReceipt_Business_BusinessId",
-                        column: x => x.BusinessId,
-                        principalTable: "Business",
+                        name: "FK_ReserveTimeReceipt_Businesses_BusinessReceiptId",
+                        column: x => x.BusinessReceiptId,
+                        principalTable: "Businesses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ReserveTimeReceipt_Businesses_BusinessSenderId",
+                        column: x => x.BusinessSenderId,
+                        principalTable: "Businesses",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ReserveTimeReceipt_Transaction_TransactionReceiptId",
+                        column: x => x.TransactionReceiptId,
+                        principalTable: "Transaction",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ReserveTimeReceipt_Transaction_TransactionSenderId",
+                        column: x => x.TransactionSenderId,
+                        principalTable: "Transaction",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_ReserveTimeReceipt_Users_UserId",
                         column: x => x.UserId,
                         principalTable: "Users",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "UserVIP",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: true),
-                    BusinessId = table.Column<Guid>(type: "uuid", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_UserVIP", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_UserVIP_Business_BusinessId",
-                        column: x => x.BusinessId,
-                        principalTable: "Business",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_UserVIP_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Point",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Rate = table.Column<int>(type: "integer", nullable: false),
-                    UserId = table.Column<Guid>(type: "uuid", nullable: true),
-                    ArtistId = table.Column<Guid>(type: "uuid", nullable: true),
-                    BusinessId = table.Column<Guid>(type: "uuid", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Point", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Point_Artist_ArtistId",
-                        column: x => x.ArtistId,
-                        principalTable: "Artist",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Point_Business_BusinessId",
-                        column: x => x.BusinessId,
-                        principalTable: "Business",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Point_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Service",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Name = table.Column<string>(type: "text", nullable: true),
-                    Time = table.Column<TimeOnly>(type: "time without time zone", nullable: false),
-                    Price = table.Column<int>(type: "integer", nullable: false),
-                    Active = table.Column<bool>(type: "boolean", nullable: false),
-                    BusinessId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ArtistId = table.Column<Guid>(type: "uuid", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Service", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Service_Artist_ArtistId",
-                        column: x => x.ArtistId,
-                        principalTable: "Artist",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Service_Business_BusinessId",
-                        column: x => x.BusinessId,
-                        principalTable: "Business",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Transaction",
-                columns: table => new
-                {
-                    Id = table.Column<Guid>(type: "uuid", nullable: false),
-                    Amount = table.Column<decimal>(type: "numeric", nullable: false),
-                    Type = table.Column<int>(type: "integer", nullable: false),
-                    WalletId = table.Column<Guid>(type: "uuid", nullable: false),
-                    ReserveTimeId = table.Column<Guid>(type: "uuid", nullable: true),
-                    IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
-                    CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    ModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
-                    DeletedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Transaction", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Transaction_ReserveTimeReceipt_ReserveTimeId",
-                        column: x => x.ReserveTimeId,
-                        principalTable: "ReserveTimeReceipt",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Transaction_Wallet_WalletId",
-                        column: x => x.WalletId,
-                        principalTable: "Wallet",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -437,7 +365,6 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                     Finished = table.Column<bool>(type: "boolean", nullable: false),
                     ServiceId = table.Column<Guid>(type: "uuid", nullable: false),
                     ReserveTimeReceiptId = table.Column<Guid>(type: "uuid", nullable: true),
-                    ReserveTimeSenderId = table.Column<Guid>(type: "uuid", nullable: true),
                     IsDeleted = table.Column<bool>(type: "boolean", nullable: false),
                     CreatedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
                     ModifiedOn = table.Column<DateTime>(type: "timestamp without time zone", nullable: false),
@@ -452,32 +379,23 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         principalTable: "ReserveTimeReceipt",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_ReserveItem_ReserveTimeSender_ReserveTimeSenderId",
-                        column: x => x.ReserveTimeSenderId,
-                        principalTable: "ReserveTimeSender",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_ReserveItem_Service_ServiceId",
+                        name: "FK_ReserveItem_Services_ServiceId",
                         column: x => x.ServiceId,
-                        principalTable: "Service",
+                        principalTable: "Services",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Artist_BusinessId",
-                table: "Artist",
+                name: "IX_Users_PhoneNumber",
+                table: "Users",
+                column: "PhoneNumber",
+                unique: true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Artists_BusinessId",
+                table: "Artists",
                 column: "BusinessId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Business_CityId",
-                table: "Business",
-                column: "CityId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Business_WalletId",
-                table: "Business",
-                column: "WalletId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_BusinessUser_UsersNormalId",
@@ -500,8 +418,8 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Post_BusinessId",
-                table: "Post",
+                name: "IX_Posts_BusinessId",
+                table: "Posts",
                 column: "BusinessId");
 
             migrationBuilder.CreateIndex(
@@ -510,19 +428,29 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 column: "ReserveTimeReceiptId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ReserveItem_ReserveTimeSenderId",
-                table: "ReserveItem",
-                column: "ReserveTimeSenderId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_ReserveItem_ServiceId",
                 table: "ReserveItem",
                 column: "ServiceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ReserveTimeReceipt_BusinessId",
+                name: "IX_ReserveTimeReceipt_BusinessReceiptId",
                 table: "ReserveTimeReceipt",
-                column: "BusinessId");
+                column: "BusinessReceiptId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReserveTimeReceipt_BusinessSenderId",
+                table: "ReserveTimeReceipt",
+                column: "BusinessSenderId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReserveTimeReceipt_TransactionReceiptId",
+                table: "ReserveTimeReceipt",
+                column: "TransactionReceiptId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ReserveTimeReceipt_TransactionSenderId",
+                table: "ReserveTimeReceipt",
+                column: "TransactionSenderId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_ReserveTimeReceipt_UserId",
@@ -530,40 +458,25 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ReserveTimeSender_BusinessInId",
-                table: "ReserveTimeSender",
-                column: "BusinessInId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ReserveTimeSender_BusinessReceiptId",
-                table: "ReserveTimeSender",
-                column: "BusinessReceiptId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Service_ArtistId",
-                table: "Service",
+                name: "IX_Services_ArtistId",
+                table: "Services",
                 column: "ArtistId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Service_BusinessId",
-                table: "Service",
+                name: "IX_Services_BusinessId",
+                table: "Services",
                 column: "BusinessId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_SmsCredit_BusinessId",
-                table: "SmsCredit",
+                name: "IX_SmsCredits_BusinessId",
+                table: "SmsCredits",
                 column: "BusinessId",
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_SmsTemplate_BusinessId",
-                table: "SmsTemplate",
+                name: "IX_SmsTemplates_BusinessId",
+                table: "SmsTemplates",
                 column: "BusinessId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Transaction_ReserveTimeId",
-                table: "Transaction",
-                column: "ReserveTimeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Transaction_WalletId",
@@ -571,28 +484,13 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 column: "WalletId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_CityId",
-                table: "Users",
-                column: "CityId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_PhoneNumber",
-                table: "Users",
-                column: "PhoneNumber");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Users_WalletId",
-                table: "Users",
-                column: "WalletId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_UserVIP_BusinessId",
-                table: "UserVIP",
+                name: "IX_UsersVIP_BusinessId",
+                table: "UsersVIP",
                 column: "BusinessId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_UserVIP_UserId",
-                table: "UserVIP",
+                name: "IX_UsersVIP_UserId",
+                table: "UsersVIP",
                 column: "UserId");
         }
 
@@ -606,46 +504,41 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                 name: "Point");
 
             migrationBuilder.DropTable(
-                name: "Post");
+                name: "Posts");
 
             migrationBuilder.DropTable(
                 name: "ReserveItem");
 
             migrationBuilder.DropTable(
-                name: "SmsCredit");
+                name: "SmsCredits");
 
             migrationBuilder.DropTable(
-                name: "SmsTemplate");
+                name: "SmsTemplates");
 
             migrationBuilder.DropTable(
-                name: "Transaction");
-
-            migrationBuilder.DropTable(
-                name: "UserVIP");
-
-            migrationBuilder.DropTable(
-                name: "ReserveTimeSender");
-
-            migrationBuilder.DropTable(
-                name: "Service");
+                name: "UsersVIP");
 
             migrationBuilder.DropTable(
                 name: "ReserveTimeReceipt");
 
             migrationBuilder.DropTable(
-                name: "Artist");
+                name: "Services");
 
             migrationBuilder.DropTable(
-                name: "Users");
+                name: "Transaction");
 
             migrationBuilder.DropTable(
-                name: "Business");
-
-            migrationBuilder.DropTable(
-                name: "City");
+                name: "Artists");
 
             migrationBuilder.DropTable(
                 name: "Wallet");
+
+            migrationBuilder.DropTable(
+                name: "Businesses");
+
+            migrationBuilder.DropIndex(
+                name: "IX_Users_PhoneNumber",
+                table: "Users");
         }
     }
 }
