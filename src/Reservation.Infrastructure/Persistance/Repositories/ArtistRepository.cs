@@ -1,4 +1,3 @@
-
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 
@@ -8,6 +7,9 @@ public sealed class ArtistRepository(ReservationDbContext context) : IArtistRepo
 
     public void Add(Artist artist)
         => _context.Artists.Add(artist);
+
+    public void Remove(Artist artist)
+        => _context.Artists.Remove(artist);
 
     public async Task<bool> AnyAsync(string name, CancellationToken cancellationToken = default)
         => await _context.Artists.AsQueryable()
@@ -56,4 +58,5 @@ public sealed class ArtistRepository(ReservationDbContext context) : IArtistRepo
                                                                 s.Active
                                                             )).ToList()
                                     ).FirstOrDefaultAsync(cancellationToken);
+
 }

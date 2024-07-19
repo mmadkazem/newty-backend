@@ -4,6 +4,7 @@ namespace Reservation.Domain.Repositories;
 public interface IArtistRepository
 {
     void Add(Artist artist);
+    void Remove(Artist artist);
     Task<Artist> FindAsync(Guid artistId, CancellationToken cancellationToken = default);
     Task<IResponse> Get(Guid artistId, CancellationToken cancellationToken = default);
     Task<IEnumerable<IResponse>> GetArtistByBusinessId(Guid businessId, CancellationToken cancellationToken = default);
