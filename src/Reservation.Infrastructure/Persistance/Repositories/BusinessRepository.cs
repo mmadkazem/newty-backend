@@ -1,3 +1,4 @@
+using Reservation.Application.Businesses.Queries.GetBusiness;
 
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
@@ -33,11 +34,32 @@ public sealed class BusinessRepository(ReservationDbContext context) : IBusiness
                                     .Where(b => b.PhoneNumber == phoneNumber)
                                     .FirstOrDefaultAsync(cancellationToken);
 
-    public async Task<double> GetAveragePoints(Guid businessId, CancellationToken cancellationToken)
+    public async Task<Business> FindAsyncIncludeSMSCredit(Guid id, CancellationToken cancellationToken = default)
         => await _context.Businesses.AsQueryable()
-                                .Where(a => a.Id == businessId)
-                                .Select(a => a.Points.Average(p => p.Rate))
-                                .FirstOrDefaultAsync(cancellationToken);
+                                    .Include(b => b.SmsCredit)
+                                    .Where(b => b.Id == id)
+                                    .FirstOrDefaultAsync(cancellationToken);
+
+    public async Task<IResponse> Get(Guid businessId, CancellationToken cancellationToken)
+        => await _context.Businesses.AsQueryable()
+                                    .AsNoTracking()
+                                    .Where(b => b.Id == businessId)
+                                    .Select(b => new GetBusinessQueryResponse
+                                    (
+                                        b.Id,
+                                        b.PhoneNumber,
+                                        b.Name,
+                                        b.CoverImagePath,
+                                        b.ParvaneKasbImagePath,
+                                        b.Description,
+                                        b.Address,
+                                        b.City.Name,
+                                        b.Holidays,
+                                        b.StartHoursOfWor,
+                                        b.EndHoursOfWor,
+                                        b.IsCancelReserveTime
+                                    )).FirstOrDefaultAsync(cancellationToken);
+
     public async Task<IEnumerable<IResponse>> Search(int page, string key, CancellationToken cancellationToken = default)
         => await _context.Businesses.AsQueryable()
                                     .AsNoTracking()
