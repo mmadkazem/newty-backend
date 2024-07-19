@@ -12,6 +12,7 @@ public sealed class SoftDeleteInterceptor : SaveChangesInterceptor
             if (entry is { State: EntityState.Deleted, Entity: BaseClass entity })
             {
                 entity.IsDeleted = true;
+                entity.DeletedOn = DateTime.Now;
                 entry.State = EntityState.Modified;
             }
         }
@@ -29,6 +30,7 @@ public sealed class SoftDeleteInterceptor : SaveChangesInterceptor
             if (entry is { State: EntityState.Deleted, Entity: BaseClass entity })
             {
                 entity.IsDeleted = true;
+                entity.DeletedOn = DateTime.Now;
                 entry.State = EntityState.Modified;
             }
         }
