@@ -11,10 +11,10 @@ public class User : BaseClass
     // User City
     public City City { get; set; }
 
-    // User Wallet
+    // // User Wallet
     public Wallet Wallet { get; set; }
 
-    // Business
+    // // Business
     public ICollection<Business> Businesses { get; set; }
 
 }
