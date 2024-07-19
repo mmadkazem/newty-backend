@@ -7,4 +7,5 @@ global using Reservation.Domain.Entities.Reserve;
 global using Reservation.Domain.Entities.Cities;
 global using Reservation.Domain.Entities.Points;
 global using Reservation.Share.Abstract.Helper;
+global using Reservation.Domain.Entities.Admin;
 global using Reservation.Domain.Repositories;

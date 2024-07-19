@@ -6,11 +6,3 @@ public record GetBusinessTransactionsQueryRequest(Guid BusinessId, int Page) : I
     public static GetBusinessTransactionsQueryRequest Create(Guid businessId, int page)
         => new(businessId, page);
 }
-
-public record GetBusinessTransactionsQueryResponse
-(
-    Guid Id,
-    DateTime CreatedOn,
-    decimal Amount,
-    Guid ReserveTimeId
-) : IResponse;

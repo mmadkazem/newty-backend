@@ -11,7 +11,7 @@ public sealed class CreateBusinessWalletCommandHandler(IUnitOfWork uow) : IReque
     public async Task Handle(CreateBusinessWalletCommandRequest request, CancellationToken cancellationToken)
     {
         var business = await _uow.Businesses.FindAsync(request.BusinessId, cancellationToken)
-            ?? throw new BusinessesNotFoundException();
+            ?? throw new BusinessNotFoundException();
         business.Wallet = new();
 
         await _uow.SaveChangeAsync(cancellationToken);
