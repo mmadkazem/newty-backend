@@ -36,18 +36,19 @@ public sealed class WalletRepository(ReservationDbContext context) : IWalletRepo
 
     public async Task<IEnumerable<IResponse>> GetTransactions(int page, Guid walletId, CancellationToken cancellationToken)
         => await _context.Transactions.AsQueryable()
-                                .AsNoTracking()
-                                .Where(w => w.Wallet.Id == walletId)
-                                .Select(w => new GetUserTransactionsQueryResponse
-                                (
-                                    w.Id,
-                                    w.CreatedOn,
-                                    w.Amount,
-                                    w.ReserveTime.Id
-                                ))
-                                .Skip((page - 1) * 25)
-                                .Take(25)
-                                .ToListAsync(cancellationToken);
+                                    .AsNoTracking()
+                                    .Where(w => w.Wallet.Id == walletId)
+                                    .Select(w => new GetWalletTransactionsQueryResponse
+                                    (
+                                        w.Id,
+                                        w.CreatedOn,
+                                        w.Amount,
+                                        w.Type,
+                                        w.State
+                                    ))
+                                    .Skip((page - 1) * 25)
+                                    .Take(25)
+                                    .ToListAsync(cancellationToken);
 
     public async Task<IResponse> GetBusinessWallet(Guid businessId, CancellationToken cancellationToken)
         => await _context.Businesses.AsQueryable()
@@ -64,8 +65,4 @@ public sealed class WalletRepository(ReservationDbContext context) : IWalletRepo
                                 .Where(u => u.Id == businessId)
                                 .Select(u => u.Wallet.Id)
                                 .FirstOrDefaultAsync(cancellationToken);
-
-    public async Task<Transaction> FindAsyncTransaction(Guid transactionId, CancellationToken cancellationToken)
-        => await _context.Transactions.AsQueryable()
-                                .FirstOrDefaultAsync(t => t.Id == transactionId, cancellationToken);
 }
