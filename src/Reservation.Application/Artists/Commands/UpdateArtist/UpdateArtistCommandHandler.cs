@@ -1,4 +1,3 @@
-
 namespace Reservation.Application.Artists.Commands.UpdateArtist;
 
 public sealed class UpdateArtistCommandHandler(IUnitOfWork uow) : IRequestHandler<UpdateArtistCommandRequest>
@@ -9,10 +8,17 @@ public sealed class UpdateArtistCommandHandler(IUnitOfWork uow) : IRequestHandle
     {
         var artist = await _uow.Artists.FindAsync(request.Id, cancellationToken)
             ?? throw new ArtistNotFoundException();
+
         if (artist.Name != request.Name && !await _uow.Artists.AnyAsync(request.Name, cancellationToken))
         {
             throw new ArtistNameAlreadyExistException();
         }
+
+        if (artist.BusinessId != request.BusinessId)
+        {
+            throw new DoNotAccessToRemoveItem("آرتیست");
+        }
+
         artist.Name = request.Name;
         artist.Description = request.Description;
         artist.CoverImagePath = request.CoverImagePath;
