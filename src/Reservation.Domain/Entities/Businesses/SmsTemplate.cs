@@ -7,4 +7,5 @@ public class SmsTemplate : BaseClass
 
     // Business Sms Template
     public Business Business { get; set; }
+    public Guid BusinessId { get; set; }
 }
