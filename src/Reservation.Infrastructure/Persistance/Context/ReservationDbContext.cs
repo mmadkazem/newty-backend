@@ -1,5 +1,3 @@
-using Reservation.Infrastructure.Persistance.Interceptor;
-
 namespace Reservation.Infrastructure.Persistance.Context;
 
 public sealed class ReservationDbContext : DbContext
@@ -44,6 +42,12 @@ public sealed class ReservationDbContext : DbContext
     public DbSet<Wallet> Wallets { get; set; }
     public DbSet<Transaction> Transactions { get; set; }
 
+    // SmsPlan
+    public DbSet<SmsPlan> SmsPlans { get; set; }
+
+    // FeeTransfer
+    public DbSet<TransferFee> TransferFees { get; set; }
+
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);
@@ -54,5 +58,6 @@ public sealed class ReservationDbContext : DbContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+        modelBuilder.ConfigSoftDeleteFilter();
     }
 }
