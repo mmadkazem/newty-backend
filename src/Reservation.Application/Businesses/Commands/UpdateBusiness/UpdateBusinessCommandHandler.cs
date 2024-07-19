@@ -7,7 +7,7 @@ public sealed class UpdateBusinessCommandHandler(IUnitOfWork uow) : IRequestHand
     public async Task Handle(UpdateBusinessCommandRequest request, CancellationToken cancellationToken)
     {
         var business = await _uow.Businesses.FindAsync(request.Id, cancellationToken)
-            ?? throw new BusinessesNotFoundException();
+            ?? throw new BusinessNotFoundException();
 
         if (business.PhoneNumber != request.PhoneNumber && !await _uow.Users.AnyAsync(request.PhoneNumber, cancellationToken))
         {
