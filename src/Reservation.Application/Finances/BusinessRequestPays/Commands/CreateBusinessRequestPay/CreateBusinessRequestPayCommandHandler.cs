@@ -7,7 +7,7 @@ public class CreateBusinessRequestPayCommandHandler(IUnitOfWork uow) : IRequestH
     public async Task Handle(CreateBusinessRequestPayCommandRequest request, CancellationToken cancellationToken)
     {
         var business = await _uow.Businesses.FindAsync(request.BusinessId, cancellationToken)
-            ?? throw new BusinessesNotFoundException();
+            ?? throw new BusinessNotFoundException();
 
         BusinessRequestPay businessRequestPay = new()
         {
