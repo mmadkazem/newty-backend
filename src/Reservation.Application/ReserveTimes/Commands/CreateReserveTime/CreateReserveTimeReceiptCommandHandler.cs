@@ -7,6 +7,20 @@ public sealed class CreateReserveTimeReceiptCommandHandler(IUnitOfWork uow)
 
     public async Task Handle(CreateReserveTimeReceiptCommandRequest request, CancellationToken cancellationToken)
     {
+        var business = await _uow.Businesses.FindAsync(request.BusinessId, cancellationToken)
+            ?? throw new UserNotFoundException();
+
+        var userReserveTime = new TimeSpan(request.DateTime.Hour, request.DateTime.Minute, request.DateTime.Second);
+
+        if (!(business.StartHoursOfWor <= userReserveTime &&
+            userReserveTime <= business.EndHoursOfWor))
+        {
+            throw new ThisTimeIsNotInTheWorkingTimeException();
+        }
+        if (business.Holidays.Any(c => c == request.DateTime.DayOfWeek))
+        {
+            throw new BusinessHolidayException();
+        }
 
         var startDate = request.DateTime;
         var endDate = request.DateTime;
@@ -17,7 +31,7 @@ public sealed class CreateReserveTimeReceiptCommandHandler(IUnitOfWork uow)
             var service = await _uow.Services.FindAsync(artistService.ServiceId, cancellationToken)
                 ?? throw new ServiceNotFoundException();
 
-            if (service.ArtistId != artistService.ArtistId)
+            if (service.Artist.Id != artistService.ArtistId)
             {
                 throw new ArtistNotFoundException();
             }
@@ -36,6 +50,7 @@ public sealed class CreateReserveTimeReceiptCommandHandler(IUnitOfWork uow)
             reserveItems.Add(item);
         }
 
+
         #region Check Business Time Conflict
         var reserveTimesByBusinessId = await _uow.ReserveTimes.FindAsyncByBusinessId(request.BusinessId, cancellationToken);
         if (reserveTimesByBusinessId.Count != 0)
@@ -44,7 +59,7 @@ public sealed class CreateReserveTimeReceiptCommandHandler(IUnitOfWork uow)
             {
                 foreach (var item in time.ReserveItems)
                 {
-                    if (request.ArtistServices.Any(a => a.ArtistId == item.Service.ArtistId))
+                    if (request.ArtistServices.Any(a => a.ArtistId == item.Service.Artist.Id))
                     {
                         if (item.StartDate <= endDate && startDate <= item.EndDate)
                         {
@@ -74,6 +89,7 @@ public sealed class CreateReserveTimeReceiptCommandHandler(IUnitOfWork uow)
 
         var user = await _uow.Users.FindAsync(request.UserId, cancellationToken)
             ?? throw new UserNotFoundException();
+
         ReserveTimeReceipt reserveTime = new()
         {
             TotalPrice = totalPrice,
@@ -81,21 +97,28 @@ public sealed class CreateReserveTimeReceiptCommandHandler(IUnitOfWork uow)
             TotalEndDate = endDate,
             ReserveItems = reserveItems,
             User = user,
-            BusinessReceiptId = request.BusinessId,
+            BusinessReceipt = business,
             State = ReserveState.Waiting
         };
 
-        #region Create Transaction
         var userWallet = await _uow.Wallets.FindAsyncByUserId(request.UserId, cancellationToken)
             ?? throw new WalletNotFoundException();
 
         var businessWallet = await _uow.Wallets.FindAsyncByBusinessId(request.BusinessId, cancellationToken)
             ?? throw new WalletNotFoundException();
 
+        // block credit
+        if (userWallet.Credit - totalPrice < 0)
+        {
+            throw new BalanceInsufficientException();
+        }
+        userWallet.Credit -= totalPrice;
+        userWallet.BlockCredit += totalPrice;
+
+        #region Create Transaction
         Transaction transactionReceipt = new()
         {
             Amount = totalPrice,
-            ReserveTime = reserveTime,
             Wallet = businessWallet,
             State = TransactionState.Waiting
         };
@@ -103,8 +126,8 @@ public sealed class CreateReserveTimeReceiptCommandHandler(IUnitOfWork uow)
         Transaction transactionSender = new()
         {
             Amount = totalPrice,
-            ReserveTime = reserveTime,
             Wallet = userWallet,
+            State = TransactionState.Waiting
         };
 
         reserveTime.TransactionReceipt = transactionReceipt;

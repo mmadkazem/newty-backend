@@ -6,6 +6,21 @@ public sealed class CreateReserveTimeSenderCommandHandler(IUnitOfWork uow) : IRe
 
     public async Task Handle(CreateReserveTimeSenderCommandRequest request, CancellationToken cancellationToken)
     {
+        var businessReceipt = await _uow.Businesses.FindAsync(request.BusinessReceiptId, cancellationToken)
+            ?? throw new UserNotFoundException();
+
+        var userReserveTime = new TimeSpan(request.DateTime.Hour, request.DateTime.Minute, request.DateTime.Second);
+
+        if (!(businessReceipt.StartHoursOfWor <= userReserveTime &&
+            userReserveTime <= businessReceipt.EndHoursOfWor))
+        {
+            throw new ThisTimeIsNotInTheWorkingTimeException();
+        }
+
+        if (businessReceipt.Holidays.Any(c => c == request.DateTime.DayOfWeek))
+        {
+            throw new BusinessHolidayException();
+        }
 
         var startDate = request.DateTime;
         var endDate = request.DateTime;
@@ -13,10 +28,10 @@ public sealed class CreateReserveTimeSenderCommandHandler(IUnitOfWork uow) : IRe
         List<ReserveItem> reserveItems = [];
         foreach (var artistService in request.ArtistServices)
         {
-            var service = await _uow.Services.FindAsync(artistService.ServiceId, cancellationToken)
+            var service = await _uow.Services.FindAsyncIncludeArtist(artistService.ServiceId, cancellationToken)
                 ?? throw new ServiceNotFoundException();
 
-            if (service.ArtistId != artistService.ArtistId)
+            if (service.Artist.Id != artistService.ArtistId)
             {
                 throw new ArtistNotFoundException();
             }
@@ -43,7 +58,7 @@ public sealed class CreateReserveTimeSenderCommandHandler(IUnitOfWork uow) : IRe
             {
                 foreach (var item in time.ReserveItems)
                 {
-                    if (request.ArtistServices.Any(a => a.ArtistId == item.Service.ArtistId))
+                    if (request.ArtistServices.Any(a => a.ArtistId == item.Service.Artist.Id))
                     {
                         if (item.StartDate <= endDate && startDate <= item.EndDate)
                         {
@@ -71,19 +86,20 @@ public sealed class CreateReserveTimeSenderCommandHandler(IUnitOfWork uow) : IRe
         }
         #endregion
 
+        var businessSender = await _uow.Businesses.FindAsync(request.BusinessSenderId, cancellationToken)
+            ?? throw new BusinessNotFoundException();
+
         ReserveTimeSender reserveTimeSender = new()
         {
             TotalPrice = totalPrice,
             TotalStartDate = startDate,
             TotalEndDate = endDate,
             ReserveItems = reserveItems,
-            BusinessSenderId = request.BusinessSenderId,
-            BusinessReceiptId = request.BusinessReceiptId,
+            BusinessSender = businessSender,
+            BusinessReceipt = businessReceipt,
             State = ReserveState.Waiting
         };
 
-        var businessSender = await _uow.Businesses.FindAsync(request.BusinessSenderId, cancellationToken)
-            ?? throw new BusinessesNotFoundException();
 
 
         ReserveTimeReceipt reserveTimeReceipt = new()
@@ -93,17 +109,25 @@ public sealed class CreateReserveTimeSenderCommandHandler(IUnitOfWork uow) : IRe
             TotalEndDate = endDate,
             ReserveItems = reserveItems,
             BusinessSender = businessSender,
-            BusinessReceiptId = request.BusinessReceiptId,
+            BusinessReceipt = businessReceipt,
             State = ReserveState.Waiting
         };
 
-        #region Create Transaction
         var walletSender = await _uow.Wallets.FindAsyncByBusinessId(request.BusinessSenderId, cancellationToken)
             ?? throw new WalletNotFoundException();
 
         var walletReceipt = await _uow.Wallets.FindAsyncByBusinessId(request.BusinessReceiptId, cancellationToken)
             ?? throw new WalletNotFoundException();
 
+        // block credit
+        if (walletSender.Credit - totalPrice < 0)
+        {
+            throw new BalanceInsufficientException();
+        }
+        walletSender.Credit -= totalPrice;
+        walletSender.BlockCredit += totalPrice;
+
+        #region Create Transaction
         Transaction transactionSender = new()
         {
             Amount = totalPrice,
@@ -116,7 +140,6 @@ public sealed class CreateReserveTimeSenderCommandHandler(IUnitOfWork uow) : IRe
             Amount = totalPrice,
             Wallet = walletReceipt,
             Type = TransactionType.ReserveTimeReceipt,
-            ReserveTime = reserveTimeReceipt
         };
 
         reserveTimeReceipt.TransactionReceipt = transactionReceipt;
