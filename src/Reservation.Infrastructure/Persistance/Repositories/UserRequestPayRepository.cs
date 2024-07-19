@@ -9,6 +9,9 @@ public sealed class UserRequestPayRepository(ReservationDbContext context) : IUs
     public void Add(UserRequestPay userRequestPay)
         => _context.UserRequestPays.Add(userRequestPay);
 
+    public void Remove(UserRequestPay userRequestPay)
+        => _context.UserRequestPays.Remove(userRequestPay);
+
     public async Task<UserRequestPay> FindAsync(Guid id, CancellationToken cancellationToken)
         => await _context.UserRequestPays.AsQueryable()
                                             .FirstOrDefaultAsync(r => r.Id == id, cancellationToken);
@@ -42,4 +45,5 @@ public sealed class UserRequestPayRepository(ReservationDbContext context) : IUs
                                 .Skip((page - 1) * 25)
                                 .Take(25)
                                 .ToListAsync(cancellationToken);
+
 }
