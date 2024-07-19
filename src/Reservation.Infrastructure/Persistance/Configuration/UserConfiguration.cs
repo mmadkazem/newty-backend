@@ -5,8 +5,8 @@ public class UserConfiguration : IEntityTypeConfiguration<User>
 {
     public void Configure(EntityTypeBuilder<User> builder)
     {
-        builder.HasIndex(u => u.PhoneNumber);
-                builder
-            .HasOne(u => u.Wallet);
+        builder.HasIndex(u => u.PhoneNumber).IsUnique();
+
+        builder.HasOne(u => u.Wallet);
     }
 }
