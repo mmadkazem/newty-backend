@@ -6,13 +6,19 @@ public sealed class UpdateServiceCommandHandler(IUnitOfWork uow) : IRequestHandl
 
     public async Task Handle(UpdateServiceCommandRequest request, CancellationToken cancellationToken)
     {
-        Service service = await _uow.Services.FindAsync(request.Id, cancellationToken)
+        var service = await _uow.Services.FindAsync(request.Id, cancellationToken)
             ?? throw new ServiceNotFoundException();
 
         if (service.Name != request.Name && !await _uow.Services.AnyAsync(request.Name, cancellationToken))
         {
             throw new ServiceAlreadyExistException();
         }
+
+        if (service.BusinessId != request.BusinessId)
+        {
+            throw new DoNotAccessToRemoveItem("سرویس");
+        }
+
         service.Name = request.Name;
         service.Price = request.Price;
         service.Time = new TimeOnly(request.Time.Hour, request.Time.Minute);
