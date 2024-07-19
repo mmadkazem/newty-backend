@@ -10,8 +10,6 @@ public class Transaction : BaseClass
     public Wallet Wallet { get; set; }
     public Guid WalletId { get; set; }
 
-    // Transaction for Reserve Time
-    public ReserveTimeReceipt ReserveTime { get; set; }
 }
 
 public enum TransactionType
