@@ -8,7 +8,7 @@ public sealed class GetCategoriesQueryHandler(IUnitOfWork uow) : IRequestHandler
 
     public async Task<IEnumerable<IResponse>> Handle(GetCategoriesQueryRequest request, CancellationToken cancellationToken)
     {
-        var categories = await _uow.Categories.GetCategories(request.Page, cancellationToken);
+        var categories = await _uow.Categories.GetCategories(cancellationToken);
         if (!categories.Any())
         {
             throw new CategoryNotFoundException();

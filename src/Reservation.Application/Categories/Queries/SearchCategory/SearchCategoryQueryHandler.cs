@@ -6,7 +6,7 @@ public sealed class SearchCategoryQueryHandler(IUnitOfWork uow) : IRequestHandle
 
     public async Task<IEnumerable<IResponse>> Handle(SearchCategoryQueryRequest request, CancellationToken cancellationToken)
     {
-        var responses = await _uow.Categories.Search(request.Key, request.Page, cancellationToken);
+        var responses = await _uow.Categories.Search(request.Key, cancellationToken);
 
         if (!responses.Any())
         {

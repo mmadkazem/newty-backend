@@ -12,7 +12,7 @@ public sealed class CategoriesController(ISender sender) : ControllerBase
     private readonly ISender _sender = sender;
 
     [HttpPost]
-    public async Task<IActionResult> Post(Guid? ParentId, CreateCategoryDTO model,
+    public async Task<IActionResult> Post(Guid? ParentId, [FromBody] CreateCategoryDTO model,
         CancellationToken token)
     {
         var request = CreateCategoryCommandRequest.Create(ParentId, model);
@@ -31,47 +31,46 @@ public sealed class CategoriesController(ISender sender) : ControllerBase
         return Ok();
     }
 
-    [HttpPut("{Id:guid}")]
-    public async Task<IActionResult> Put([FromRoute] Guid Id, UpdateCategoryDTO model,
+    [HttpPut("{id:guid}")]
+    public async Task<IActionResult> Put(Guid id, UpdateCategoryDTO model,
         CancellationToken token)
     {
-        var request = UpdateCategoryCommandRequest.Create(Id, model);
+        var request = UpdateCategoryCommandRequest.Create(id, model);
         await _sender.Send(request, token);
         return Ok();
     }
 
-    [HttpDelete("{Id:guid}")]
-    public async Task<IActionResult> Remove(Guid Id,
+    [HttpDelete("{id:guid}")]
+    public async Task<IActionResult> Remove(Guid id,
         CancellationToken token)
     {
-        await _sender.Send(new RemoveCategoryCommandRequest(Id), token);
+        await _sender.Send(new RemoveCategoryCommandRequest(id), token);
         return Ok();
     }
 
-    [HttpGet("{Id:guid}/SubCategory")]
+    [HttpGet("{id:guid}/SubCategory")]
     [AllowAnonymous]
-    public async Task<IActionResult> Get([FromRoute] GetSubCategoriesByCategoryIdQueryRequest request,
+    public async Task<IActionResult> GetSubCategory(Guid id,
         CancellationToken token)
     {
-        var result = await _sender.Send(request, token);
+        var result = await _sender.Send(new GetSubCategoriesByCategoryIdQueryRequest(id), token);
         return Ok(result);
     }
 
-    [HttpGet("{Id:guid}")]
+    [HttpGet("{id:guid}")]
     [AllowAnonymous]
-    public async Task<IActionResult> Get([FromRoute] GetCategoryQueryRequest request,
+    public async Task<IActionResult> Get(Guid id,
         CancellationToken token)
     {
-        var result = await _sender.Send(request, token);
+        var result = await _sender.Send(new GetCategoryQueryRequest(id), token);
         return Ok(result);
     }
 
-    [HttpGet("{page:int}")]
+    [HttpGet]
     [AllowAnonymous]
-    public async Task<IActionResult> Get(int page,
-        CancellationToken token)
+    public async Task<IActionResult> Get(CancellationToken token)
     {
-        var results = await _sender.Send(new GetCategoriesQueryRequest(page), token);
+        var results = await _sender.Send(new GetCategoriesQueryRequest(), token);
         return Ok(results);
     }
 
@@ -83,21 +82,21 @@ public sealed class CategoriesController(ISender sender) : ControllerBase
         return Ok(results);
     }
 
-    [HttpGet("{categoryId:guid}/Page/{page:int}/Businesses")]
+    [HttpGet("{categoryId:guid}/Businesses/Page/{page:int}")]
     [AllowAnonymous]
-    public async Task<IActionResult> Get(int page, Guid categoryId,
+    public async Task<IActionResult> Get(Guid categoryId, int page,
         CancellationToken token)
     {
         var result = await _sender.Send(new GetCategoryBusinessesQueryRequest(categoryId, page), token);
         return Ok(result);
     }
 
-    [HttpGet("{key}/Page/{page:int}")]
+    [HttpGet("{key}")]
     [AllowAnonymous]
-    public async Task<IActionResult> Get(int page, string key,
+    public async Task<IActionResult> Get(string key,
         CancellationToken token)
     {
-        var result = await _sender.Send(new SearchCategoryQueryRequest(key, page), token);
+        var result = await _sender.Send(new SearchCategoryQueryRequest(key), token);
         return Ok(result);
     }
 
