@@ -26,8 +26,8 @@ public class ReserveTimesSenderController(ISender sender) : ControllerBase
         return Ok();
     }
 
-    [HttpGet("Page/{page:int}/Finished/{finished:bool}")]
-    public async Task<IActionResult> GetUserReserveTime(int page, bool finished,
+    [HttpGet("Finished/{finished:bool}/Page/{page:int}")]
+    public async Task<IActionResult> GetUserReserveTime(bool finished, int page,
         CancellationToken token)
     {
         var request = GetBusinessReserveTimeSenderQueryRequest.Create(page, finished, User.UserId());
@@ -35,8 +35,8 @@ public class ReserveTimesSenderController(ISender sender) : ControllerBase
         return Ok(results);
     }
 
-    [HttpGet("Page/{page:int}/State/{state}")]
-    public async Task<IActionResult> GetBusinessReserveTimeByState(int page, ReserveState state,
+    [HttpGet("/State/{state}/Page/{page:int}")]
+    public async Task<IActionResult> GetBusinessReserveTimeByState(ReserveState state, int page,
         CancellationToken token)
     {
         var request = GetBusinessReserveTimeSenderByStateQueryRequest.Create(page, state, User.UserId());

@@ -33,11 +33,11 @@ public sealed class SmsTemplatesController(ISender sender) : ControllerBase
         return Ok();
     }
 
-    [HttpGet("Businesses/{BusinessId:guid}")]
-    public async Task<IActionResult> Get([FromRoute] GetSmsTemplatesQueryRequest request,
+    [HttpGet("Businesses/{businessId:guid}")]
+    public async Task<IActionResult> GetAll(Guid businessId,
         CancellationToken token)
     {
-        var results = await _sender.Send(request, token);
+        var results = await _sender.Send(new GetSmsTemplatesQueryRequest(businessId), token);
         return Ok(results);
     }
 

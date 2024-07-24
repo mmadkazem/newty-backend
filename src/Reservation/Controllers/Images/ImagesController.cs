@@ -29,10 +29,10 @@ public sealed class ImagesController(ISender sender) : ControllerBase
     }
 
     [HttpGet("{objectKey}"), AllowAnonymous]
-    public async Task<IActionResult> GetUrl([FromRoute] GetImageUrlQueryRequest request,
+    public async Task<IActionResult> GetUrl(string objectKey,
         CancellationToken token)
     {
-        var result = await _sender.Send(request, token);
+        var result = await _sender.Send(new GetImageUrlQueryRequest(objectKey), token);
         return Ok(result);
     }
 }

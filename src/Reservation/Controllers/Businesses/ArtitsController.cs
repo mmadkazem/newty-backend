@@ -35,35 +35,35 @@ public sealed class ArtistsController(ISender sender) : ControllerBase
         return Ok();
     }
 
-    [HttpGet("{ArtistId:guid}")]
+    [HttpGet("{id:guid}")]
     [AllowAnonymous]
-    public async Task<IActionResult> Get([FromRoute] GetArtistQueryRequest request,
+    public async Task<IActionResult> Get(Guid id,
         CancellationToken token)
     {
-        var result = await _sender.Send(request, token);
+        var result = await _sender.Send(new GetArtistQueryRequest(id), token);
         return Ok(result);
     }
 
-    [HttpGet("{ArtistId:guid}/Services")]
+    [HttpGet("{id:guid}/Services")]
     [AllowAnonymous]
-    public async Task<IActionResult> GetArtistService([FromRoute] GetArtistServicesQueryRequest request,
+    public async Task<IActionResult> GetArtistService(Guid id,
         CancellationToken token)
     {
-        var results = await _sender.Send(request, token);
+        var results = await _sender.Send(new GetArtistServicesQueryRequest(id), token);
         return Ok(results);
     }
 
-    [HttpGet("Businesses/{BusinessId:guid}")]
+    [HttpGet("Businesses/{businessId:guid}")]
     [AllowAnonymous]
-    public async Task<IActionResult> GetArtistByBusinessId([FromRoute] GetArtistByBusinessIdQueryRequest request,
+    public async Task<IActionResult> GetArtistByBusinessId(Guid businessId,
         CancellationToken token)
     {
-        var results = await _sender.Send(request, token);
+        var results = await _sender.Send(new GetArtistByBusinessIdQueryRequest(businessId), token);
         return Ok(results);
     }
 
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Put([FromRoute] Guid id, [FromBody] UpdateArtistDTO model,
+    public async Task<IActionResult> Put(Guid id, [FromBody] UpdateArtistDTO model,
         CancellationToken token)
     {
         var request = UpdateArtistCommandRequest.Create(id, User.UserId(), model);

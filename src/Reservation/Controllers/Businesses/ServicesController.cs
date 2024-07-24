@@ -16,12 +16,12 @@ public sealed class ServicesController(ISender sender) : ControllerBase
         return Ok();
     }
 
-    [HttpGet("Businesses/{BusinessId:guid}/Page/{Page:int}")]
+    [HttpGet("Businesses/{businessId:guid}/Page/{page:int}")]
     [AllowAnonymous]
-    public async Task<IActionResult> GetByBusinessId([FromRoute] GetServicesByBusinessIdQueryRequest request,
+    public async Task<IActionResult> GetByBusinessId(Guid businessId, int page,
         CancellationToken token)
     {
-        var services = await _sender.Send(request, token);
+        var services = await _sender.Send(new GetServicesByBusinessIdQueryRequest(page, businessId), token);
         return Ok(services);
     }
 

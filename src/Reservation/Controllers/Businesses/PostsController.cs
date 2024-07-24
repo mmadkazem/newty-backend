@@ -32,21 +32,21 @@ public sealed class PostsController(ISender sender) : ControllerBase
         return Ok();
     }
 
-    [HttpGet("{Id:guid}")]
+    [HttpGet("{id:guid}")]
     [AllowAnonymous]
-    public async Task<IActionResult> Get([FromRoute] GetPostQueryRequest request,
+    public async Task<IActionResult> Get(Guid id,
         CancellationToken token)
     {
-        var result = await _sender.Send(request, token);
+        var result = await _sender.Send(new GetPostQueryRequest(id), token);
         return Ok(result);
     }
 
-    [HttpGet("Page/{page:int}/Businesses/{businessId:guid}")]
+    [HttpGet("Businesses/{businessId:guid}/Page/{page:int}")]
     [AllowAnonymous]
-    public async Task<IActionResult> Get([AsParameters] GetPostsQueryRequest request,
+    public async Task<IActionResult> Get(Guid businessId, int page,
         CancellationToken token)
     {
-        var result = await _sender.Send(request, token);
+        var result = await _sender.Send(new GetPostsQueryRequest(page, businessId), token);
         return Ok(result);
     }
 }

@@ -1,3 +1,5 @@
+using Reservation.Application.Businesses.Commands.SendSMSUserVIP;
+
 namespace Reservation.Controllers.Businesses;
 
 [ApiController]
@@ -11,6 +13,14 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
         CancellationToken token)
     {
         await _sender.Send(request, token);
+        return Ok();
+    }
+
+    [HttpPost("SendSMS")]
+    public async Task<IActionResult> SendSMS(DateTime sendDate, Guid templateId,
+        CancellationToken token)
+    {
+        await _sender.Send(new SendSMSUserVIPCommandRequest(User.UserId(), templateId, sendDate), token);
         return Ok();
     }
 
@@ -35,8 +45,8 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
         return Ok();
     }
 
-    [HttpGet("{page:int}/Key/{key}")]
-    public async Task<IActionResult> Search(int page, string key,
+    [HttpGet("Key/{key}/Page/{page:int}")]
+    public async Task<IActionResult> Search(string key, int page,
         CancellationToken token)
     {
         var request = SearchBusinessRequest.Create(page, key);
