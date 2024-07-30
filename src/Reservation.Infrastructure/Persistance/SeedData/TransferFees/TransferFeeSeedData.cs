@@ -1,4 +1,4 @@
-namespace Reservation.Infrastructure.Persistance.SeedData;
+namespace Reservation.Infrastructure.Persistance.SeedData.TransferFees;
 
 
 public class TransferFeeSeedData : IEntityTypeConfiguration<TransferFee>

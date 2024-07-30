@@ -1,4 +1,4 @@
-namespace Reservation.Infrastructure.Persistance.SeedData;
+namespace Reservation.Infrastructure.Persistance.SeedData.Admin;
 
 
 public class AdminSeedData : IEntityTypeConfiguration<User>
