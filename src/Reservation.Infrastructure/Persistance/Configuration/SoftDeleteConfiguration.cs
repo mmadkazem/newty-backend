@@ -23,5 +23,8 @@ public static class SoftDeleteConfiguration
         modelBuilder.Entity<Wallet>().HasQueryFilter(f => !f.IsDeleted);
         modelBuilder.Entity<Transaction>().HasQueryFilter(f => !f.IsDeleted);
         modelBuilder.Entity<City>().HasQueryFilter(f => !f.IsDeleted);
+        modelBuilder.Entity<TransferFee>().HasQueryFilter(f => !f.IsDeleted);
+        modelBuilder.Entity<SmsPlan>().HasQueryFilter(f => !f.IsDeleted);
+        modelBuilder.Entity<Coupon>().HasQueryFilter(f => !f.IsDeleted);
     }
 }
