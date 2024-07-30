@@ -17,5 +17,6 @@ public interface IUnitOfWork
     ISmsTemplateRepository SmsTemplates { get; }
     ISmsPlanRepository SmsPlans { get; }
     ITransferFeeRepository TransferFees { get; }
+    ICouponRepository Coupons { get; }
     Task SaveChangeAsync(CancellationToken cancellationToken = default);
 }
