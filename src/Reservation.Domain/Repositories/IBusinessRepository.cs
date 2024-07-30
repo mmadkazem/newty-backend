@@ -4,6 +4,7 @@ namespace Reservation.Domain.Repositories;
 public interface IBusinessRepository
 {
     void Add(Business business);
+    void AddUserVIP(UserVIP userVIP);
     Task<Business> FindAsyncByPhoneNumber(string phoneNumber, CancellationToken cancellationToken = default);
     Task<Business> FindAsync(Guid id, CancellationToken cancellationToken = default);
     Task<Business> FindAsyncIncludeSMSCredit(Guid id, CancellationToken cancellationToken = default);

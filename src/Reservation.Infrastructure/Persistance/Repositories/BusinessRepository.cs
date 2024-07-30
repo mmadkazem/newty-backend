@@ -1,5 +1,3 @@
-using Reservation.Application.Businesses.Queries.GetBusiness;
-
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 
@@ -9,6 +7,10 @@ public sealed class BusinessRepository(ReservationDbContext context) : IBusiness
 
     public void Add(Business business)
         => _context.Businesses.Add(business);
+
+    public void AddUserVIP(UserVIP userVIP)
+        => _context.UsersVIP.Add(userVIP);
+
 
     public async Task<bool> AnyAsync(string phoneNumber, CancellationToken cancellationToken)
         => await _context.Businesses.AsQueryable()
