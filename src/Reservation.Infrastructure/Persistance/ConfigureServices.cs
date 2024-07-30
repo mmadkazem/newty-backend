@@ -18,6 +18,7 @@ public static class ConfigureServices
         services.AddTransient<ISmsPlanRepository, SmsPlanRepository>();
         services.AddTransient<IArtistRepository, ArtistRepository>();
         services.AddTransient<IWalletRepository, WalletRepository>();
+        services.AddTransient<ICouponRepository, CouponRepository>();
         services.AddTransient<ICityRepository, CityRepository>();
         services.AddTransient<IUserRepository, UserRepository>();
         services.AddTransient<IPostRepository, PostRepository>();
@@ -30,6 +31,17 @@ public static class ConfigureServices
         services.AddDbContext<ReservationDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("NewtyDb")));
 
+        // DI Seeding Data
+        services.AddSingleton<ICategorySeedData, CategorySeedData>();
+        services.AddTransient<IReadCategoryInJsonService, ReadCategoryInJsonService>();
+
         return services;
+    }
+
+    public static WebApplication UseSeedingData(this WebApplication app)
+    {
+        var seedDataCategory = app.Services.GetService<ICategorySeedData>();
+        seedDataCategory.SeedData();
+        return app;
     }
 }
