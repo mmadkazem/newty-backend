@@ -14,4 +14,8 @@ public class Service : BaseClass
 
     // Artist
     public Artist Artist { get; set; }
+
+    // Service Coupons
+    public ICollection<Coupon> Coupons { get; set; }
+
 }
