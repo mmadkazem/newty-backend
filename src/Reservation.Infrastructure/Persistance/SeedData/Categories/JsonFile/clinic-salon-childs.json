@@ -1,0 +1,32 @@
+[
+    {
+        "Id": "0b3d1d1d-7ab4-4695-bf1d-5e3c72ff949d",
+        "Title": "تزریق بوتاکس و فیلر",
+        "Description": "",
+        "CoverImagePath": "d68c296b-0e54-4652-9bdd-851907b6ad0c@botox.webp"
+    },
+    {
+        "Id": "0f8baef4-4b57-4fc6-bd1b-a443203dd91d",
+        "Title": "لیزر و رفع موهای زائد",
+        "Description": "",
+        "CoverImagePath": "d68c296b-0e54-4652-9bdd-851907b6ad0c@laser.webp"
+    },
+    {
+        "Id": "e0ad0f28-7965-4e59-968b-1c9196e2a6e4",
+        "Title": "خدمات پوست تخصصی",
+        "Description": "",
+        "CoverImagePath": "d68c296b-0e54-4652-9bdd-851907b6ad0c@facial.webp"
+    },
+    {
+        "Id": "9ccf90f5-480a-45a6-b44a-8eece9be0f87",
+        "Title": "تناسب اندام",
+        "Description": "",
+        "CoverImagePath": "d68c296b-0e54-4652-9bdd-851907b6ad0c@fitness.webp"
+    },
+    {
+        "Id": "d24ac256-36fa-4560-9979-c9603c1b966a",
+        "Title": "مشاوره زیبایی",
+        "Description": "",
+        "CoverImagePath": "d68c296b-0e54-4652-9bdd-851907b6ad0c@beauty-advice.webp"
+    }
+]

@@ -1,5 +1,4 @@
-using Reservation.Application.ExternalServices.Job;
-using Reservation.Infrastructure.ExternalServices;
+using Reservation.Infrastructure.Persistance;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,8 +18,7 @@ var services = builder.Services;
 // Configure the HTTP request pipeline
 var app = builder.Build();
 {
-    var payingReserveTimeJob = app.Services.GetService<IPayingReserveTimeJob>();
-    payingReserveTimeJob.Execute();
+    app.UseSeedingData();
 
     app.UseSwagger();
     app.UseSwaggerUI();
