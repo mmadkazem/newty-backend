@@ -54,7 +54,7 @@ public sealed class UploadImageProvider : IUploadImageProvider
 
         var credentials = new BasicAWSCredentials(Env.GetString("LIARA_ACCESS_KEY"), Env.GetString("LIARA_SECRET_KEY"));
         using var client = new AmazonS3Client(credentials, config);
-        var objectKey = $"{Guid.NewGuid()}{file.FileName.Replace(" ", "")}@{subjectId}";
+        var objectKey = $"{subjectId}@{file.FileName.Replace(" ", "")}";
 
         try
         {
