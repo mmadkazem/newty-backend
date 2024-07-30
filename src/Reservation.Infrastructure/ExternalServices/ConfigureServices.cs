@@ -1,5 +1,3 @@
-using Hangfire.Dashboard;
-
 namespace Reservation.Infrastructure.ExternalServices;
 
 public static class ConfigureServices
@@ -20,6 +18,7 @@ public static class ConfigureServices
                 // DI Job
                 services.AddSingleton<IPayingReserveTimeJob, PayingReserveTimeJob>();
                 services.AddTransient<IFinishReserveTimeJob, FinishReserveTimeJob>();
+                services.AddTransient<ISendSMSToUserVIPJob, SendSMSToUserVIPJob>();
 
                 // DI Options
                 services.AddOptions<TempTokenOption>()
@@ -44,8 +43,8 @@ public static class ConfigureServices
                 services.AddStackExchangeRedisCache(options =>
                         options.Configuration = configuration.GetConnectionString("Redis"));
 
+                #region DI Hangfire
 #pragma warning disable CS0618 // Type or member is obsolete
-                // DI Hangfire
                 services.AddHangfire
                 (
                         c => c.SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
@@ -55,22 +54,25 @@ public static class ConfigureServices
                 );
                 services.AddHangfireServer();
 #pragma warning restore CS0618 // Type or member is obsolete
-
+                #endregion
                 return services;
         }
-        public static IApplicationBuilder UseJob(this IApplicationBuilder app)
+        public static WebApplication UseJob(this WebApplication app)
         {
                 app.UseHangfireDashboard("/job/dashboard", new DashboardOptions()
                 {
                         Authorization = [new AuthorizationDashboard()],
-                        IsReadOnlyFunc = (DashboardContext context) => true
+                        IsReadOnlyFunc = (context) => true
                 });
 
                 app.UseEndpoints(endpoints =>
                 {
-                        endpoints.MapControllers();
-                        endpoints.MapHangfireDashboard();
+                        var unused1 = endpoints.MapControllers();
+                        var unused = endpoints.MapHangfireDashboard();
                 });
+
+                var payingReserveTimeJob = app.Services.GetService<IPayingReserveTimeJob>();
+                payingReserveTimeJob.Execute();
 
                 return app;
         }
