@@ -9,15 +9,15 @@ public class KavenegarProvider(IOptions<SmsProviderOption> options) : ISmsProvid
     {
         try
         {
-            var api = new Kavenegar.KavenegarApi(_options.Value.Key);
+            var api = new KavenegarApi(_options.Value.Key);
             await api.VerifyLookup(receptor, token, _options.Value.Template);
         }
 
-        catch (Kavenegar.Core.Exceptions.ApiException ex)
+        catch (ApiException ex)
         {
             throw new Exception(ex.Message);
         }
-        catch (Kavenegar.Core.Exceptions.HttpException ex)
+        catch (HttpException ex)
         {
             throw new Exception(ex.Message);
         }
