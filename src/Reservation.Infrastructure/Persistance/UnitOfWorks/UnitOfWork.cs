@@ -19,7 +19,8 @@ public sealed class UnitOfWork : IUnitOfWork
         ISmsCreditRepository smsCredits,
         ISmsTemplateRepository smsTemplates,
         ISmsPlanRepository smsPlans,
-        ITransferFeeRepository transferFees)
+        ITransferFeeRepository transferFees,
+        ICouponRepository coupons)
     {
         _users = users;
         _context = context;
@@ -37,6 +38,7 @@ public sealed class UnitOfWork : IUnitOfWork
         _smsTemplates = smsTemplates;
         _smsPlans = smsPlans;
         _transferFees = transferFees;
+        _coupons = coupons;
     }
 
     private readonly IUserRepository _users;
@@ -94,6 +96,10 @@ public sealed class UnitOfWork : IUnitOfWork
     private readonly ITransferFeeRepository _transferFees;
     public ITransferFeeRepository TransferFees
         => _transferFees;
+
+    private readonly ICouponRepository _coupons;
+    public ICouponRepository Coupons
+        => _coupons;
 
     public async Task SaveChangeAsync(CancellationToken cancellationToken)
         => await _context.SaveChangesAsync(cancellationToken);
