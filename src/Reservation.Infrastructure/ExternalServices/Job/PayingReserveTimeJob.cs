@@ -18,6 +18,17 @@ public sealed class PayingReserveTimeJob(IServiceScopeFactory scopeFactory) : IP
         using var serviceScope = _scopeFactory.CreateScope();
         using var _context = serviceScope.ServiceProvider.GetService<ReservationDbContext>();
         var count = 0;
+
+        #region Get Admin Information
+        Env.Load();
+        var adminPhonNumber = Env.GetString("ADMIN_PHONE_NUMBER");
+        var adminWallet = _context.Users.AsQueryable()
+                                        .Where(u => u.PhoneNumber == adminPhonNumber)
+                                        .Select(u => u.Wallet)
+                                        .FirstOrDefault();
+
+        var transferFee = _context.TransferFees.FirstOrDefault();
+        #endregion
         // var WalletAdmin
         while (true)
         {
@@ -78,7 +89,7 @@ public sealed class PayingReserveTimeJob(IServiceScopeFactory scopeFactory) : IP
                         }
 
                         // Deduct from the user wallet
-                        if (businessSenderWallet.BlockCredit - reserveTime.TransactionReceipt.Amount < 0)
+                        if (businessReceiptWallet.BlockCredit - reserveTime.TransactionReceipt.Amount < 0)
                         {
                             continue;
                         }
@@ -86,6 +97,10 @@ public sealed class PayingReserveTimeJob(IServiceScopeFactory scopeFactory) : IP
 
                         // Transfer to business wallet
                         businessReceiptWallet.Credit += reserveTime.TransactionReceipt.Amount;
+
+                        // Transfer to admin wallet Transfer Fee
+                        businessReceiptWallet.Credit -= transferFee.Percent * reserveTime.TransactionReceipt.Amount / 100;
+                        adminWallet.Credit += transferFee.Percent * reserveTime.TransactionReceipt.Amount / 100;
                         reserveTime.IsPay = true;
                         _context.SaveChanges();
 
@@ -110,6 +125,9 @@ public sealed class PayingReserveTimeJob(IServiceScopeFactory scopeFactory) : IP
 
                         // Transfer to business wallet
                         businessReceiptWallet.Credit += reserveTime.TransactionReceipt.Amount;
+
+                        businessReceiptWallet.Credit -= transferFee.Percent * reserveTime.TransactionReceipt.Amount / 100;
+                        adminWallet.Credit += transferFee.Percent * reserveTime.TransactionReceipt.Amount / 100;
                         reserveTime.IsPay = true;
                         _context.SaveChanges();
                     }
