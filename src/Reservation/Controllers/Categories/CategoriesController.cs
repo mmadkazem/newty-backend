@@ -1,7 +1,3 @@
-using Npgsql.Internal;
-using Reservation.Application.Categories.Queries.GetCategoryBusinesses;
-using Reservation.Application.Categories.Queries.SearchCategory;
-
 namespace Reservation.Controllers.Categories;
 
 [ApiController]
@@ -16,17 +12,6 @@ public sealed class CategoriesController(ISender sender) : ControllerBase
         CancellationToken token)
     {
         var request = CreateCategoryCommandRequest.Create(ParentId, model);
-        await _sender.Send(request, token);
-        return Ok();
-    }
-
-    [HttpPost("Points")]
-    [Authorize(AuthenticationSchemes = AuthScheme.UserScheme)]
-    [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
-    public async Task<IActionResult> Post([FromBody] AddCategoryPointDTO model,
-        CancellationToken token)
-    {
-        var request = AddCategoryPointCommandRequest.Create(User.UserId(), model);
         await _sender.Send(request, token);
         return Ok();
     }

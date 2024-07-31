@@ -12,7 +12,4 @@ public class Category : BaseClass
 
     // Business Rel
     public ICollection<Business> Businesses { get; set; }
-
-    // Business Point
-    public ICollection<Point> Points { get; set; } = [];
 }

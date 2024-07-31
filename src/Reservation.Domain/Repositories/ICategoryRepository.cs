@@ -7,7 +7,6 @@ public interface ICategoryRepository
     void Remove(Category category);
     Task<IEnumerable<IResponse>> GetSubCategoryByCategoryId(Guid Id, CancellationToken cancellationToken = default);
     Task<Category> FindAsync(Guid Id, CancellationToken cancellationToken = default);
-    Task<Category> FindAsyncByIncludePoints(Guid categoryId, CancellationToken cancellationToken = default);
     Task<IEnumerable<IResponse>> GetMainCategory(CancellationToken cancellationToken = default);
     Task<bool> AnyAsync(string title, CancellationToken cancellationToken = default);
     Task<IEnumerable<IResponse>> GetCategories(CancellationToken cancellationToken = default);
