@@ -12,7 +12,7 @@ global using Reservation.Application.SmsTemplates.Queries.GetSmsTemplates;
 global using Reservation.Application.Wallets.Queries.GetUserTransactions;
 global using Reservation.Application.SmsTemplates.Queries.GetSmsTemplate;
 global using Reservation.Application.TransferFees.Queries.GetTransferFee;
-global using Reservation.Application.Categories.Queries.GetTop3Category;
+global using Reservation.Application.Categories.Queries.GetMainCategory;
 global using Reservation.Infrastructure.Persistance.SeedData.Categories;
 global using Reservation.Application.Artists.Queries.GetArtistServices;
 global using Reservation.Application.Wallets.Queries.GetBusinessWallet;

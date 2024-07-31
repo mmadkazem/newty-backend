@@ -76,13 +76,11 @@ public class CategoryRepository(ReservationDbContext context) : ICategoryReposit
                                     ))
                                     .FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
 
-    public async Task<IEnumerable<IResponse>> Top3(CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<IResponse>> GetMainCategory(CancellationToken cancellationToken = default)
         => await _context.Categories.AsQueryable()
                                     .AsNoTracking()
                                     .Where(c => c.ParentCategory == null)
-                                    .OrderBy(c => c.Points.Average(p => p.Rate))
-                                    .Take(3)
-                                    .Select(c => new GetTop3SubCategoryQueryResponse
+                                    .Select(c => new GetMainCategoryQueryResponse
                                     (
                                         c.Id,
                                         c.Title,

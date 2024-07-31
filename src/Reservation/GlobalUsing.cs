@@ -49,7 +49,7 @@ global using Reservation.Application.SmsCredits.Commands.FoundSmsCredit;
 global using Reservation.Application.Categories.Commands.UpdateCategory;
 global using Reservation.Application.Businesses.Commands.UpdateBusiness;
 global using Reservation.Application.Categories.Commands.CreateCategory;
-global using Reservation.Application.Categories.Queries.GetTop3Category;
+global using Reservation.Application.Categories.Queries.GetMainCategory;
 global using Reservation.Application.Categories.Commands.RemoveCategory;
 global using Reservation.Infrastructure.Persistance.SeedData.Categories;
 global using Reservation.Application.Wallets.Queries.GetBusinessWallet;
