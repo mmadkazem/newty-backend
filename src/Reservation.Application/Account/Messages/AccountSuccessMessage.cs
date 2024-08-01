@@ -1,7 +1,7 @@
 namespace Reservation.Application.Account.Messages;
 
 
-public class AccountSuccess
+public class AccountSuccessMessage
 {
     public const string Registered = "شما با موفقیت ثبت نام شدید";
     public const string loggedIn = "با موفقیت وارد شدید";

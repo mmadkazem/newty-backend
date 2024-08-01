@@ -33,7 +33,7 @@ public sealed class LoginQueryHandler(IUnitOfWork uow,
                 _uow.Users.Add(finalUser);
                 await _uow.SaveChangeAsync(cancellationToken);
 
-                return new(_tokenFactory.CreateUserToken(finalUser), AccountSuccess.Registered);
+                return new(_tokenFactory.CreateUserToken(finalUser), AccountSuccessMessage.Registered);
             }
 
             if (user.OTPCode != request.Code)
@@ -44,7 +44,7 @@ public sealed class LoginQueryHandler(IUnitOfWork uow,
             user.IsActive = true;
             await _uow.SaveChangeAsync(cancellationToken);
 
-            return new(_tokenFactory.CreateUserToken(user), AccountSuccess.loggedIn);
+            return new(_tokenFactory.CreateUserToken(user), AccountSuccessMessage.loggedIn);
 
         }
         else if (request.Role == Role.Business)
@@ -68,7 +68,7 @@ public sealed class LoginQueryHandler(IUnitOfWork uow,
                 _uow.Businesses.Add(finalBusiness);
                 await _uow.SaveChangeAsync(cancellationToken);
 
-                return new(_tokenFactory.CreateBusinessToken(finalBusiness), AccountSuccess.Registered);
+                return new(_tokenFactory.CreateBusinessToken(finalBusiness), AccountSuccessMessage.Registered);
             }
 
             if (business.OTPCode != request.Code)
@@ -78,7 +78,7 @@ public sealed class LoginQueryHandler(IUnitOfWork uow,
 
             business.IsActive = true;
             await _uow.SaveChangeAsync(cancellationToken);
-            return new(_tokenFactory.CreateBusinessToken(business), AccountSuccess.loggedIn);
+            return new(_tokenFactory.CreateBusinessToken(business), AccountSuccessMessage.loggedIn);
 
         }
 

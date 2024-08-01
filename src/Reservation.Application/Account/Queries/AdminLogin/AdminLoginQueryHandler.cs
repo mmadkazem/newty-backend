@@ -14,6 +14,6 @@ public sealed class AdminLoginQueryHandler(IUnitOfWork uow, ITokenFactoryService
             throw new NotEqualActualAndExpectedException();
         }
 
-        return new(_tokenFactory.CreateAdminToken(admin), AccountSuccess.loggedIn);
+        return new(_tokenFactory.CreateAdminToken(admin), AccountSuccessMessage.loggedIn);
     }
 }
