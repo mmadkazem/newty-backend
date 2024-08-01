@@ -4,13 +4,13 @@ namespace Reservation.Application.Account.Queries.Login;
 public sealed class LoginQueryHandler(IUnitOfWork uow,
                                     ITokenFactoryService tokenFactory,
                                     ICacheProvider cache)
-    : IRequestHandler<LoginQueryRequest, JwtTokensData>
+    : IRequestHandler<LoginQueryRequest, LoginQueryResponse>
 {
     private readonly IUnitOfWork _uow = uow;
     private readonly ITokenFactoryService _tokenFactory = tokenFactory;
     private readonly ICacheProvider _cache = cache;
 
-    public async Task<JwtTokensData> Handle(LoginQueryRequest request, CancellationToken cancellationToken)
+    public async Task<LoginQueryResponse> Handle(LoginQueryRequest request, CancellationToken cancellationToken)
     {
         if (request.Role == Role.User)
         {
@@ -33,7 +33,7 @@ public sealed class LoginQueryHandler(IUnitOfWork uow,
                 _uow.Users.Add(finalUser);
                 await _uow.SaveChangeAsync(cancellationToken);
 
-                return _tokenFactory.CreateUserToken(finalUser);
+                return new(_tokenFactory.CreateUserToken(finalUser), AccountSuccess.Registered);
             }
 
             if (user.OTPCode != request.Code)
@@ -44,7 +44,7 @@ public sealed class LoginQueryHandler(IUnitOfWork uow,
             user.IsActive = true;
             await _uow.SaveChangeAsync(cancellationToken);
 
-            return _tokenFactory.CreateUserToken(user);
+            return new(_tokenFactory.CreateUserToken(user), AccountSuccess.loggedIn);
 
         }
         else if (request.Role == Role.Business)
@@ -68,7 +68,7 @@ public sealed class LoginQueryHandler(IUnitOfWork uow,
                 _uow.Businesses.Add(finalBusiness);
                 await _uow.SaveChangeAsync(cancellationToken);
 
-                return _tokenFactory.CreateBusinessToken(finalBusiness);
+                return new(_tokenFactory.CreateBusinessToken(finalBusiness), AccountSuccess.Registered);
             }
 
             if (business.OTPCode != request.Code)
@@ -78,10 +78,12 @@ public sealed class LoginQueryHandler(IUnitOfWork uow,
 
             business.IsActive = true;
             await _uow.SaveChangeAsync(cancellationToken);
-            return _tokenFactory.CreateBusinessToken(business);
+            return new(_tokenFactory.CreateBusinessToken(business), AccountSuccess.loggedIn);
 
         }
 
         throw new UserOrBusinessNotExistException();
     }
 }
+
+public readonly record struct LoginQueryResponse(JwtTokensData JwtTokens, string Message);

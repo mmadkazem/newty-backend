@@ -6,4 +6,4 @@ public record LoginQueryRequest
     string Code,
     string PhoneNumber,
     string Role
-): IRequest<JwtTokensData>;
+): IRequest<LoginQueryResponse>;

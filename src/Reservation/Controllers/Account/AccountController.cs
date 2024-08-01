@@ -51,7 +51,7 @@ public sealed class AccountController(ISender sender) : ControllerBase
     {
         var request = new UpdateUserCommandRequest(User.UserId(), model.FullName, model.PhoneNumber, model.City);
         await _sender.Send(request, token);
-        return Ok();
+        return Ok(new { Message = AccountSuccess.UserUpdated });
     }
 
     [HttpGet]
@@ -60,7 +60,7 @@ public sealed class AccountController(ISender sender) : ControllerBase
     public async Task<IActionResult> Logout(CancellationToken token)
     {
         await _sender.Send(new LogoutQueryRequest(User.UserId()), token);
-        return Ok();
+        return Ok(new { Message = AccountSuccess.loggedOut });
     }
 
     [HttpGet("/api/Account/Admin/Login")]

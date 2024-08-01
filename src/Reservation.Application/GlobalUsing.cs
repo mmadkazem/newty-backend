@@ -23,6 +23,7 @@ global using Reservation.Application.Images.Exceptions;
 global using Reservation.Application.Posts.Exceptions;
 global using Microsoft.Extensions.DependencyInjection;
 global using Reservation.Application.Common.Behaviors;
+global using Reservation.Application.Account.Messages;
 global using Reservation.Domain.Entities.Businesses;
 global using Reservation.Domain.Entities.Categories;
 global using Reservation.Share.Abstract.Exceptions;
