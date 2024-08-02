@@ -1,7 +1,7 @@
 namespace Reservation.Controllers.Finances;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
 public sealed class BusinessRequestPaysController(ISender sender) : ControllerBase
 {
@@ -12,23 +12,6 @@ public sealed class BusinessRequestPaysController(ISender sender) : ControllerBa
         CancellationToken token)
     {
         await _sender.Send(request, token);
-        return Ok();
-    }
-
-    [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Put(Guid id, [FromBody] UpdateBusinessRequestPayDTO model,
-        CancellationToken token)
-    {
-        var request = UpdateBusinessRequestPayCommandRequest.Create(id, User.UserId(), model);
-        await _sender.Send(request, token);
-        return Ok();
-    }
-
-    [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> Put(Guid id,
-        CancellationToken token)
-    {
-        await _sender.Send(new RemoveBusinessRequestCommandRequest(id, User.UserId()), token);
         return Ok();
     }
 

@@ -2,7 +2,7 @@ namespace Reservation.Controllers.Wallets;
 
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 public sealed class WalletsController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;
@@ -24,21 +24,21 @@ public sealed class WalletsController(ISender sender) : ControllerBase
     }
 
     [HttpPut("Users/Found")]
+    [EnableCors("FinancePolicy")]
     [Authorize(AuthenticationSchemes = AuthScheme.UserScheme)]
-    public async Task<IActionResult> PutFoundUsers(decimal credit,
+    public async Task<IActionResult> PutFoundUsers(FoundUserWalletCommandRequest request,
         CancellationToken token)
     {
-        var request = FoundUserWalletCommandRequest.Create(User.UserId(), credit);
         await _sender.Send(request, token);
         return Ok();
     }
 
     [HttpPut("Businesses/Found")]
+    [EnableCors("FinancePolicy")]
     [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
-    public async Task<IActionResult> PutFoundBusiness(decimal credit,
+    public async Task<IActionResult> PutFoundBusiness(FoundBusinessWalletCommandRequest request,
         CancellationToken token)
     {
-        var request = FoundBusinessWalletCommandRequest.Create(User.UserId(), credit);
         await _sender.Send(request, token);
         return Ok();
     }

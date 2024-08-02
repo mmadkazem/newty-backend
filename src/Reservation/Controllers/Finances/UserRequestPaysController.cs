@@ -2,7 +2,7 @@ namespace Reservation.Controllers.Finances;
 
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 [Authorize(AuthenticationSchemes = AuthScheme.UserScheme)]
 public class UserRequestPaysController(ISender sender) : ControllerBase
 {
@@ -13,23 +13,6 @@ public class UserRequestPaysController(ISender sender) : ControllerBase
         CancellationToken token)
     {
         await _sender.Send(request, token);
-        return Ok();
-    }
-
-    [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Put(Guid id, [FromBody] UpdateUserRequestPayDTO model,
-        CancellationToken token)
-    {
-        var request = UpdateUserRequestPayCommandRequest.Create(id, User.UserId(), model);
-        await _sender.Send(request, token);
-        return Ok();
-    }
-
-    [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> Remove(Guid id,
-        CancellationToken token)
-    {
-        await _sender.Send(new RemoveUserRequestPayCommandRequest(id, User.UserId()), token);
         return Ok();
     }
 
