@@ -5,6 +5,7 @@ public static class ConfigureServices
         public static IServiceCollection RegisterExternalServices(this IServiceCollection services, IConfiguration configuration)
         {
                 // DI Services
+                services.AddTransient<ICheckPaymentIsVerificationService, CheckPaymentIsVerificationService>();
                 services.AddTransient<ITokenFactoryService, TokenFactoryService>();
                 services.AddTransient<IUploadImageProvider, UploadImageProvider>();
                 services.AddTransient<ISmsProvider, KavenegarProvider>();

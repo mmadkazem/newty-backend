@@ -1,5 +1,5 @@
 namespace Reservation.Application.Wallets.Commands.FoundUserWallet;
 
 
-public record FoundUserWalletCommandRequest(decimal Credit, Guid RequestPayId, string Authorizy, int RefId)
+public record FoundUserWalletCommandRequest(Guid RequestPayId, string Authorizy)
     : IRequest;
