@@ -13,7 +13,7 @@ public class TransferFeesController(ISender sender) : ControllerBase
         CancellationToken token)
     {
         await _sender.Send(new UpdateTransferFeeCommandRequest(percent), token);
-        return Ok();
+        return Ok(new { Message = TransferFeeSuccessMessage.Updated });
     }
 
     [HttpGet]

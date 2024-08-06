@@ -13,7 +13,7 @@ public sealed class ServicesController(ISender sender) : ControllerBase
     {
         var request = CreateServiceCommandRequest.Create(User.UserId(), model);
         await _sender.Send(request, token);
-        return Ok();
+        return Ok(new { Message = ServiceSuccessMessage.Created });
     }
 
     [HttpGet("Businesses/{businessId:guid}/Page/{page:int}")]
@@ -31,7 +31,7 @@ public sealed class ServicesController(ISender sender) : ControllerBase
     {
         var request = UpdateServiceCommandRequest.Create(id, User.UserId(), model);
         await _sender.Send(request, token);
-        return Ok();
+        return Ok(new { Message = ServiceSuccessMessage.Updated });
     }
 
     [HttpDelete("{id:guid}")]
@@ -39,6 +39,6 @@ public sealed class ServicesController(ISender sender) : ControllerBase
         CancellationToken token)
     {
         await _sender.Send(new RemoveServiceCommandRequest(id, User.UserId()), token);
-        return Ok();
+        return Ok(new { Message = ServiceSuccessMessage.Removed });
     }
 }

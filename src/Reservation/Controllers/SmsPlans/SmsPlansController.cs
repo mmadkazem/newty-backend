@@ -13,7 +13,7 @@ public sealed class SmsPlansController(ISender sender) : ControllerBase
         CancellationToken token)
     {
         await _sender.Send(request, token);
-        return Ok();
+        return Ok(new { Message = SmsPlanSuccessMessage.Created });
     }
 
     [HttpPut("{id:guid}")]
@@ -22,7 +22,7 @@ public sealed class SmsPlansController(ISender sender) : ControllerBase
     {
         var request = UpdateSmsPlanCommandRequest.Create(id, model);
         await _sender.Send(request, token);
-        return Ok();
+        return Ok(new { Message = SmsPlanSuccessMessage.Updated });
     }
 
     [HttpDelete("{id:guid}")]
@@ -30,7 +30,7 @@ public sealed class SmsPlansController(ISender sender) : ControllerBase
         CancellationToken token)
     {
         await _sender.Send(new RemoveSmsPlanCommandRequest(id), token);
-        return Ok();
+        return Ok(new { Message = SmsPlanSuccessMessage.Removed });
     }
 
     [HttpGet("{page:int}")]

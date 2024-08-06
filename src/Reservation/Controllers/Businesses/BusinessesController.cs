@@ -1,5 +1,3 @@
-using Reservation.Application.Businesses.Commands.SendSMSUserVIP;
-
 namespace Reservation.Controllers.Businesses;
 
 [ApiController]
@@ -17,11 +15,21 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
     }
 
     [HttpPost("SendSMS")]
+    [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
     public async Task<IActionResult> SendSMS(DateTime sendDate, Guid templateId,
         CancellationToken token)
     {
         await _sender.Send(new SendSMSUserVIPCommandRequest(User.UserId(), templateId, sendDate), token);
-        return Ok();
+        return Accepted(new { Message = BusinessSuccessMessage.SendedSms });
+    }
+
+    [HttpPost("UserVIP")]
+    [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
+    public async Task<IActionResult> PostUserVIP(Guid userId,
+    CancellationToken token)
+    {
+        await _sender.Send(new AddUserVIPCommandRequest(User.UserId(), userId), token);
+        return Ok(new { Message = BusinessSuccessMessage.SendedSms });
     }
 
     [HttpPost("Categories")]
@@ -31,7 +39,7 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
     {
         var request = AddCategoriesToBusinessCommandRequest.Carate(User.UserId(), categories);
         await _sender.Send(request, token);
-        return Ok();
+        return Ok(new { Message = BusinessSuccessMessage.CategoryAdded });
     }
 
     [HttpPost("Points")]
@@ -42,7 +50,7 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
     {
         var request = AddBusinessPointCommandRequest.Create(User.UserId(), model);
         await _sender.Send(request, token);
-        return Ok();
+        return Ok(new { Message = CommonMessage.PointRecorded });
     }
 
     [HttpGet("Key/{key}/Page/{page:int}")]
@@ -61,7 +69,7 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
     {
         var request = UpdateBusinessCommandRequest.Create(User.UserId(), model);
         await _sender.Send(request, token);
-        return Ok();
+        return Ok(new { Message = BusinessSuccessMessage.Updated });
     }
 
     [HttpPatch]
@@ -70,7 +78,7 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
         CancellationToken token)
     {
         await _sender.Send(new UpdateIsCancelReserveTimeCommandRequest(User.UserId(), isCancelReserveTime), token);
-        return Ok();
+        return Ok(new { Message = BusinessSuccessMessage.Updated });
     }
 
     [HttpGet]

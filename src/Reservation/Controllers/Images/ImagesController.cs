@@ -16,7 +16,7 @@ public sealed class ImagesController(ISender sender) : ControllerBase
     {
         var request = UploadImageCommandRequest.Create(model, User.UserId());
         var result = await _sender.Send(request, token);
-        return Ok(result);
+        return Ok(new { Key = result, Message = ImageSuccessMessage.Uploaded });
     }
 
     [HttpDelete("{objectKey}")]
@@ -25,7 +25,7 @@ public sealed class ImagesController(ISender sender) : ControllerBase
     {
         var request = RemoveImageCommandRequest.Create(objectKey, User.UserId());
         await _sender.Send(request, token);
-        return Ok();
+        return Ok(new { Message = ImageSuccessMessage.Removed });
     }
 
     [HttpGet("{objectKey}"), AllowAnonymous]

@@ -2,7 +2,7 @@ namespace Reservation.Controllers.Businesses;
 
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
 public sealed class SmsCreditController(ISender sender) : ControllerBase
 {
@@ -14,7 +14,7 @@ public sealed class SmsCreditController(ISender sender) : ControllerBase
     {
         var request = CreateSmsCreditCommandRequest.Create(User.UserId(), count);
         await _sender.Send(request, token);
-        return Ok();
+        return Ok(new { Message = SmsCreditSuccessMessage.Created });
     }
 
     [HttpPut("Found")]
@@ -23,13 +23,13 @@ public sealed class SmsCreditController(ISender sender) : ControllerBase
     {
         var request = FoundSmsCreditCommandRequest.Create(User.UserId(), SMSPlanId);
         await _sender.Send(request, token);
-        return Ok();
+        return Ok(new { Message = SmsCreditSuccessMessage.Founded });
     }
 
     [HttpGet]
     public async Task<IActionResult> Get(CancellationToken token)
     {
-        await _sender.Send(new GetSmsCreditQueryRequest(User.UserId()), token);
-        return Ok();
+        var result = await _sender.Send(new GetSmsCreditQueryRequest(User.UserId()), token);
+        return Ok(result);
     }
 }

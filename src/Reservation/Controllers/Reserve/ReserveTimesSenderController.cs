@@ -14,7 +14,7 @@ public class ReserveTimesSenderController(ISender sender) : ControllerBase
     {
         var request = CreateReserveTimeSenderCommandRequest.Create(User.UserId(), model);
         await _sender.Send(request, token);
-        return Ok();
+        return Ok(new { Massage = ReserveTimeSuccessMessage.Created });
     }
 
     [HttpPut("{id:guid}/State/{state}")]
@@ -22,8 +22,8 @@ public class ReserveTimesSenderController(ISender sender) : ControllerBase
         CancellationToken token)
     {
         var request = new UpdateStateReserveTimeSenderCommandRequest(id, User.UserId(), state);
-        await _sender.Send(request, token);
-        return Ok();
+        var result = await _sender.Send(request, token);
+        return Ok(result);
     }
 
     [HttpGet("Finished/{finished:bool}/Page/{page:int}")]
@@ -35,7 +35,7 @@ public class ReserveTimesSenderController(ISender sender) : ControllerBase
         return Ok(results);
     }
 
-    [HttpGet("/State/{state}/Page/{page:int}")]
+    [HttpGet("State/{state}/Page/{page:int}")]
     public async Task<IActionResult> GetBusinessReserveTimeByState(ReserveState state, int page,
         CancellationToken token)
     {

@@ -12,7 +12,7 @@ public sealed class WalletsController(ISender sender) : ControllerBase
     public async Task<IActionResult> PostBusiness(CancellationToken token)
     {
         await _sender.Send(new CreateBusinessWalletCommandRequest(User.UserId()), token);
-        return Ok();
+        return Ok(new { Message = WalletSuccessMessage.Created});
     }
 
     [HttpPost("Users")]
@@ -20,27 +20,23 @@ public sealed class WalletsController(ISender sender) : ControllerBase
     public async Task<IActionResult> PostUsers(CancellationToken token)
     {
         await _sender.Send(new CreateUserWalletCommandRequest(User.UserId()), token);
-        return Ok();
+        return Ok(new { Message = WalletSuccessMessage.Created});
     }
 
     [HttpPut("Users/Found")]
-    [EnableCors("FinancePolicy")]
-    [Authorize(AuthenticationSchemes = AuthScheme.UserScheme)]
     public async Task<IActionResult> PutFoundUsers(FoundUserWalletCommandRequest request,
         CancellationToken token)
     {
         await _sender.Send(request, token);
-        return Ok();
+        return Ok(new { Message = WalletSuccessMessage.Founded});
     }
 
     [HttpPut("Businesses/Found")]
-    [EnableCors("FinancePolicy")]
-    [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
     public async Task<IActionResult> PutFoundBusiness(FoundBusinessWalletCommandRequest request,
         CancellationToken token)
     {
         await _sender.Send(request, token);
-        return Ok();
+        return Ok(new { Message = WalletSuccessMessage.Founded});
     }
 
     [HttpPut("Businesses/Withdraw")]
@@ -50,7 +46,7 @@ public sealed class WalletsController(ISender sender) : ControllerBase
     {
         var request = WithdrawBusinessWalletCommandRequest.Create(User.UserId(), amount);
         await _sender.Send(request, token);
-        return Ok();
+        return Ok(new { Message = WalletSuccessMessage.Withdraw});
     }
 
     [HttpPut("Users/Withdraw")]
@@ -60,7 +56,7 @@ public sealed class WalletsController(ISender sender) : ControllerBase
     {
         var request = WithdrawUserWalletCommandRequest.Create(User.UserId(), amount);
         await _sender.Send(request, token);
-        return Ok();
+        return Ok(new { Message = WalletSuccessMessage.Withdraw});
     }
 
     [HttpGet("Users")]

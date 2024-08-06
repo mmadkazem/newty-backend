@@ -13,7 +13,7 @@ public sealed class CitiesController(ISender sender) : ControllerBase
         CancellationToken token)
     {
         await _sender.Send(request, token);
-        return Ok();
+        return Ok(new { Message = CitySuccessMessage.Created });
     }
 
     [HttpPut("{id:guid}")]
@@ -22,7 +22,7 @@ public sealed class CitiesController(ISender sender) : ControllerBase
     {
         var request = UpdateCityCommandRequest.Create(id, name, state);
         await _sender.Send(request, token);
-        return Ok();
+        return Ok(new { Message = CitySuccessMessage.Updated });
     }
 
     [HttpDelete("{id:guid}")]
@@ -30,7 +30,7 @@ public sealed class CitiesController(ISender sender) : ControllerBase
         CancellationToken token)
     {
         await _sender.Send(new RemoveCityCommandRequest(id), token);
-        return Ok();
+        return Ok(new { Message = CitySuccessMessage.Removed });
     }
 
     [HttpGet]

@@ -1,7 +1,7 @@
 namespace Reservation.Controllers.Businesses;
 
 [ApiController]
-[Route("[controller]")]
+[Route("api/[controller]")]
 [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
 public sealed class SmsTemplatesController(ISender sender) : ControllerBase
 {
@@ -13,7 +13,7 @@ public sealed class SmsTemplatesController(ISender sender) : ControllerBase
     {
         var request = CreateSmsTemplateCommandRequest.Create(BusinessId, model);
         await _sender.Send(request, token);
-        return Ok();
+        return Ok(new { Message = SmsTemplateSuccessMessage.Created });
     }
 
     [HttpPut("{id:guid}")]
@@ -22,7 +22,7 @@ public sealed class SmsTemplatesController(ISender sender) : ControllerBase
     {
         var request = UpdateSmsTemplateCommandRequest.Create(id, User.UserId(), model);
         await _sender.Send(request, token);
-        return Ok();
+        return Ok(new { Message = SmsTemplateSuccessMessage.Updated });
     }
 
     [HttpDelete("{id:guid}")]
@@ -30,7 +30,7 @@ public sealed class SmsTemplatesController(ISender sender) : ControllerBase
         CancellationToken token)
     {
         await _sender.Send(new RemoveSmsTemplateCommandRequest(id, User.UserId()), token);
-        return Ok();
+        return Ok(new { Message = SmsTemplateSuccessMessage.Removed });
     }
 
     [HttpGet("Businesses/{businessId:guid}")]

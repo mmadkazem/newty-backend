@@ -13,7 +13,7 @@ public sealed class ReserveTimesReceiptController(ISender sender) : ControllerBa
     {
         var request = CreateReserveTimeReceiptCommandRequest.Create(User.UserId(), model);
         await _sender.Send(request, token);
-        return Ok();
+        return Ok(new { Message = ReserveTimeSuccessMessage.Created });
     }
 
     [HttpPut("{id:guid}/State/{state}")]
@@ -23,13 +23,13 @@ public sealed class ReserveTimesReceiptController(ISender sender) : ControllerBa
         CancellationToken token)
     {
         var request = new UpdateStateReserveTimeReceiptCommandRequest(id, state, User.Roles());
-        await _sender.Send(request, token);
-        return Ok();
+        var result = await _sender.Send(request, token);
+        return Ok(result);
     }
 
     [HttpGet("Businesses/Finished/{finished:bool}/Page/{page:int}")]
     [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
-    public async Task<IActionResult> GetBusinessReserveTime(bool finished, int page, 
+    public async Task<IActionResult> GetBusinessReserveTime(bool finished, int page,
         CancellationToken token)
     {
         var request = GetBusinessReserveTimeReceiptQueryRequest.Create(page, User.UserId(), finished);

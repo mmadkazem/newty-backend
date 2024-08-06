@@ -13,7 +13,7 @@ public sealed class CategoriesController(ISender sender) : ControllerBase
     {
         var request = CreateCategoryCommandRequest.Create(ParentId, model);
         await _sender.Send(request, token);
-        return Ok();
+        return Ok(new { Message = CategorySuccessMessage.Created });
     }
 
     [HttpPut("{id:guid}")]
@@ -22,7 +22,7 @@ public sealed class CategoriesController(ISender sender) : ControllerBase
     {
         var request = UpdateCategoryCommandRequest.Create(id, model);
         await _sender.Send(request, token);
-        return Ok();
+        return Ok(new { Message = CategorySuccessMessage.Updated });
     }
 
     [HttpDelete("{id:guid}")]
@@ -30,7 +30,7 @@ public sealed class CategoriesController(ISender sender) : ControllerBase
         CancellationToken token)
     {
         await _sender.Send(new RemoveCategoryCommandRequest(id), token);
-        return Ok();
+        return Ok(new { Message = CategorySuccessMessage.Removed });
     }
 
     [HttpGet("{id:guid}/SubCategory")]

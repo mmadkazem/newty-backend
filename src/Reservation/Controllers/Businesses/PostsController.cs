@@ -13,15 +13,15 @@ public sealed class PostsController(ISender sender) : ControllerBase
     {
         var request = CreatePostCommandRequest.Create(User.UserId(), model);
         await _sender.Send(request, token);
-        return Ok();
+        return Ok(new { Message = PostSuccessMessage.Created });
     }
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Post(Guid id, [FromBody] UpdatePostDTO model,
+    public async Task<IActionResult> Put(Guid id, [FromBody] UpdatePostDTO model,
         CancellationToken token)
     {
         var request = UpdatePostCommandRequest.Create(id, User.UserId(), model);
         await _sender.Send(request, token);
-        return Ok();
+        return Ok(new { Message = PostSuccessMessage.Updated });
     }
 
     [HttpDelete("{id:guid}")]
@@ -29,7 +29,7 @@ public sealed class PostsController(ISender sender) : ControllerBase
         CancellationToken token)
     {
         await _sender.Send(new RemovePostCommandRequest(id, User.UserId()), token);
-        return Ok();
+        return Ok(new { Message = PostSuccessMessage.Removed });
     }
 
     [HttpGet("{id:guid}")]

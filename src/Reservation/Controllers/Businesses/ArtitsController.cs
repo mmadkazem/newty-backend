@@ -13,7 +13,7 @@ public sealed class ArtistsController(ISender sender) : ControllerBase
     {
         var request = CreateArtistCommandRequest.Create(User.UserId(), model);
         await _sender.Send(request, token);
-        return Ok();
+        return Ok(new { Message = ArtistSuccessMessage.Created });
     }
 
     [HttpPost("Points")]
@@ -24,7 +24,7 @@ public sealed class ArtistsController(ISender sender) : ControllerBase
     {
         var request = AddArtistPointCommandRequest.Create(User.UserId(), model);
         await _sender.Send(request, token);
-        return Ok();
+        return Ok(new { Message = CommonMessage.PointRecorded });
     }
 
     [HttpPost("{artistId:guid}/Services/{serviceId:guid}")]
@@ -32,7 +32,7 @@ public sealed class ArtistsController(ISender sender) : ControllerBase
         CancellationToken token)
     {
         await _sender.Send(new AddServiceCommandRequest(artistId, serviceId), token);
-        return Ok();
+        return Ok(new { Message = ArtistSuccessMessage.ServiceAdded });
     }
 
     [HttpGet("{id:guid}")]
@@ -68,7 +68,7 @@ public sealed class ArtistsController(ISender sender) : ControllerBase
     {
         var request = UpdateArtistCommandRequest.Create(id, User.UserId(), model);
         await _sender.Send(request, token);
-        return Ok();
+        return Ok(new { Message = ArtistSuccessMessage.Updated });
     }
 
     [HttpDelete("{id:guid}")]
@@ -76,6 +76,6 @@ public sealed class ArtistsController(ISender sender) : ControllerBase
         CancellationToken token)
     {
         await _sender.Send(new RemoveArtistCommandRequest(id, User.UserId()), token);
-        return Ok();
+        return Ok(new { Message = ArtistSuccessMessage.Removed });
     }
 }

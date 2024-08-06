@@ -1,11 +1,12 @@
 namespace Reservation.Application.ReserveTimes.Commands.UpdateStateReserveTimeSender;
 
-public sealed class UpdateStateReserveTimeSenderCommandHandler(IUnitOfWork uow, IFinishReserveTimeJob finishReserveTimeJob) : IRequestHandler<UpdateStateReserveTimeSenderCommandRequest>
+public sealed class UpdateStateReserveTimeSenderCommandHandler(IUnitOfWork uow, IFinishReserveTimeJob finishReserveTimeJob)
+    : IRequestHandler<UpdateStateReserveTimeSenderCommandRequest, UpdateStateReserveTimeSenderCommandResponse>
 {
     private readonly IUnitOfWork _uow = uow;
     private readonly IFinishReserveTimeJob _finishReserveTimeJob = finishReserveTimeJob;
 
-    public async Task Handle(UpdateStateReserveTimeSenderCommandRequest request, CancellationToken cancellationToken)
+    public async Task<UpdateStateReserveTimeSenderCommandResponse> Handle(UpdateStateReserveTimeSenderCommandRequest request, CancellationToken cancellationToken)
     {
         var reserveTime = await _uow.ReserveTimes.FindAsyncIncludeTransaction(request.Id, cancellationToken)
             ?? throw new ReserveTimeNotFoundException();
@@ -29,7 +30,7 @@ public sealed class UpdateStateReserveTimeSenderCommandHandler(IUnitOfWork uow, 
 
             await _uow.SaveChangeAsync(cancellationToken);
 
-            return;
+            return new(ReserveTimeSuccessMessage.UpdatedCancelState);
         }
 
         if (request.State == ReserveState.Confirmed)
@@ -63,7 +64,10 @@ public sealed class UpdateStateReserveTimeSenderCommandHandler(IUnitOfWork uow, 
 
             await _uow.SaveChangeAsync(cancellationToken);
             _finishReserveTimeJob.Execute(reserveTime.Id, reserveTime.TotalEndDate.AddMinutes(2));
+
+            return new(ReserveTimeSuccessMessage.UpdatedConfirmState);
         }
 
+        return new();
     }
 }

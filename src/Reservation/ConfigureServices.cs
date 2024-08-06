@@ -260,4 +260,19 @@ public static class ConfigureServices
 
         return services;
     }
+
+    public static IServiceCollection AddCorsPolicies(this IServiceCollection services)
+    {
+        services.AddCors(options =>
+        {
+            options.AddPolicy("MainPolicy",
+                policy =>
+                {
+                    policy.AllowAnyOrigin()
+                        .AllowAnyMethod()
+                        .AllowAnyHeader();
+                });
+        });
+        return services;
+    }
 }
