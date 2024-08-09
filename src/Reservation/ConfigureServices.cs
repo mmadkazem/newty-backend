@@ -7,6 +7,7 @@ public static class ConfigureServices
 {
     public static IServiceCollection RegisterApiServices(this IServiceCollection services, IConfiguration configuration)
     {
+        services.AddCorsPolicies();
         services.AddControllers();
         services.AddEndpointsApiExplorer();
         services
@@ -249,15 +250,6 @@ public static class ConfigureServices
                 };
             });
 
-        // services.AddCors(options =>
-        // {
-        //     options.AddPolicy("CorsPolicy",
-        //     builder => builder.AllowAnyOrigin()
-        //         .AllowAnyMethod()
-        //         .AllowAnyHeader()
-        //         .AllowCredentials());
-        // });
-
         return services;
     }
 
@@ -268,8 +260,8 @@ public static class ConfigureServices
             options.AddPolicy("MainPolicy",
                 policy =>
                 {
-                    policy.AllowAnyOrigin()
-                        .AllowAnyMethod()
+                    policy.WithOrigins("http://localhost:3006", "https://newty.liara.run")
+                        .WithMethods("POST", "GET", "PUT", "DELETE", "PATCH")
                         .AllowAnyHeader();
                 });
         });
