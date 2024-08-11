@@ -14,72 +14,84 @@ public sealed class LoginQueryHandler(IUnitOfWork uow,
     {
         if (request.Role == Role.User)
         {
-            var user = await _uow.Users.FindAsyncByNumber(request.PhoneNumber, cancellationToken);
-            if (user is null)
+            try
             {
-                var userCacheVM = await _cache.GetAsync<UserCacheVM>(nameof(User) + request.PhoneNumber);
-                if (userCacheVM.OTPCode != request.Code)
+                var userLogin = await _cache.GetAsync<UserLoginCacheVM>(UserLoginCacheVM.ToKey(request.PhoneNumber), cancellationToken);
+
+                if (userLogin.OTPCode != request.Code)
                 {
                     throw new NotEqualActualAndExpectedException();
                 }
 
-                User finalUser = new()
+                if (userLogin.IsFirst)
                 {
-                    FullName = userCacheVM.Name,
-                    PhoneNumber = userCacheVM.PhoneNumber,
-                    Role = Role.User,
-                    IsActive = true
-                };
-                _uow.Users.Add(finalUser);
+                    User finalUser = new()
+                    {
+                        FullName = userLogin.Name,
+                        PhoneNumber = userLogin.PhoneNumber,
+                        Role = Role.User,
+                        IsActive = true
+                    };
+                    _uow.Users.Add(finalUser);
+                    await _uow.SaveChangeAsync(cancellationToken);
+
+                    await _cache.RemoveAsync(UserLoginCacheVM.ToKey(request.PhoneNumber), cancellationToken);
+                    await _cache.RemoveAsync(UserRegisterCacheVM.ToKey(request.PhoneNumber), cancellationToken);
+
+                    return new(_tokenFactory.CreateUserToken(finalUser.Id), AccountSuccessMessage.Registered);
+                }
+
+                var user = await _uow.Users.FindAsyncByNumber(request.PhoneNumber, cancellationToken)
+                    ?? throw new UserNotFoundException();
+
+                user.IsActive = true;
                 await _uow.SaveChangeAsync(cancellationToken);
 
-                return new(_tokenFactory.CreateUserToken(finalUser), AccountSuccessMessage.Registered);
+                await _cache.RemoveAsync(UserLoginCacheVM.ToKey(request.PhoneNumber), cancellationToken);
+
+                return new(_tokenFactory.CreateUserToken(user.Id), AccountSuccessMessage.loggedIn);
             }
-
-            if (user.OTPCode != request.Code)
-            {
-                throw new NotEqualActualAndExpectedException();
-            }
-
-            user.IsActive = true;
-            await _uow.SaveChangeAsync(cancellationToken);
-
-            return new(_tokenFactory.CreateUserToken(user), AccountSuccessMessage.loggedIn);
-
+            catch { }
         }
         else if (request.Role == Role.Business)
         {
-            var business = await _uow.Businesses.FindAsyncByPhoneNumber(request.PhoneNumber, cancellationToken);
-            if (business is null)
+            try
             {
-                var businessCacheVM = await _cache.GetAsync<BusinessCacheVM>(nameof(Business) + request.PhoneNumber);
+                var businessCacheVM = await _cache.GetAsync<BusinessLoginCacheVM>(BusinessLoginCacheVM.ToKey(request.PhoneNumber), cancellationToken);
                 if (businessCacheVM.OTPCode != request.Code)
                 {
                     throw new NotEqualActualAndExpectedException();
                 }
 
-                var city = await _uow.Cities.FindAsyncByName(businessCacheVM.City, cancellationToken);
-                Business finalBusiness = new()
+                if (businessCacheVM.IsFirst)
                 {
-                    City = city,
-                    PhoneNumber = businessCacheVM.PhoneNumber,
-                    IsActive = true
-                };
-                _uow.Businesses.Add(finalBusiness);
+                    var city = await _uow.Cities.FindAsyncByName(businessCacheVM.City, cancellationToken);
+                    Business finalBusiness = new()
+                    {
+                        City = city,
+                        PhoneNumber = businessCacheVM.PhoneNumber,
+                        IsActive = true
+                    };
+                    _uow.Businesses.Add(finalBusiness);
+                    await _uow.SaveChangeAsync(cancellationToken);
+
+                    await _cache.RemoveAsync(BusinessLoginCacheVM.ToKey(request.PhoneNumber), cancellationToken);
+                    await _cache.RemoveAsync(BusinessRegisterCacheVM.ToKey(request.PhoneNumber), cancellationToken);
+
+                    return new(_tokenFactory.CreateBusinessToken(finalBusiness.Id), AccountSuccessMessage.Registered);
+                }
+
+                var business = await _uow.Businesses.FindAsyncByPhoneNumber(request.PhoneNumber, cancellationToken)
+                    ?? throw new BusinessNotFoundException();
+
+                business.IsActive = true;
                 await _uow.SaveChangeAsync(cancellationToken);
 
-                return new(_tokenFactory.CreateBusinessToken(finalBusiness), AccountSuccessMessage.Registered);
+                await _cache.RemoveAsync(BusinessLoginCacheVM.ToKey(request.PhoneNumber), cancellationToken);
+
+                return new(_tokenFactory.CreateBusinessToken(business.Id), AccountSuccessMessage.loggedIn);
             }
-
-            if (business.OTPCode != request.Code)
-            {
-                throw new NotEqualActualAndExpectedException();
-            }
-
-            business.IsActive = true;
-            await _uow.SaveChangeAsync(cancellationToken);
-            return new(_tokenFactory.CreateBusinessToken(business), AccountSuccessMessage.loggedIn);
-
+            catch { }
         }
 
         throw new UserOrBusinessNotExistException();

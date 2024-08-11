@@ -15,7 +15,6 @@ public sealed class UpdateCityCommandHandler(IUnitOfWork uow) : IRequestHandler<
         }
 
         city.Name = request.Name;
-        city.State = request.State;
         city.ModifiedOn = DateTime.Now;
 
         await _uow.SaveChangeAsync(cancellationToken);

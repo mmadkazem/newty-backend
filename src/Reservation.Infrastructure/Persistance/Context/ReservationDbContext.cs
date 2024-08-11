@@ -13,7 +13,7 @@ public sealed class ReservationDbContext : DbContext
 
     // Business
     public DbSet<Business> Businesses { get; set; }
-    public DbSet<Service> Services { get; set; }
+    public DbSet<BusinessService> Services { get; set; }
     public DbSet<Artist> Artists { get; set; }
     public DbSet<Post> Posts { get; set; }
     public DbSet<UserVIP> UsersVIP { get; set; }

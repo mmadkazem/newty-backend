@@ -9,7 +9,7 @@ public static class SoftDeleteConfiguration
         modelBuilder.Entity<Business>().HasQueryFilter(f => !f.IsDeleted);
         modelBuilder.Entity<Artist>().HasQueryFilter(f => !f.IsDeleted);
         modelBuilder.Entity<Post>().HasQueryFilter(f => !f.IsDeleted);
-        modelBuilder.Entity<Service>().HasQueryFilter(f => !f.IsDeleted);
+        modelBuilder.Entity<BusinessService>().HasQueryFilter(f => !f.IsDeleted);
         modelBuilder.Entity<SmsCredit>().HasQueryFilter(f => !f.IsDeleted);
         modelBuilder.Entity<SmsTemplate>().HasQueryFilter(f => !f.IsDeleted);
         modelBuilder.Entity<UserVIP>().HasQueryFilter(f => !f.IsDeleted);

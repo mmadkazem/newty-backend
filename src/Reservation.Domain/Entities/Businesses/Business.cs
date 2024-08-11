@@ -9,7 +9,6 @@ public class Business : BaseClass
     public string ParvaneKasbImagePath { get; set; }
     public string Address { get; set; }
     public string PhoneNumber { get; set; }
-    public string OTPCode { get; set; }
     public bool IsActive { get; set; }
     public bool IsCancelReserveTime { get; set; }
     public TimeSpan StartHoursOfWor { get; set; }
@@ -31,7 +30,7 @@ public class Business : BaseClass
     public ICollection<Point> Points { get; set; } = [];
 
     // Business Services
-    public ICollection<Service> Services { get; set; }
+    public ICollection<BusinessService> Services { get; set; }
 
     // Business Artists
     public ICollection<Artist> Artists { get; set; }

@@ -47,27 +47,27 @@ public sealed class TokenFactoryService(IOptions<TempTokenOption> optionTemp,
         return new(tempToken);
     }
 
-    public JwtTokensData CreateUserToken(User user)
+    public JwtTokensData CreateUserToken(Guid userId)
     {
-        var accessToken = createUserAccessToken(user);
-        var refreshToken = createRefreshToken(user.Id, Role.User);
+        var accessToken = createUserAccessToken(userId);
+        var refreshToken = createRefreshToken(userId, Role.User);
         return new(accessToken, refreshToken);
     }
-    public JwtTokensData CreateBusinessToken(Business business)
+    public JwtTokensData CreateBusinessToken(Guid businessId)
     {
-        var accessToken = createBusinessAccessToken(business);
-        var refreshToken = createRefreshToken(business.Id, Role.Business);
-        return new(accessToken, refreshToken);
-    }
-
-    public JwtTokensData CreateAdminToken(User admin)
-    {
-        var accessToken = createAdminAccessToken(admin);
-        var refreshToken = createRefreshToken(admin.Id, Role.Admin);
+        var accessToken = createBusinessAccessToken(businessId);
+        var refreshToken = createRefreshToken(businessId, Role.Business);
         return new(accessToken, refreshToken);
     }
 
-    private string createAdminAccessToken(User admin)
+    public JwtTokensData CreateAdminToken(Guid adminId)
+    {
+        var accessToken = createAdminAccessToken(adminId);
+        var refreshToken = createRefreshToken(adminId, Role.Admin);
+        return new(accessToken, refreshToken);
+    }
+
+    private string createAdminAccessToken(Guid adminId)
     {
         var claims = new List<Claim>
         {
@@ -77,7 +77,7 @@ public sealed class TokenFactoryService(IOptions<TempTokenOption> optionTemp,
             new(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Iss, _optionsAdmin.Value.Issuer, ClaimValueTypes.String, _optionsAdmin.Value.Issuer),
             // Issued at
             new(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64, _optionsAdmin.Value.Issuer),
-            new(ClaimTypes.NameIdentifier, admin.Id.ToString(), ClaimValueTypes.String, _optionsAdmin.Value.Issuer),
+            new(ClaimTypes.NameIdentifier, adminId.ToString(), ClaimValueTypes.String, _optionsAdmin.Value.Issuer),
             // add roles
             new(ClaimTypes.Role, Role.Admin, ClaimValueTypes.String, _optionsAdmin.Value.Issuer)
         };
@@ -124,7 +124,7 @@ public sealed class TokenFactoryService(IOptions<TempTokenOption> optionTemp,
             signingCredentials: creds);
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
-    private string createUserAccessToken(User user)
+    private string createUserAccessToken(Guid userId)
     {
         var claims = new List<Claim>
         {
@@ -134,9 +134,7 @@ public sealed class TokenFactoryService(IOptions<TempTokenOption> optionTemp,
             new(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Iss, _optionUser.Value.Issuer, ClaimValueTypes.String, _optionUser.Value.Issuer),
             // Issued at
             new(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64, _optionUser.Value.Issuer),
-            new(ClaimTypes.NameIdentifier, user.Id.ToString(), ClaimValueTypes.String, _optionUser.Value.Issuer),
-            // custom data
-            new(ClaimTypes.UserData, user.PhoneNumber, ClaimValueTypes.String, _optionUser.Value.Issuer),
+            new(ClaimTypes.NameIdentifier, userId.ToString(), ClaimValueTypes.String, _optionUser.Value.Issuer),
             // add roles
             new(ClaimTypes.Role, Role.User, ClaimValueTypes.String, _optionUser.Value.Issuer)
         };
@@ -154,7 +152,7 @@ public sealed class TokenFactoryService(IOptions<TempTokenOption> optionTemp,
 
         return new JwtSecurityTokenHandler().WriteToken(token);
     }
-    private string createBusinessAccessToken(Business business)
+    private string createBusinessAccessToken(Guid businessId)
     {
         var claims = new List<Claim>
         {
@@ -164,9 +162,7 @@ public sealed class TokenFactoryService(IOptions<TempTokenOption> optionTemp,
             new(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Iss, _optionBusiness.Value.Issuer, ClaimValueTypes.String, _optionBusiness.Value.Issuer),
             // Issued at
             new(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64, _optionBusiness.Value.Issuer),
-            new(ClaimTypes.NameIdentifier, business.Id.ToString(), ClaimValueTypes.String, _optionBusiness.Value.Issuer),
-            // custom data
-            new(ClaimTypes.UserData, business.PhoneNumber, ClaimValueTypes.String, _optionBusiness.Value.Issuer),
+            new(ClaimTypes.NameIdentifier, businessId.ToString(), ClaimValueTypes.String, _optionBusiness.Value.Issuer),
             // add roles
             new(ClaimTypes.Role, Role.Business, ClaimValueTypes.String, _optionBusiness.Value.Issuer)
         };

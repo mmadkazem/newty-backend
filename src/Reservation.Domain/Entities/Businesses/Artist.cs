@@ -16,6 +16,6 @@ public class Artist : BaseClass
     public ICollection<Point> Points { get; set; } = [];
 
     // Artist Services
-    public ICollection<Service> Services { get; set; } = [];
+    public ICollection<BusinessService> Services { get; set; } = [];
 
 }

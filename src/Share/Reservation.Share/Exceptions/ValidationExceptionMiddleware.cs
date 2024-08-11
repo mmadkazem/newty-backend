@@ -10,7 +10,7 @@ public sealed class ValidationsExceptionMiddleware : IMiddleware
         }
         catch (ValidationsException ex)
         {
-            context.Response.StatusCode = 400;
+            context.Response.StatusCode = 422;
             context.Response.Headers.Add("content-type", "application/json");
             var errorType = ToUnderscoreCase(ex.GetType().Name.Replace("Exception", string.Empty));
             var json = JsonSerializer.Serialize(new { ErrorType = errorType, ex.Message, ex.Errors });

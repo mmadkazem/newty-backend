@@ -74,7 +74,7 @@ public sealed class ReadCategoryInJsonService : IReadCategoryInJsonService
         string categorySeedPath = Path.Combine
         (
             BaseDirectoryPath.InfrastructureDirectoryPath,
-            @$"{BaseDirectoryPath.SeedDataPath}parents-category.json"
+            @$"{BaseDirectoryPath.CategoryPath}parents-category.json"
         );
 
         // Read File
@@ -89,7 +89,7 @@ public sealed class ReadCategoryInJsonService : IReadCategoryInJsonService
         string categorySeedPath = Path.Combine
         (
             BaseDirectoryPath.InfrastructureDirectoryPath,
-            @$"{BaseDirectoryPath.SeedDataPath}tattoo-childs.json"
+            @$"{BaseDirectoryPath.CategoryPath}tattoo-childs.json"
         );
 
         // Read File
@@ -104,7 +104,7 @@ public sealed class ReadCategoryInJsonService : IReadCategoryInJsonService
         string categorySeedPath = Path.Combine
         (
             BaseDirectoryPath.InfrastructureDirectoryPath,
-            @$"{BaseDirectoryPath.SeedDataPath}beauty-salon-childs.json"
+            @$"{BaseDirectoryPath.CategoryPath}beauty-salon-childs.json"
         );
 
         // Read File
@@ -119,7 +119,7 @@ public sealed class ReadCategoryInJsonService : IReadCategoryInJsonService
         string categorySeedPath = Path.Combine
         (
             BaseDirectoryPath.InfrastructureDirectoryPath,
-            @$"{BaseDirectoryPath.SeedDataPath}clinic-salon-childs.json"
+            @$"{BaseDirectoryPath.CategoryPath}clinic-salon-childs.json"
         );
 
         // Read File

@@ -30,8 +30,7 @@ public class CityRepository(ReservationDbContext context) : ICityRepository
                                 .Select(c => new GetCitiesQueryResponse
                                 (
                                     c.Id,
-                                    c.Name,
-                                    c.State
+                                    c.Name
                                 ))
                                 .ToListAsync(cancellationToken);
 

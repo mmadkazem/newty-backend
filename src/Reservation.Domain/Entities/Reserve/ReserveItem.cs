@@ -8,6 +8,6 @@ public class ReserveItem : BaseClass
     public bool Finished { get; set; } = false;
 
     // Reserve Service
-    public Service Service { get; set; }
+    public BusinessService Service { get; set; }
     public Guid ServiceId { get; set; }
 }

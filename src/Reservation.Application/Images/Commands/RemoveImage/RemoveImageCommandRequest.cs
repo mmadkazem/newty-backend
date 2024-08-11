@@ -13,7 +13,7 @@ public sealed class RemoveImageCommandHandler(IUploadImageProvider uploadImage) 
 
     public async Task<string> Handle(RemoveImageCommandRequest request, CancellationToken cancellationToken)
     {
-        var subjectReceipt = request.ObjectKey.Split("@").Last();
+        var subjectReceipt = request.ObjectKey.Split("@").First();
         if (subjectReceipt != request.SubjectId.ToString())
         {
             throw new NotAllowedRemovedException();

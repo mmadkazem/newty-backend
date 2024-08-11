@@ -5,21 +5,21 @@ public sealed class ServiceRepository(ReservationDbContext context) : IServiceRe
 {
     private readonly ReservationDbContext _context = context;
 
-    public void Add(Service service)
+    public void Add(BusinessService service)
         => _context.Services.Add(service);
 
-    public void Remove(Service service)
+    public void Remove(BusinessService service)
         => _context.Services.Remove(service);
 
     public async Task<bool> AnyAsync(string name, CancellationToken cancellationToken = default)
         => await _context.Services.AsQueryable()
                                     .AnyAsync(s => s.Name == name, cancellationToken);
 
-    public async Task<Service> FindAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<BusinessService> FindAsync(Guid id, CancellationToken cancellationToken)
         => await _context.Services.AsQueryable()
                                     .FirstOrDefaultAsync(b => b.Id == id, cancellationToken);
 
-    public async Task<Service> FindAsyncIncludeArtist(Guid serviceId, CancellationToken cancellationToken)
+    public async Task<BusinessService> FindAsyncIncludeArtist(Guid serviceId, CancellationToken cancellationToken)
         => await _context.Services.AsQueryable()
                                     .Include(s => s.Artist)
                                     .FirstOrDefaultAsync(b => b.Id == serviceId, cancellationToken);

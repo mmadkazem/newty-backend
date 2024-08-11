@@ -9,7 +9,7 @@ public sealed class CreateArtistCommandHandler(IUnitOfWork uow) : IRequestHandle
         var business = await _uow.Businesses.FindAsync(request.BusinessId, cancellationToken)
             ?? throw new BusinessNotFoundException();
 
-        List<Service> services = [];
+        List<BusinessService> services = [];
         foreach (var serviceId in request.Services)
         {
             var service = await _uow.Services.FindAsync(serviceId, cancellationToken)

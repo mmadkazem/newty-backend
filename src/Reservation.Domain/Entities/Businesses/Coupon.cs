@@ -6,6 +6,6 @@ public sealed class Coupon : BaseClass
     public DateTime Expire { get; set; }
 
     // Business Discount Code
-    public Service Service { get; set; }
+    public BusinessService Service { get; set; }
     public Guid ServiceId { get; set; }
 }

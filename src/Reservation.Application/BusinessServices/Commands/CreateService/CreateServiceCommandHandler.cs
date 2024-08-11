@@ -9,7 +9,7 @@ public sealed class CreateServiceCommandHandler(IUnitOfWork uow) : IRequestHandl
         var business = await _uow.Businesses.FindAsync(request.BusinessId, cancellationToken)
             ?? throw new BusinessNotFoundException();
 
-        Service service = new()
+        BusinessService service = new()
         {
             Name = request.Name,
             Price = request.Price,

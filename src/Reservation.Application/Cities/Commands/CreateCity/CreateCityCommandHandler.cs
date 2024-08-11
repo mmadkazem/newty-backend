@@ -10,7 +10,6 @@ public sealed class CreateCityCommandHandler(IUnitOfWork uow) : IRequestHandler<
         City city = new()
         {
             Name = request.Name,
-            State = request.State
         };
 
         _uow.Cities.Add(city);
