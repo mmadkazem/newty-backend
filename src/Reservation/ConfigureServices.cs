@@ -1,5 +1,3 @@
-using Reservation.Infrastructure.ExternalServices.Jwt.TokenValidators;
-
 namespace Reservation;
 
 
@@ -262,6 +260,7 @@ public static class ConfigureServices
                 {
                     policy.WithOrigins("http://localhost:3006", "https://newty.liara.run")
                         .WithMethods("POST", "GET", "PUT", "DELETE", "PATCH")
+                        // .AllowAnyMethod()
                         .AllowAnyHeader();
                 });
         });
