@@ -5,6 +5,7 @@ public class Business : BaseClass
 {
     public string Name { get; set; }
     public string Description { get; set; }
+    public string CardNumber { get; set; }
     public string CoverImagePath { get; set; }
     public string ParvaneKasbImagePath { get; set; }
     public string Address { get; set; }
