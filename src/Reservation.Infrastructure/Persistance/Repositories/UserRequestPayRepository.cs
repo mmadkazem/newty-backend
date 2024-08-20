@@ -14,7 +14,7 @@ public sealed class UserRequestPayRepository(ReservationDbContext context) : IUs
 
     public async Task<UserRequestPay> FindAsync(Guid id, CancellationToken cancellationToken)
         => await _context.UserRequestPays.AsQueryable()
-                                            .FirstOrDefaultAsync(r => r.Id == id, cancellationToken);
+                                            .FirstOrDefaultAsync(r => r.Id == id && !r.IsPay, cancellationToken);
 
     public async Task<IResponse> Get(Guid id, CancellationToken cancellationToken)
         => await _context.UserRequestPays.AsQueryable()

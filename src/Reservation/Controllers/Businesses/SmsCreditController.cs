@@ -3,7 +3,7 @@ namespace Reservation.Controllers.Businesses;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
+[Authorize(Role.Business)]
 public sealed class SmsCreditController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;

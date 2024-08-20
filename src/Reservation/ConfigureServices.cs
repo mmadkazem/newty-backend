@@ -60,17 +60,17 @@ public static class ConfigureServices
             options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
         })
-            .AddJwtBearer(options =>
+            .AddJwtBearer(AuthScheme.TempScheme, options =>
             {
                 options.RequireHttpsMetadata = false;
                 options.SaveToken = true;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidIssuer = configuration["TempToken:Issuer"], // site that makes the token
+                    ValidIssuer = configuration["TempTokenOption:Issuer"], // site that makes the token
                     ValidateIssuer = true,
-                    ValidAudience = configuration["TempToken:Audience"], // site that consumes the token
+                    ValidAudience = configuration["TempTokenOption:Audience"], // site that consumes the token
                     ValidateAudience = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["TempToken:Key"])),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["TempTokenOption:Key"])),
                     ValidateIssuerSigningKey = true, // verify signature to avoid tampering
                     ValidateLifetime = true, // validate the expiration
                     ClockSkew = TimeSpan.Zero // tolerance for the expiration date
@@ -101,17 +101,17 @@ public static class ConfigureServices
                     }
                 };
             })
-            .AddJwtBearer(AuthScheme.UserScheme, options =>
+            .AddJwtBearer(options =>
             {
                 options.RequireHttpsMetadata = false;
                 options.SaveToken = true;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidIssuer = configuration["UserToken:Issuer"], // site that makes the token
+                    ValidIssuer = configuration["BearerTokenOption:Issuer"], // site that makes the token
                     ValidateIssuer = true,
-                    ValidAudience = configuration["UserToken:Audience"], // site that consumes the token
+                    ValidAudience = configuration["BearerTokenOption:Audience"], // site that consumes the token
                     ValidateAudience = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["UserToken:Key"])),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["BearerTokenOption:Key"])),
                     ValidateIssuerSigningKey = true, // verify signature to avoid tampering
                     ValidateLifetime = true, // validate the expiration
                     ClockSkew = TimeSpan.Zero // tolerance for the expiration date
@@ -124,81 +124,8 @@ public static class ConfigureServices
                     },
                     OnTokenValidated = context =>
                     {
-                        var tokenValidatorService = context.HttpContext.RequestServices.GetRequiredService<IUserTokenValidatorService>();
+                        var tokenValidatorService = context.HttpContext.RequestServices.GetRequiredService<IBearerTokenValidatorService>();
                         return tokenValidatorService.ValidateAsync(context);
-                    },
-                    OnMessageReceived = context =>
-                    {
-                        return Task.CompletedTask;
-                    },
-                    OnChallenge = context =>
-                    {
-                        return Task.CompletedTask;
-                    }
-                };
-            })
-            .AddJwtBearer(AuthScheme.BusinessScheme, options =>
-            {
-                options.RequireHttpsMetadata = false;
-                options.SaveToken = true;
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidIssuer = configuration["BusinessToken:Issuer"], // site that makes the token
-                    ValidateIssuer = true,
-                    ValidAudience = configuration["BusinessToken:Audience"], // site that consumes the token
-                    ValidateAudience = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["BusinessToken:Key"])),
-                    ValidateIssuerSigningKey = true, // verify signature to avoid tampering
-                    ValidateLifetime = true, // validate the expiration
-                    ClockSkew = TimeSpan.Zero // tolerance for the expiration date
-                };
-                options.Events = new JwtBearerEvents
-                {
-                    OnAuthenticationFailed = context =>
-                    {
-                        return Task.CompletedTask;
-                    },
-                    OnTokenValidated = context =>
-                    {
-                        var tokenValidatorService = context.HttpContext.RequestServices.GetRequiredService<IBusinessTokenValidatorService>();
-                        return tokenValidatorService.ValidateAsync(context);
-                    },
-                    OnMessageReceived = context =>
-                    {
-                        return Task.CompletedTask;
-                    },
-                    OnChallenge = context =>
-                    {
-                        return Task.CompletedTask;
-                    }
-                };
-            })
-            .AddJwtBearer(AuthScheme.AdminScheme, options =>
-            {
-                options.RequireHttpsMetadata = false;
-                options.SaveToken = true;
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidIssuer = configuration["AdminToken:Issuer"], // site that makes the token
-                    ValidateIssuer = true,
-                    ValidAudience = configuration["AdminToken:Audience"], // site that consumes the token
-                    ValidateAudience = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["AdminToken:Key"])),
-                    ValidateIssuerSigningKey = true, // verify signature to avoid tampering
-                    ValidateLifetime = true, // validate the expiration
-                    ClockSkew = TimeSpan.Zero // tolerance for the expiration date
-                };
-                options.Events = new JwtBearerEvents
-                {
-                    OnAuthenticationFailed = context =>
-                    {
-                        return Task.CompletedTask;
-                    },
-                    OnTokenValidated = context =>
-                    {
-                        // var tokenValidatorService = context.HttpContext.RequestServices.GetRequiredService<ITokenValidatorService>();
-                        // return tokenValidatorService.ValidateAsync(context);
-                        return Task.CompletedTask;
                     },
                     OnMessageReceived = context =>
                     {
@@ -216,35 +143,30 @@ public static class ConfigureServices
                 options.SaveToken = true;
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidIssuer = configuration["RefreshToken:Issuer"], // site that makes the token
+                    ValidIssuer = configuration["RefreshTokenOption:Issuer"], // site that makes the token
                     ValidateIssuer = true,
-                    ValidAudience = configuration["RefreshToken:Audience"], // site that consumes the token
+                    ValidAudience = configuration["RefreshTokenOption:Audience"], // site that consumes the token
                     ValidateAudience = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["RefreshToken:Key"])),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["RefreshTokenOption:Key"])),
                     ValidateIssuerSigningKey = true, // verify signature to avoid tampering
                     ValidateLifetime = true, // validate the expiration
                     ClockSkew = TimeSpan.Zero // tolerance for the expiration date
                 };
-                options.Events = new JwtBearerEvents
+            })
+            .AddJwtBearer(AuthScheme.UpdateScheme, options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    OnAuthenticationFailed = context =>
-                    {
-                        return Task.CompletedTask;
-                    },
-                    OnTokenValidated = context =>
-                    {
-                        // var tokenValidatorService = context.HttpContext.RequestServices.GetRequiredService<ITokenValidatorService>();
-                        // return tokenValidatorService.ValidateAsync(context);
-                        return Task.CompletedTask;
-                    },
-                    OnMessageReceived = context =>
-                    {
-                        return Task.CompletedTask;
-                    },
-                    OnChallenge = context =>
-                    {
-                        return Task.CompletedTask;
-                    }
+                    ValidIssuer = configuration["BearerTokenOption:Issuer"], // site that makes the token
+                    ValidateIssuer = true,
+                    ValidAudience = configuration["BearerTokenOption:Audience"], // site that consumes the token
+                    ValidateAudience = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["BearerTokenOption:Key"])),
+                    ValidateIssuerSigningKey = true, // verify signature to avoid tampering
+                    ValidateLifetime = true, // validate the expiration
+                    ClockSkew = TimeSpan.Zero // tolerance for the expiration date
                 };
             });
 
@@ -255,12 +177,13 @@ public static class ConfigureServices
     {
         services.AddCors(options =>
         {
-            options.AddPolicy("MainPolicy",
-                policy =>
+            options.AddDefaultPolicy(policy =>
                 {
-                    policy.WithOrigins("http://localhost:3006", "https://newty.liara.run")
-                        .WithMethods("POST", "GET", "PUT", "DELETE", "PATCH")
-                        // .AllowAnyMethod()
+                    policy
+                        // .WithOrigins("http://localhost:3006", "https://newty.liara.run/")
+                        // .WithMethods("POST", "GET", "PUT", "DELETE", "PATCH")
+                        .AllowAnyOrigin()
+                        .AllowAnyMethod()
                         .AllowAnyHeader();
                 });
         });

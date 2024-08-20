@@ -3,7 +3,7 @@ namespace Reservation.Controllers.TransferFee;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(AuthenticationSchemes = AuthScheme.AdminScheme)]
+[Authorize(Role.Admin)]
 public class TransferFeesController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;

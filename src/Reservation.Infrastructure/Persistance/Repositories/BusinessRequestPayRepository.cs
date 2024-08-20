@@ -1,4 +1,3 @@
-
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 public sealed class BusinessRequestPayRepository(ReservationDbContext context)
@@ -14,7 +13,7 @@ public sealed class BusinessRequestPayRepository(ReservationDbContext context)
 
     public async Task<BusinessRequestPay> FindAsync(Guid id, CancellationToken cancellationToken)
         => await _context.BusinessRequestPays.AsQueryable()
-                                                .FirstOrDefaultAsync(r => r.Id == id, cancellationToken);
+                                                .FirstOrDefaultAsync(r => r.Id == id && !r.IsPay, cancellationToken);
 
     public async Task<IResponse> Get(Guid id, CancellationToken cancellationToken)
         => await _context.BusinessRequestPays.AsQueryable()

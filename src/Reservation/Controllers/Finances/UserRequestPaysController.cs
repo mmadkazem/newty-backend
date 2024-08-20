@@ -3,7 +3,7 @@ namespace Reservation.Controllers.Finances;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(AuthenticationSchemes = AuthScheme.UserScheme)]
+[Authorize(Role.User)]
 public class UserRequestPaysController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;

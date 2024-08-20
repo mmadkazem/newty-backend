@@ -48,9 +48,6 @@ public sealed class ReservationDbContext : DbContext
     // FeeTransfer
     public DbSet<TransferFee> TransferFees { get; set; }
 
-    // Service Coupon
-    public DbSet<Coupon> Coupons { get; set; }
-
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         base.OnConfiguring(optionsBuilder);

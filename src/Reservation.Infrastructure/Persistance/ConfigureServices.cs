@@ -1,3 +1,5 @@
+using Reservation.Infrastructure.Persistance.SeedData.TestData;
+
 namespace Reservation.Infrastructure.Persistance;
 
 
@@ -33,6 +35,7 @@ public static class ConfigureServices
 
         // DI Seeding Data
         services.AddSingleton<ICategorySeedData, CategorySeedData>();
+        services.AddSingleton<ISeedTestDataService, SeedTestDataService>();
         services.AddTransient<IReadCategoryInJsonService, ReadCategoryInJsonService>();
 
         return services;
@@ -40,8 +43,10 @@ public static class ConfigureServices
 
     public static WebApplication UseSeedingData(this WebApplication app)
     {
-        var seedDataCategory = app.Services.GetService<ICategorySeedData>();
-        seedDataCategory.SeedData();
+        // var seedDataCategory = app.Services.GetService<ICategorySeedData>();
+        // seedDataCategory.SeedData();
+        var seedTestData = app.Services.GetService<ISeedTestDataService>();
+        seedTestData.SeedData();
         return app;
     }
 }

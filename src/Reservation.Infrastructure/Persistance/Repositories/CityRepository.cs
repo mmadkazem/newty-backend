@@ -13,7 +13,7 @@ public class CityRepository(ReservationDbContext context) : ICityRepository
 
     public async Task<bool> AnyAsync(string name, CancellationToken cancellationToken = default)
         => await _context.Cities.AsQueryable()
-                                .AnyAsync(c => c.Name == name, cancellationToken);
+                                .AnyAsync(c => c.FaName == name, cancellationToken);
 
     public async Task<City> FindAsync(Guid Id, CancellationToken cancellationToken = default)
         => await _context.Cities.AsQueryable()
@@ -21,7 +21,7 @@ public class CityRepository(ReservationDbContext context) : ICityRepository
                                 .FirstOrDefaultAsync(cancellationToken);
     public async Task<City> FindAsyncByName(string name, CancellationToken cancellationToken = default)
         => await _context.Cities.AsQueryable()
-                                .Where(c => c.Name == name)
+                                .Where(c => c.FaName == name)
                                 .FirstOrDefaultAsync(cancellationToken);
 
     public async Task<IEnumerable<IResponse>> GetAll(CancellationToken cancellationToken)
@@ -30,7 +30,9 @@ public class CityRepository(ReservationDbContext context) : ICityRepository
                                 .Select(c => new GetCitiesQueryResponse
                                 (
                                     c.Id,
-                                    c.Name
+                                    c.FaName,
+                                    c.Alternatives,
+                                    c.Key
                                 ))
                                 .ToListAsync(cancellationToken);
 

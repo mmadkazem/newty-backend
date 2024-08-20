@@ -22,9 +22,4 @@ public class KavenegarProvider(IOptions<SmsProviderOption> options) : ISmsProvid
             throw new Exception(ex.Message);
         }
     }
-
-    public Task SendSms(string mobile, string fullName)
-    {
-        throw new NotImplementedException();
-    }
 }

@@ -2,7 +2,7 @@ namespace Reservation.Controllers.Businesses;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
+[Authorize(Role.Business)]
 public sealed class ArtistsController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;
@@ -17,8 +17,8 @@ public sealed class ArtistsController(ISender sender) : ControllerBase
     }
 
     [HttpPost("Points")]
-    [Authorize(AuthenticationSchemes = AuthScheme.UserScheme)]
-    [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
+    [Authorize(Role.User)]
+    [Authorize(Role.Business)]
     public async Task<IActionResult> Post([FromBody] AddArtistPointDTO model,
         CancellationToken token)
     {

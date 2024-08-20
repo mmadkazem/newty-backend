@@ -84,7 +84,7 @@ public class CategoryRepository(ReservationDbContext context) : ICategoryReposit
                                         b.Id,
                                         b.Name,
                                         b.CoverImagePath,
-                                        b.City.Name
+                                        b.City.FaName
                                     ))
                                     .Skip((page - 1) * 25)
                                     .Take(25)

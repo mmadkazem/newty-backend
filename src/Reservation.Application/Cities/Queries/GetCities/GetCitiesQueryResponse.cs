@@ -1,3 +1,8 @@
 namespace Reservation.Application.Cities.Queries.GetCities;
 
-public record GetCitiesQueryResponse(Guid Id, string Name) : IResponse;
+public record GetCitiesQueryResponse
+(
+    Guid Id, string FaName,
+    IEnumerable<string> Alternatives,
+    string Key
+) : IResponse;

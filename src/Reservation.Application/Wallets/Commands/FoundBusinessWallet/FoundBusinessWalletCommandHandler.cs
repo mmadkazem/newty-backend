@@ -25,6 +25,7 @@ public sealed class FoundBusinessWalletCommandHandler
         businessRequestPay.Authorizy = request.Authorizy;
         businessRequestPay.RefId = businessRequestPay.RefId;
         businessRequestPay.PayDate = DateTime.Now;
+        businessRequestPay.IsPay = true;
 
         wallet.Credit += businessRequestPay.Amount;
         wallet.ModifiedOn = DateTime.Now;

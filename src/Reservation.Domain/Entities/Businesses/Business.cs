@@ -14,6 +14,7 @@ public class Business : BaseClass
     public TimeSpan StartHoursOfWor { get; set; }
     public TimeSpan EndHoursOfWor { get; set; }
     public List<DayOfWeek> Holidays { get; set; } = [];
+    public bool IsValid { get; set; } = false;
 
     // Business Wallet
     public Wallet Wallet { get; set; }

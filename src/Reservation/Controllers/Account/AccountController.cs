@@ -1,3 +1,5 @@
+using Reservation.Application.Account.Queries.GetUserInfo;
+
 namespace Reservation.Controllers.Account;
 
 [ApiController]
@@ -25,7 +27,8 @@ public sealed class AccountController(ISender sender) : ControllerBase
     }
 
     [HttpGet]
-    [Authorize]
+    [Authorize(AuthenticationSchemes = AuthScheme.TempScheme)]
+    // [Authorize(Role.Business, AuthenticationSchemes = AuthScheme.TempScheme)]
     public async Task<IActionResult> Login([FromQuery] string code,
         CancellationToken token)
     {
@@ -45,7 +48,7 @@ public sealed class AccountController(ISender sender) : ControllerBase
     }
 
     [HttpPut]
-    [Authorize(AuthenticationSchemes = AuthScheme.UserScheme)]
+    [Authorize(AuthenticationSchemes = AuthScheme.UpdateScheme)]
     public async Task<IActionResult> UpdateUser([FromBody] UpdateUserDTO model,
         CancellationToken token)
     {
@@ -55,8 +58,7 @@ public sealed class AccountController(ISender sender) : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(AuthenticationSchemes = AuthScheme.UserScheme)]
-    [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
+    [Authorize]
     public async Task<IActionResult> Logout(CancellationToken token)
     {
         await _sender.Send(new LogoutQueryRequest(User.UserId()), token);
@@ -64,11 +66,19 @@ public sealed class AccountController(ISender sender) : ControllerBase
     }
 
     [HttpGet("/api/Account/Admin/Login")]
-    [Authorize(Role.Admin)]
+    [Authorize(Roles = Role.Admin, AuthenticationSchemes = AuthScheme.TempScheme)]
     public async Task<IActionResult> AdminLogin([FromQuery] string code,
         CancellationToken token)
     {
         var result = await _sender.Send(new AdminLoginQueryRequest(User.UserPhoneNumber(), code), token);
+        return Ok(result);
+    }
+
+    [HttpGet("Users")]
+    [Authorize(Roles = Role.Admin)]
+    public async Task<IActionResult> GetUserInfo(CancellationToken token)
+    {
+        var result = await _sender.Send(new GetUserInfoQueryRequest(User.UserId()), token);
         return Ok(result);
     }
 }

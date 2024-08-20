@@ -1,250 +1,510 @@
 [
     {
-        "Id": "cb081377-f652-4adc-b153-60ac10380a6b",
-        "Name": "تهران"
+        "Id": "6979e8ce-5f2a-468e-b579-4ce2c27100c9",
+        "FaName": "تهران",
+        "Key": "tehran",
+        "Alternatives": [
+            "tehran"
+        ]
     },
     {
-        "Id": "15170d9c-e850-46b5-bfb7-a04664e76b3d",
-        "Name": "اهواز"
+        "Id": "511680d1-3191-4d44-aad6-5f46f4eee182",
+        "FaName": "اهواز",
+        "Key": "ahwaz",
+        "Alternatives": [
+            "ahwaz",
+            "ahvaz"
+        ]
     },
     {
-        "Id": "2e784626-7df6-44d0-804a-1d3ac8673f7b",
-        "Name": "شیراز"
+        "Id": "2459068b-6b0c-47a1-a299-18900fbd4ed4",
+        "FaName": "شیراز",
+        "Key": "shiraz",
+        "Alternatives": [
+            "shiraz"
+        ]
     },
     {
-        "Id": "bb84534f-45a6-4e23-b640-bba637db0f1b",
-        "Name": "مشهد"
+        "Id": "fe6295c8-50d1-4ce7-99c0-d681edecbbab",
+        "FaName": "مشهد",
+        "Key": "mashhad",
+        "Alternatives": [
+            "mashhad"
+        ]
     },
     {
-        "Id": "450218a2-bc26-4e2a-ad21-16bcf1ab996f",
-        "Name": "بندر عباس"
+        "Id": "e1d368d9-45ab-4daf-a4bf-b4f09b575f4f",
+        "FaName": "بندر عباس",
+        "Key": "bandar-abbas",
+        "Alternatives": [
+            "bandar abbas"
+        ]
     },
     {
-        "Id": "0855c105-cdd5-4619-8217-ff1a497aa179",
-        "Name": "اصفهان"
+        "Id": "044947b9-e2fa-48b1-b0f2-361da01e10d3",
+        "FaName": "اصفهان",
+        "Key": "isfahan",
+        "Alternatives": [
+            "isfahan",
+            "esfahan"
+        ]
     },
     {
-        "Id": "f6fa4bbd-79cc-402c-8f26-1c5674e879a1",
-        "Name": "تبریز"
+        "Id": "d1de7180-20c8-4cf9-a90c-04720d91c50a",
+        "FaName": "تبریز",
+        "Key": "tabriz",
+        "Alternatives": [
+            "tabriz"
+        ]
     },
     {
-        "Id": "d5a91502-9371-4852-8f2a-0f906c09f8a8",
-        "Name": "کیش"
+        "Id": "12cba520-6cb8-48aa-a464-8dbfc45b4acc",
+        "FaName": "کیش",
+        "Key": "kish",
+        "Alternatives": [
+            "kish"
+        ]
     },
     {
-        "Id": "f180c9be-ac7f-4787-b5c2-3c5cab4cb711",
-        "Name": "آبادان"
+        "Id": "56245a47-a6dd-408e-8f55-7886db01be2c",
+        "FaName": "آبادان",
+        "Key": "abadan",
+        "Alternatives": [
+            "abadan"
+        ]
     },
     {
-        "Id": "19073e0d-14cf-4833-b4f2-1aa8cd43a529",
-        "Name": "اراک"
+        "Id": "1b6c2033-9ec8-4167-8273-058f83dc403a",
+        "FaName": "اراک",
+        "Key": "arak",
+        "Alternatives": [
+            "arak"
+        ]
     },
     {
-        "Id": "c2b367df-b432-4c51-a8da-ac9c87a23239",
-        "Name": "اردبیل"
+        "Id": "ad6c225d-3315-44c1-a0ae-39bb7e60722c",
+        "FaName": "اردبیل",
+        "Key": "ardabil",
+        "Alternatives": [
+            "ardabil"
+        ]
     },
     {
-        "Id": "8a9b71d5-31a4-4c64-81c3-5f2cf6adc68d",
-        "Name": "ارومیه"
+        "Id": "ff002bb6-d9e4-431a-83d5-bff8b3679de4",
+        "FaName": "ارومیه",
+        "Key": "orumiyeh",
+        "Alternatives": [
+            "orumiyeh"
+        ]
     },
     {
-        "Id": "70922a9c-6ebd-43a1-9424-47141ab44996",
-        "Name": "امیدیه"
+        "Id": "2b0f4a8c-ae50-483e-ab43-c377d5542c57",
+        "FaName": "امیدیه",
+        "Key": "omIdieh",
+        "Alternatives": [
+            "omIdieh"
+        ]
     },
     {
-        "Id": "82beca37-8015-4c34-8ff0-25c205f0f077",
-        "Name": "ایران شهر"
+        "Id": "3f7f9b70-088e-4c51-ab5c-910f38623793",
+        "FaName": "ایران شهر",
+        "Key": "iranshahr",
+        "Alternatives": [
+            "iranshahr"
+        ]
     },
     {
-        "Id": "5d5fba78-4b9c-4112-b76d-01ef49a77ad6",
-        "Name": "ایلام"
+        "Id": "19705072-6766-478e-b1f1-099603369129",
+        "FaName": "ایلام",
+        "Key": "ilam",
+        "Alternatives": [
+            "ilam"
+        ]
     },
     {
-        "Id": "666e7b29-8999-48e7-8431-a396d66eed90",
-        "Name": "بجنورد"
+        "Id": "021a54be-4266-4780-ad0c-7680688d9f36",
+        "FaName": "بجنورد",
+        "Key": "bojnourd",
+        "Alternatives": [
+            "bojnourd"
+        ]
     },
     {
-        "Id": "6d31d1ea-bad1-43c5-89be-c36d57fe5e0e",
-        "Name": "بم"
+        "Id": "a1786c97-9eaf-4c78-96ca-f31b935bc667",
+        "FaName": "بم",
+        "Key": "bam",
+        "Alternatives": [
+            "bam"
+        ]
     },
     {
-        "Id": "4be4fb83-3b11-4086-a187-19eee3f64ab7",
-        "Name": "بندر لنگه"
+        "Id": "2ffbaf0b-9621-4f8d-9156-6a18238f9b53",
+        "FaName": "بندر لنگه",
+        "Key": "bandar-lengeh",
+        "Alternatives": [
+            "bandar lengeh"
+        ]
     },
     {
-        "Id": "7b03a727-f521-4d7d-81c0-f6696b9764f1",
-        "Name": "بوشهر"
+        "Id": "5319fd9d-5d6f-4c8f-9cef-5385dfcbc545",
+        "FaName": "بوشهر",
+        "Key": "bushehr",
+        "Alternatives": [
+            "bushehr",
+            "booshehr"
+        ]
     },
     {
-        "Id": "2a5d5d53-f90d-4e19-9eef-5731261f4d82",
-        "Name": "بیرجند"
+        "Id": "882113bb-a3d9-44a9-a0a3-7774c98c3b0e",
+        "FaName": "بیرجند",
+        "Key": "birjand",
+        "Alternatives": [
+            "birjand"
+        ]
     },
     {
-        "Id": "f75791de-4aa7-4b67-8e6c-c63c97080dad",
-        "Name": "پارس آباد"
+        "Id": "c40478c3-8165-41f6-bc5c-73e82a9c7305",
+        "FaName": "پارس آباد",
+        "Key": "pars-abad",
+        "Alternatives": [
+            "pars-abad"
+        ]
     },
     {
-        "Id": "fa9ec8fb-96e3-46d4-a98f-d585cf9e4d96",
-        "Name": "جاسک"
+        "Id": "d5e3997e-6cf9-4080-90ab-86a5d6b45953",
+        "FaName": "جاسک",
+        "Key": "jask",
+        "Alternatives": [
+            "jask"
+        ]
     },
     {
-        "Id": "12ffbd47-ee3a-4036-a746-c45a4ccd4a20",
-        "Name": "جهرم"
+        "Id": "172c2c8f-1800-4e0f-acd4-ef5a1e2f9213",
+        "FaName": "جهرم",
+        "Key": "jahrom",
+        "Alternatives": [
+            "jahrom"
+        ]
     },
     {
-        "Id": "c5734116-545b-4daf-b5a7-6da949853af5",
-        "Name": "جیرفت"
+        "Id": "8a48d0ae-4297-46a6-926e-19e936a08428",
+        "FaName": "جیرفت",
+        "Key": "jiroft",
+        "Alternatives": [
+            "jiroft"
+        ]
     },
     {
-        "Id": "7c09666c-88b6-40f3-a13c-c5397dbe0496",
-        "Name": "چابهار"
+        "Id": "57f276e4-b2ce-4fc8-a346-180b1c412de1",
+        "FaName": "چابهار",
+        "Key": "chabahar",
+        "Alternatives": [
+            "chabahar"
+        ]
     },
     {
-        "Id": "71fb41bd-44b4-46a7-a204-2c296d4e3261",
-        "Name": "خارک"
+        "Id": "a3231945-d2ca-4ff0-85c9-21ae34da5f42",
+        "FaName": "خارک",
+        "Key": "khark",
+        "Alternatives": [
+            "khark"
+        ]
     },
     {
-        "Id": "6816512f-5dbf-4745-b672-254f8e7dd89a",
-        "Name": "خرم آباد"
+        "Id": "19349721-8952-4623-9863-f17b856e4201",
+        "FaName": "خرم آباد",
+        "Key": "khorramabad",
+        "Alternatives": [
+            "khorramabad"
+        ]
     },
     {
-        "Id": "73b5adec-1244-404d-aaa9-76245a54bed7",
-        "Name": "خوی"
+        "Id": "36aedc91-6b85-4201-baee-394102453b86",
+        "FaName": "خوی",
+        "Key": "khoy",
+        "Alternatives": [
+            "khoy"
+        ]
     },
     {
-        "Id": "508a77f4-d926-4d65-bf1b-4a096773255b",
-        "Name": "دزفول"
+        "Id": "75c76800-2a81-4b4e-a6d6-ad18827ece45",
+        "FaName": "دزفول",
+        "Key": "dezful",
+        "Alternatives": [
+            "dezful"
+        ]
     },
     {
-        "Id": "a0e78fc5-cdff-44e9-83c9-949288e9627e",
-        "Name": "رامسر"
+        "Id": "76482101-3aaa-4ba9-a95e-a1d300e7c92e",
+        "FaName": "رامسر",
+        "Key": "ramsar",
+        "Alternatives": [
+            "ramsar"
+        ]
     },
     {
-        "Id": "982635e0-4f2b-4824-a35e-b197ff2c4342",
-        "Name": "رشت"
+        "Id": "73c81768-44a1-4a94-be4e-f79eaf577167",
+        "FaName": "رشت",
+        "Key": "rasht",
+        "Alternatives": [
+            "rasht"
+        ]
     },
     {
-        "Id": "d2d786d6-0200-4f3a-815e-042a7fb00353",
-        "Name": "رفسنجان"
+        "Id": "3f092d22-a361-4380-8201-1deac30c7eb8",
+        "FaName": "رفسنجان",
+        "Key": "rafsanjan",
+        "Alternatives": [
+            "rafsanjan"
+        ]
     },
     {
-        "Id": "0c8f675e-1235-440d-9555-5c42cd7a6cd2",
-        "Name": "زابل"
+        "Id": "392876fd-f90d-4825-a32b-46feafa7ef4d",
+        "FaName": "زابل",
+        "Key": "zabol",
+        "Alternatives": [
+            "zabol"
+        ]
     },
     {
-        "Id": "9c84908f-251b-4912-a0fc-0336165d2071",
-        "Name": "زاهدان"
+        "Id": "15e161a8-554e-4d84-a011-f17e1e4bbc3f",
+        "FaName": "زاهدان",
+        "Key": "zahedan",
+        "Alternatives": [
+            "zahedan"
+        ]
     },
     {
-        "Id": "4ea5fd9b-f610-44cb-ba5e-c5d2453c6bc9",
-        "Name": "زنجان"
+        "Id": "4a46d1f1-8bb0-4cb8-85c7-1929cb06e3b7",
+        "FaName": "زنجان",
+        "Key": "zanjan",
+        "Alternatives": [
+            "zanjan"
+        ]
     },
     {
-        "Id": "295bef88-2787-4f08-a095-152033a13437",
-        "Name": "ساری"
+        "Id": "d6489a65-5488-4967-9ee5-77067554f936",
+        "FaName": "ساری",
+        "Key": "sari",
+        "Alternatives": [
+            "sari"
+        ]
     },
     {
-        "Id": "e3703711-7aad-483a-9eb1-ec4b7347301c",
-        "Name": "سبزوار"
+        "Id": "0f10d758-0cba-46df-92a9-8fdb3858cca7",
+        "FaName": "سبزوار",
+        "Key": "sabzevar",
+        "Alternatives": [
+            "sabzevar"
+        ]
     },
     {
-        "Id": "47340e32-d499-400f-a7de-8177af670ba4",
-        "Name": "سمنان"
+        "Id": "ad8c177c-61c3-4243-aadc-092c897dc72f",
+        "FaName": "سمنان",
+        "Key": "semnan",
+        "Alternatives": [
+            "semnan"
+        ]
     },
     {
-        "Id": "b50c4bef-e7f6-448b-b2db-e22c84535b92",
-        "Name": "سنندج"
+        "Id": "718e45e8-a398-4725-bfe6-ad184b0e9541",
+        "FaName": "سنندج",
+        "Key": "sanandaj",
+        "Alternatives": [
+            "sanandaj"
+        ]
     },
     {
-        "Id": "12fa5562-2711-4ba7-bd6c-a36e3f11814f",
-        "Name": "مراغه"
+        "Id": "223eba20-a0ed-4f63-ac3e-b4cc50c4923f",
+        "FaName": "مراغه",
+        "Key": "maragheh",
+        "Alternatives": [
+            "maragheh"
+        ]
     },
     {
-        "Id": "d0bad1df-fc60-4aad-b566-ac46c1ba8d66",
-        "Name": "سیرجان"
+        "Id": "99e93656-edd9-4d2d-bd43-8b81437dba0f",
+        "FaName": "سیرجان",
+        "Key": "syrjan",
+        "Alternatives": [
+            "syrjan"
+        ]
     },
     {
-        "Id": "097b65db-4bba-48e3-9131-bb80066fa02c",
-        "Name": "شاهرود"
+        "Id": "2ac079e7-d52d-46c3-8ef2-2f951e9a360d",
+        "FaName": "شاهرود",
+        "Key": "shahroud",
+        "Alternatives": [
+            "shahroud"
+        ]
     },
     {
-        "Id": "64e405a9-8fcb-46ae-841d-b0f9f93b6662",
-        "Name": "شهرکرد"
+        "Id": "8c49b9f4-90c8-4fab-be77-6403bfeeb487",
+        "FaName": "شهرکرد",
+        "Key": "shahrekord",
+        "Alternatives": [
+            "shahrekord"
+        ]
     },
     {
-        "Id": "dc8137ac-457c-4502-aebb-46b3a842e389",
-        "Name": "طبس"
+        "Id": "dabec0ed-ba17-4807-9041-d6706aa0aa49",
+        "FaName": "طبس",
+        "Key": "tabas",
+        "Alternatives": [
+            "tabas"
+        ]
     },
     {
-        "Id": "bb34eb52-d14e-4fc1-a8fa-76644a0684cd",
-        "Name": "عسلویه"
+        "Id": "38d0d97a-dc59-4067-b255-81b0d237ed7c",
+        "FaName": "عسلویه",
+        "Key": "asalouyeh",
+        "Alternatives": [
+            "asalouyeh"
+        ]
     },
     {
-        "Id": "fdb090f2-6316-4ebc-8178-dbecb276516c",
-        "Name": "قشم"
+        "Id": "1cb92aa7-68a3-4e7c-a308-49d0dfed5841",
+        "FaName": "امیدیه",
+        "Alternatives": [
+            "omidieh"
+        ],
+        "Key": "omidieh"
     },
     {
-        "Id": "61aca7cf-2ab5-410d-aa3b-712e4ee44352",
-        "Name": "قم"
+        "Id": "f91c4eb3-621a-4db0-900c-fc24198f8718",
+        "FaName": "قشم",
+        "Key": "qeshm",
+        "Alternatives": [
+            "qeshm"
+        ]
     },
     {
-        "Id": "b4edfc09-2945-4b97-a17d-e6773f658d2a",
-        "Name": "کاشان"
+        "Id": "dda8a974-f10d-4b38-9c5a-bf085d85f5e4",
+        "FaName": "قم",
+        "Key": "qom",
+        "Alternatives": [
+            "qom",
+            "ghom"
+        ]
     },
     {
-        "Id": "cc7d3fd0-28db-4068-b532-b90d645cd37a",
-        "Name": "کرج"
+        "Id": "0a6e7713-475a-4192-bc75-18bdf3849077",
+        "FaName": "کاشان",
+        "Key": "kashan",
+        "Alternatives": [
+            "kashan"
+        ]
     },
     {
-        "Id": "aed264f1-b292-41bb-b876-4a8bc2d6c964",
-        "Name": "کرمان"
+        "Id": "921c90cc-0170-4b2c-9ceb-702c78e3b775",
+        "FaName": "کرج",
+        "Key": "karaj",
+        "Alternatives": [
+            "karaj"
+        ]
     },
     {
-        "Id": "a8543d00-0172-484c-a76d-59d9dc5a4687",
-        "Name": "کرمانشاه"
+        "Id": "9c592f92-6aab-4d8c-8526-4d99631b5d95",
+        "FaName": "کرمان",
+        "Key": "kerman",
+        "Alternatives": [
+            "kerman"
+        ]
     },
     {
-        "Id": "151bb9db-ca79-488c-977d-71d7886dd70d",
-        "Name": "کولاله"
+        "Id": "e3eec5c4-1fbb-4ff0-b54c-bfc6c5fbf7fa",
+        "FaName": "کرمانشاه",
+        "Key": "kermanshah",
+        "Alternatives": [
+            "kermanshah"
+        ]
     },
     {
-        "Id": "d8bc5526-5a3d-4b56-8463-435ffacbf51b",
-        "Name": "گچساران"
+        "Id": "4df58cb6-68cf-459a-a09c-9b233a1db4ab",
+        "FaName": "کولاله",
+        "Key": "kolaleh",
+        "Alternatives": [
+            "kolaleh"
+        ]
     },
     {
-        "Id": "3bd82e88-e4c0-4d0c-acc7-69fdc7f3d0d4",
-        "Name": "گرگان"
+        "Id": "b595d16b-7be5-48b4-b8b2-cc4d10c6946c",
+        "FaName": "گچساران",
+        "Key": "gachsaran",
+        "Alternatives": [
+            "gachsaran"
+        ]
     },
     {
-        "Id": "5cb1472b-9a86-4d2a-aff0-b30b71af23a9",
-        "Name": "لار"
+        "Id": "2d22b9f7-ec8f-446c-9eed-af22d21ff194",
+        "FaName": "گرگان",
+        "Key": "gorgan",
+        "Alternatives": [
+            "gorgan"
+        ]
     },
     {
-        "Id": "494e1988-f6df-4d9c-839f-f99ebec6d6e4",
-        "Name": "لامراد"
+        "Id": "44e5f7fb-a9e6-4f1e-bb25-03924a06c124",
+        "FaName": "لار",
+        "Key": "lar",
+        "Alternatives": [
+            "lar"
+        ]
     },
     {
-        "Id": "2e3c1c2c-716e-4bbd-94d5-5899231b5e7c",
-        "Name": "ماکو"
+        "Id": "4166380e-133a-4428-ba44-6298406dca2c",
+        "FaName": "لامراد",
+        "Key": "lamard",
+        "Alternatives": [
+            "lamard"
+        ]
     },
     {
-        "Id": "67591f60-6ad5-405a-b4ab-ad05e1772347",
-        "Name": "ماهشار"
+        "Id": "b713db78-eac0-48e5-a576-7a14057a5542",
+        "FaName": "ماکو",
+        "Key": "makou",
+        "Alternatives": [
+            "makou"
+        ]
     },
     {
-        "Id": "feec8d4e-d64c-428c-8392-4daae7ab10ef",
-        "Name": "نوشهر"
+        "Id": "d5e46c30-604f-41f7-8188-84fca3b06b24",
+        "FaName": "ماهشار",
+        "Key": "mahshahr",
+        "Alternatives": [
+            "mahshahr"
+        ]
     },
     {
-        "Id": "98cf31e9-b59d-4f83-9651-cb4d21d283e9",
-        "Name": "همدان"
+        "Id": "160c7d8e-d839-4b4c-a8c9-39cbe5a38d37",
+        "FaName": "نوشهر",
+        "Key": "noshahr",
+        "Alternatives": [
+            "noshahr"
+        ]
     },
     {
-        "Id": "1a1827e7-9530-4cc9-bd71-a2c153911958",
-        "Name": "یاسوج"
+        "Id": "fe9a4b32-844e-49ec-ad99-21e49f771552",
+        "FaName": "همدان",
+        "Key": "hamedan",
+        "Alternatives": [
+            "hamedan"
+        ]
     },
     {
-        "Id": "a9c30179-e8a9-4b20-b391-1e591dd25466",
-        "Name": "یزد"
+        "Id": "634826cc-9f97-48f9-a8c7-55155dcf0073",
+        "FaName": "یاسوج",
+        "Key": "yasouj",
+        "Alternatives": [
+            "yasouj"
+        ]
+    },
+    {
+        "Id": "974203f2-f7d6-410f-91bc-89a7a706f964",
+        "FaName": "یزد",
+        "Key": "yazd",
+        "Alternatives": [
+            "yazd"
+        ]
     }
 ]

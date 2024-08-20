@@ -1,4 +1,4 @@
-
+using Reservation.Application.Account.Queries.GetUserInfo;
 
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
@@ -28,4 +28,16 @@ public sealed class UserRepository(ReservationDbContext context) : IUserReposito
         => await _context.Users.AsQueryable()
                                 .Where(u => u.PhoneNumber == phoneNumber)
                                 .FirstOrDefaultAsync(cancellationToken);
+
+    public async Task<IResponse> Get(Guid id, CancellationToken cancellationToken)
+        => await _context.Users.AsQueryable()
+                                .AsNoTracking()
+                                .Select(u => new GetUserInfoQueryResponse
+                                (
+                                    u.Id,
+                                    u.PhoneNumber,
+                                    u.FullName,
+                                    u.City.FaName
+                                ))
+                                .FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
 }

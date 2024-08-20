@@ -8,7 +8,7 @@ public sealed class WalletsController(ISender sender) : ControllerBase
     private readonly ISender _sender = sender;
 
     [HttpPost("Businesses")]
-    [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
+    [Authorize(Role.Business)]
     public async Task<IActionResult> PostBusiness(CancellationToken token)
     {
         await _sender.Send(new CreateBusinessWalletCommandRequest(User.UserId()), token);
@@ -16,7 +16,7 @@ public sealed class WalletsController(ISender sender) : ControllerBase
     }
 
     [HttpPost("Users")]
-    [Authorize(AuthenticationSchemes = AuthScheme.UserScheme)]
+    [Authorize(Roles = Role.User)]
     public async Task<IActionResult> PostUsers(CancellationToken token)
     {
         await _sender.Send(new CreateUserWalletCommandRequest(User.UserId()), token);
@@ -24,6 +24,7 @@ public sealed class WalletsController(ISender sender) : ControllerBase
     }
 
     [HttpPut("Users/Found")]
+    [Authorize(Role.User)]
     public async Task<IActionResult> PutFoundUsers(FoundUserWalletCommandRequest request,
         CancellationToken token)
     {
@@ -32,6 +33,7 @@ public sealed class WalletsController(ISender sender) : ControllerBase
     }
 
     [HttpPut("Businesses/Found")]
+    [Authorize(Role.Business)]
     public async Task<IActionResult> PutFoundBusiness(FoundBusinessWalletCommandRequest request,
         CancellationToken token)
     {
@@ -40,7 +42,7 @@ public sealed class WalletsController(ISender sender) : ControllerBase
     }
 
     [HttpPut("Businesses/Withdraw")]
-    [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
+    [Authorize(Role.Business)]
     public async Task<IActionResult> PutWithdrawBusiness(decimal amount,
         CancellationToken token)
     {
@@ -50,7 +52,7 @@ public sealed class WalletsController(ISender sender) : ControllerBase
     }
 
     [HttpPut("Users/Withdraw")]
-    [Authorize(AuthenticationSchemes = AuthScheme.UserScheme)]
+    [Authorize(Role.User)]
     public async Task<IActionResult> PutWithdrawUsers(decimal amount,
         CancellationToken token)
     {
@@ -60,7 +62,7 @@ public sealed class WalletsController(ISender sender) : ControllerBase
     }
 
     [HttpGet("Users")]
-    [Authorize(AuthenticationSchemes = AuthScheme.UserScheme)]
+    [Authorize(Role.User)]
     public async Task<IActionResult> GetUserWallet(CancellationToken token)
     {
         var result = await _sender.Send(new GetUserWalletQueryRequest(User.UserId()), token);
@@ -68,7 +70,7 @@ public sealed class WalletsController(ISender sender) : ControllerBase
     }
 
     [HttpGet("Businesses")]
-    [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
+    [Authorize(Role.Business)]
     public async Task<IActionResult> GetBusinessWallet(CancellationToken token)
     {
         var result = await _sender.Send(new GetBusinessWalletQueryRequest(User.UserId()), token);
@@ -76,7 +78,7 @@ public sealed class WalletsController(ISender sender) : ControllerBase
     }
 
     [HttpGet("Users/Transactions/Page/{page:int}")]
-    [Authorize(AuthenticationSchemes = AuthScheme.UserScheme)]
+    [Authorize(Role.User)]
     public async Task<IActionResult> GetUserTransactions(int page,
         CancellationToken token)
     {
@@ -86,7 +88,7 @@ public sealed class WalletsController(ISender sender) : ControllerBase
     }
 
     [HttpGet("Businesses/Transactions/Page/{page:int}")]
-    [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
+    [Authorize(Role.Business)]
     public async Task<IActionResult> GetBusinessesTransactions(int page,
         CancellationToken token)
     {

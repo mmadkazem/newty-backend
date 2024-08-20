@@ -2,11 +2,13 @@ namespace Reservation.Controllers.Businesses;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Role.Business)]
 public sealed class BusinessesController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;
 
     [HttpPost]
+    [AllowAnonymous]
     public async Task<IActionResult> Post([FromBody] RegisterBusinessCommandRequest request,
         CancellationToken token)
     {
@@ -15,7 +17,6 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
     }
 
     [HttpPost("SendSMS")]
-    [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
     public async Task<IActionResult> SendSMS(DateTime sendDate, Guid templateId,
         CancellationToken token)
     {
@@ -24,7 +25,6 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
     }
 
     [HttpPost("UserVIP")]
-    [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
     public async Task<IActionResult> PostUserVIP(Guid userId,
     CancellationToken token)
     {
@@ -33,7 +33,6 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
     }
 
     [HttpPost("Categories")]
-    [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
     public async Task<IActionResult> Post(IEnumerable<Guid> categories,
         CancellationToken token)
     {
@@ -43,8 +42,8 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
     }
 
     [HttpPost("Points")]
-    [Authorize(AuthenticationSchemes = AuthScheme.UserScheme)]
-    [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
+    [Authorize(Role.User)]
+    [Authorize(Role.Business)]
     public async Task<IActionResult> Post([FromBody] AddBusinessPointDTO model,
         CancellationToken token)
     {
@@ -54,6 +53,7 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
     }
 
     [HttpGet("Key/{key}/Page/{page:int}")]
+    [AllowAnonymous]
     public async Task<IActionResult> Search(string key, int page,
         CancellationToken token)
     {
@@ -63,7 +63,7 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
     }
 
     [HttpPut]
-    [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
+    [Authorize(Role.Business)]
     public async Task<IActionResult> Put([FromBody] UpdateBusinessDTO model,
         CancellationToken token)
     {
@@ -73,7 +73,7 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
     }
 
     [HttpPatch]
-    [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
+    [Authorize(Role.Business)]
     public async Task<IActionResult> Patch(bool isCancelReserveTime,
         CancellationToken token)
     {
@@ -82,7 +82,7 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
+    [Authorize(Role.Business)]
     public async Task<IActionResult> Get(CancellationToken token)
     {
         var result = await _sender.Send(new GetBusinessQueryRequest(User.UserId()), token);

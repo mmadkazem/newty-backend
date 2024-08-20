@@ -3,7 +3,7 @@ namespace Reservation.Controllers.Cities;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(AuthenticationSchemes = AuthScheme.AdminScheme)]
+[Authorize(Role.Business)]
 public sealed class CitiesController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;

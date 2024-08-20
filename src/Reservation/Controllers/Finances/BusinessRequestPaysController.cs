@@ -2,7 +2,7 @@ namespace Reservation.Controllers.Finances;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
+[Authorize(Role.Business)]
 public sealed class BusinessRequestPaysController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;

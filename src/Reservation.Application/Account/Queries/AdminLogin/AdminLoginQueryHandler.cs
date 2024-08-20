@@ -14,6 +14,6 @@ public sealed class AdminLoginQueryHandler(ICacheProvider cache, ITokenFactorySe
             throw new NotEqualActualAndExpectedException();
         }
 
-        return new(_tokenFactory.CreateAdminToken(admin.Id), AccountSuccessMessage.loggedIn);
+        return new(_tokenFactory.CreateBearerToken(admin.Id, Role.Admin), AccountSuccessMessage.loggedIn);
     }
 }

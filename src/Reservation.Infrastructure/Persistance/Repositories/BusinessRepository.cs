@@ -55,7 +55,7 @@ public sealed class BusinessRepository(ReservationDbContext context) : IBusiness
                                         b.ParvaneKasbImagePath,
                                         b.Description,
                                         b.Address,
-                                        b.City.Name,
+                                        b.City.FaName,
                                         b.Holidays,
                                         b.StartHoursOfWor,
                                         b.EndHoursOfWor,
@@ -71,7 +71,7 @@ public sealed class BusinessRepository(ReservationDbContext context) : IBusiness
                                         b.Id,
                                         b.Name,
                                         b.Address,
-                                        b.City.Name
+                                        b.City.FaName
                                     ))
                                     .Skip((page - 1) * 25)
                                     .Take(25)

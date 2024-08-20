@@ -7,7 +7,7 @@ public sealed class ReserveTimesReceiptController(ISender sender) : ControllerBa
     private readonly ISender _sender = sender;
 
     [HttpPost]
-    [Authorize(AuthenticationSchemes = AuthScheme.UserScheme)]
+    [Authorize(Role.User)]
     public async Task<IActionResult> Post([FromBody] CreateReserveTimeReceiptDTO model,
         CancellationToken token)
     {
@@ -17,8 +17,8 @@ public sealed class ReserveTimesReceiptController(ISender sender) : ControllerBa
     }
 
     [HttpPut("{id:guid}/State/{state}")]
-    [Authorize(AuthenticationSchemes = AuthScheme.UserScheme)]
-    [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
+    [Authorize(Role.User)]
+    [Authorize(Role.Business)]
     public async Task<IActionResult> Put(Guid id, ReserveState state,
         CancellationToken token)
     {
@@ -28,7 +28,7 @@ public sealed class ReserveTimesReceiptController(ISender sender) : ControllerBa
     }
 
     [HttpGet("Businesses/Finished/{finished:bool}/Page/{page:int}")]
-    [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
+    [Authorize(Role.Business)]
     public async Task<IActionResult> GetBusinessReserveTime(bool finished, int page,
         CancellationToken token)
     {
@@ -47,7 +47,7 @@ public sealed class ReserveTimesReceiptController(ISender sender) : ControllerBa
     }
 
     [HttpGet("Users/Finished/{finished:bool}Page/{page:int}/")]
-    [Authorize(AuthenticationSchemes = AuthScheme.UserScheme)]
+    [Authorize(Role.User)]
     public async Task<IActionResult> GetUserReserveTime(bool finished, int page,
         CancellationToken token)
     {
@@ -57,7 +57,7 @@ public sealed class ReserveTimesReceiptController(ISender sender) : ControllerBa
     }
 
     [HttpGet("Businesses/State/{state}/Page/{page:int}")]
-    [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
+    [Authorize(Role.Business)]
     public async Task<IActionResult> GetBusinessReserveTimeByState(ReserveState state, int page,
         CancellationToken token)
     {
@@ -67,7 +67,7 @@ public sealed class ReserveTimesReceiptController(ISender sender) : ControllerBa
     }
 
     [HttpGet("Users/State/{state}/Page/{page:int}")]
-    [Authorize(AuthenticationSchemes = AuthScheme.UserScheme)]
+    [Authorize(Role.User)]
     public async Task<IActionResult> GetUserReserveTimeByState(ReserveState state, int page,
         CancellationToken token)
     {
@@ -77,8 +77,8 @@ public sealed class ReserveTimesReceiptController(ISender sender) : ControllerBa
     }
 
     [HttpGet("{id:guid}")]
-    [Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
-    [Authorize(AuthenticationSchemes = AuthScheme.UserScheme)]
+    [Authorize(Role.Business)]
+    [Authorize(Role.User)]
     public async Task<IActionResult> Get([AsParameters] GetReserveTimeByIdReceiptQueryRequest request,
         CancellationToken token)
     {

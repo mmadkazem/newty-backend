@@ -22,11 +22,11 @@ public sealed class FinishReserveTimeService
         using var serviceScope = _scopeFactory.CreateScope();
         using var _context = serviceScope.ServiceProvider.GetService<ReservationDbContext>();
 
-        var reserveTime = _context.ReserveTimesReceipt.AsQueryable()
-                                        .FirstOrDefault(r => r.Id == reserveTimeId);
+        // var reserveTime = _context.ReserveTimesReceipt.AsQueryable()
+        //                                 .FirstOrDefault(r => r.Id == reserveTimeId);
 
-        reserveTime.Finished = true;
+        // reserveTime.Finished = true;
 
-        _context.SaveChanges();
+        // _context.SaveChanges();
     }
 }

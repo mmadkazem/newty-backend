@@ -12,9 +12,8 @@ public static class ConfigureServices
                 services.AddTransient<ICacheProvider, CacheProvider>();
 
                 // DI Token Validators
-                services.AddScoped<IBusinessTokenValidatorService, BusinessTokenValidatorService>();
                 services.AddScoped<ITempTokenValidatorService, TempTokenValidatorService>();
-                services.AddScoped<IUserTokenValidatorService, UserTokenValidatorService>();
+                services.AddScoped<IBearerTokenValidatorService, UserTokenValidatorService>();
 
                 // DI Job
                 services.AddSingleton<IPayingReserveTimeJob, PayingReserveTimeJob>();
@@ -22,23 +21,7 @@ public static class ConfigureServices
                 services.AddTransient<ISendSMSToUserVIPJob, SendSMSToUserVIPJob>();
 
                 // DI Options
-                services.AddOptions<TempTokenOption>()
-                        .Bind(configuration.GetSection("TempToken"));
-
-                services.AddOptions<UserTokenOption>()
-                        .Bind(configuration.GetSection("UserToken"));
-
-                services.AddOptions<BusinessTokenOption>()
-                        .Bind(configuration.GetSection("BusinessToken"));
-
-                services.AddOptions<RefreshTokenOption>()
-                        .Bind(configuration.GetSection("RefreshToken"));
-
-                services.AddOptions<AdminTokenOption>()
-                        .Bind(configuration.GetSection("AdminToken"));
-
-                services.AddOptions<SmsProviderOption>()
-                        .Bind(configuration.GetSection("SmsProvider"));
+                services.Configure<TokenOption>(configuration);
 
                 // DI Redis Cache
                 services.AddStackExchangeRedisCache(options =>

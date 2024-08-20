@@ -1,4 +1,3 @@
-
 namespace Reservation.Application.Wallets.Commands.WithdrawBusinessWallet;
 
 public sealed class WithdrawBusinessWalletCommandValidator : AbstractValidator<WithdrawBusinessWalletCommandRequest>

@@ -3,9 +3,7 @@ namespace Reservation.Controllers.Images;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(AuthenticationSchemes = AuthScheme.UserScheme)]
-[Authorize(AuthenticationSchemes = AuthScheme.AdminScheme)]
-[Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
+[Authorize]
 public sealed class ImagesController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;

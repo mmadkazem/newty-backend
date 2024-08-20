@@ -9,12 +9,12 @@ public sealed class UpdateCityCommandHandler(IUnitOfWork uow) : IRequestHandler<
         var city = await _uow.Cities.FindAsync(request.Id, cancellationToken)
             ?? throw new CityNotFoundException();
 
-        if (city.Name != request.Name && !await _uow.Categories.AnyAsync(request.Name, cancellationToken))
+        if (city.FaName != request.Name && !await _uow.Categories.AnyAsync(request.Name, cancellationToken))
         {
             throw new CityAlreadyExistException();
         }
 
-        city.Name = request.Name;
+        city.FaName = request.Name;
         city.ModifiedOn = DateTime.Now;
 
         await _uow.SaveChangeAsync(cancellationToken);

@@ -21,11 +21,11 @@ var app = builder.Build();
     app.UseSwagger();
     app.UseSwaggerUI();
 
+    app.UseCors();
     app.UseHttpsRedirection();
     app.UseRouting();
     app.UseShared();
 
-    app.UseCors("MainPolicy");
 
     app.UseAuthentication();
     app.UseAuthorization();

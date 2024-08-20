@@ -3,7 +3,7 @@ namespace Reservation.Controllers.Reserve;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
+[Authorize(Role.Business)]
 public class ReserveTimesSenderController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;

@@ -2,7 +2,7 @@ namespace Reservation.Controllers.Businesses;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(AuthenticationSchemes = AuthScheme.BusinessScheme)]
+[Authorize(Role.Business)]
 public sealed class SmsTemplatesController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;

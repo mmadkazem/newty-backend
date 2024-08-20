@@ -3,7 +3,7 @@ namespace Reservation.Controllers.SmsPlans;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(AuthenticationSchemes = AuthScheme.AdminScheme)]
+[Authorize(Role.Admin)]
 public sealed class SmsPlansController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;
@@ -34,6 +34,7 @@ public sealed class SmsPlansController(ISender sender) : ControllerBase
     }
 
     [HttpGet("{page:int}")]
+    [Authorize(Role.Business)]
     public async Task<IActionResult> Get(int page,
         CancellationToken token)
     {

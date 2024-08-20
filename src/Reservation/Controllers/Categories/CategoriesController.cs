@@ -2,7 +2,7 @@ namespace Reservation.Controllers.Categories;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(AuthenticationSchemes = AuthScheme.AdminScheme)]
+[Authorize(Role.Admin)]
 public sealed class CategoriesController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;
