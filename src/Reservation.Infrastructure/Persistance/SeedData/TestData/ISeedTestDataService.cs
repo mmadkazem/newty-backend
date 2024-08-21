@@ -18,7 +18,9 @@ public class SeedTestDataService(IServiceScopeFactory serviceScopeFactory) : ISe
         using var _context = serviceScope.ServiceProvider.GetService<ReservationDbContext>();
         if (!_context.Businesses.Any())
         {
-            var city = _context.Cities.FirstOrDefault(c => c.FaName == "تهران");
+            var cityTehran = _context.Cities.FirstOrDefault(c => c.FaName == "تهران");
+            var cityMashhad = _context.Cities.FirstOrDefault(c => c.FaName == "مشهد");
+            var cityAhwaz = _context.Cities.FirstOrDefault(c => c.FaName == "اهواز");
             var categoriesSolon = _context.Categories.Where(u => u.ParentCategory.Title == "سالن های زیبایی").ToList();
             var categoriesTattoo = _context.Categories.Where(u => u.ParentCategory.Title == "تتو").ToList();
             var categoriesClinic = _context.Categories.Where(u => u.ParentCategory.Title == "کلینیک زیبایی").ToList();
@@ -32,13 +34,16 @@ public class SeedTestDataService(IServiceScopeFactory serviceScopeFactory) : ISe
                 PhoneNumber = "09301594136",
                 StartHoursOfWor = new TimeSpan(9, 0, 0),
                 EndHoursOfWor = new TimeSpan(22, 0, 0),
+                CardNumber = "For Test",
                 Holidays = [DayOfWeek.Friday],
                 IsValid = true,
+                IsActive = true,
                 ParvaneKasbImagePath = "For Test",
                 Wallet = new(),
                 IsCancelReserveTime = false,
                 SmsCredit = new() { SmsCount = 100 },
-                City = city,
+                City = cityTehran,
+                CityId = cityTehran.Id,
                 Categories = categoriesSolon
             };
             BusinessService service = new()
@@ -91,6 +96,7 @@ public class SeedTestDataService(IServiceScopeFactory serviceScopeFactory) : ISe
                 Name = "سالن رز",
                 Description = "For Test",
                 PhoneNumber = "09301594137",
+                CardNumber = "For Test",
                 StartHoursOfWor = new TimeSpan(9, 0, 0),
                 EndHoursOfWor = new TimeSpan(22, 0, 0),
                 Holidays = [DayOfWeek.Friday],
@@ -99,7 +105,8 @@ public class SeedTestDataService(IServiceScopeFactory serviceScopeFactory) : ISe
                 Wallet = new(),
                 IsCancelReserveTime = false,
                 SmsCredit = new() { SmsCount = 50 },
-                City = city,
+                City = cityAhwaz,
+                CityId = cityAhwaz.Id,
                 Categories = categoriesTattoo
             };
             BusinessService service3 = new()
@@ -159,8 +166,10 @@ public class SeedTestDataService(IServiceScopeFactory serviceScopeFactory) : ISe
                 ParvaneKasbImagePath = "For Test",
                 Wallet = new(),
                 IsCancelReserveTime = false,
+                CardNumber = "For Test",
                 SmsCredit = new() { SmsCount = 100 },
-                City = city,
+                City = cityMashhad,
+                CityId = cityMashhad.Id,
                 Categories = categoriesClinic
             };
             BusinessService service5 = new()
