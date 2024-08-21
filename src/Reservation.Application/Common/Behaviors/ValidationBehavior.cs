@@ -20,7 +20,7 @@ public class ValidationBehavior<TRequest, TResponse>(IEnumerable<IValidator<TReq
                 .ToList();
 
             if (failures.Count != 0)
-                throw new ValidationsException(failures);
+                throw new NewtyValidationsException(failures);
         }
         return await next();
     }

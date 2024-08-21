@@ -20,9 +20,9 @@ public sealed class TokenFactoryService(IOptions<TokenOption> options) : ITokenF
             // Issued at
             new(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64, _optionTemp.Issuer),
             // Serial Number at
-            new(ClaimTypes.SerialNumber, code, "Code", _optionTemp.Issuer),
+            new(ClaimTypes.SerialNumber, code, ClaimValueTypes.String, _optionTemp.Issuer),
             // custom data
-            new(ClaimTypes.UserData, phoneNumber, "PhoneNumber", _optionTemp.Issuer)
+            new(ClaimTypes.UserData, phoneNumber, ClaimValueTypes.String, _optionTemp.Issuer)
         };
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_optionTemp.Key));
         var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

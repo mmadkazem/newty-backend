@@ -1,4 +1,5 @@
 namespace Reservation.Application.Wallets.Exceptions;
 
 public sealed class WalletNotFoundException()
-    : ReservationNotFoundBaseException("کیف پولی یافت نشد") { }
+    : NewtyNotFoundBaseException("کیف پولی یافت نشد")
+{ }

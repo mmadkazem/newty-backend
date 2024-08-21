@@ -53,6 +53,7 @@ public static class ConfigureServices
             .AddPolicy(Role.Admin, policy => policy.RequireRole(Role.Admin))
             .AddPolicy(Role.User, policy => policy.RequireRole(Role.User))
             .AddPolicy(Role.Business, policy => policy.RequireRole(Role.Business));
+
         // Needed for jwt auth.
         services.AddAuthentication(options =>
         {
@@ -60,6 +61,47 @@ public static class ConfigureServices
             options.DefaultSignInScheme = JwtBearerDefaults.AuthenticationScheme;
             options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
         })
+            .AddJwtBearer(options =>
+            {
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = true;
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidIssuer = configuration["BearerTokenOption:Issuer"], // site that makes the token
+                    ValidateIssuer = true,
+                    ValidAudience = configuration["BearerTokenOption:Audience"], // site that consumes the token
+                    ValidateAudience = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["BearerTokenOption:Key"])),
+                    ValidateIssuerSigningKey = true, // verify signature to avoid tampering
+                    ValidateLifetime = true, // validate the expiration
+                    ClockSkew = TimeSpan.Zero // tolerance for the expiration date
+                };
+                options.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed = context =>
+                    {
+                        var logger = context.HttpContext.RequestServices.GetRequiredService<ILoggerFactory>().CreateLogger(nameof(JwtBearerEvents));
+                        logger.LogError("Authentication failed. Exception:{}", context.Exception);
+                        return Task.CompletedTask;
+                    },
+                    OnTokenValidated = context =>
+                    {
+                        var tokenValidatorService = context.HttpContext.RequestServices.GetRequiredService<ITempTokenValidatorService>();
+                        tokenValidatorService.ValidateAsync(context);
+                        return Task.CompletedTask;
+                    },
+                    OnMessageReceived = context =>
+                    {
+                        return Task.CompletedTask;
+                    },
+                    OnChallenge = context =>
+                    {
+                        var logger = context.HttpContext.RequestServices.GetRequiredService<ILoggerFactory>().CreateLogger(nameof(JwtBearerEvents));
+                        logger.LogError("OnChallenge error Exception:{}, Description:{}", context.Error, context.ErrorDescription);
+                        return Task.CompletedTask;
+                    }
+                };
+            })
             .AddJwtBearer(AuthScheme.TempScheme, options =>
             {
                 options.RequireHttpsMetadata = false;
@@ -101,42 +143,7 @@ public static class ConfigureServices
                     }
                 };
             })
-            .AddJwtBearer(options =>
-            {
-                options.RequireHttpsMetadata = false;
-                options.SaveToken = true;
-                options.TokenValidationParameters = new TokenValidationParameters
-                {
-                    ValidIssuer = configuration["BearerTokenOption:Issuer"], // site that makes the token
-                    ValidateIssuer = true,
-                    ValidAudience = configuration["BearerTokenOption:Audience"], // site that consumes the token
-                    ValidateAudience = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["BearerTokenOption:Key"])),
-                    ValidateIssuerSigningKey = true, // verify signature to avoid tampering
-                    ValidateLifetime = true, // validate the expiration
-                    ClockSkew = TimeSpan.Zero // tolerance for the expiration date
-                };
-                options.Events = new JwtBearerEvents
-                {
-                    OnAuthenticationFailed = context =>
-                    {
-                        return Task.CompletedTask;
-                    },
-                    OnTokenValidated = context =>
-                    {
-                        var tokenValidatorService = context.HttpContext.RequestServices.GetRequiredService<IBearerTokenValidatorService>();
-                        return tokenValidatorService.ValidateAsync(context);
-                    },
-                    OnMessageReceived = context =>
-                    {
-                        return Task.CompletedTask;
-                    },
-                    OnChallenge = context =>
-                    {
-                        return Task.CompletedTask;
-                    }
-                };
-            })
+
             .AddJwtBearer(AuthScheme.RefreshTokenScheme, options =>
             {
                 options.RequireHttpsMetadata = false;
@@ -180,10 +187,10 @@ public static class ConfigureServices
             options.AddDefaultPolicy(policy =>
                 {
                     policy
-                        // .WithOrigins("http://localhost:3006", "https://newty.liara.run/")
-                        // .WithMethods("POST", "GET", "PUT", "DELETE", "PATCH")
-                        .AllowAnyOrigin()
-                        .AllowAnyMethod()
+                        .WithOrigins("http://localhost:3006", "https://newty.liara.run/")
+                        .WithMethods("POST", "GET", "PUT", "DELETE", "PATCH")
+                        // .AllowAnyOrigin()
+                        // .AllowAnyMethod()
                         .AllowAnyHeader();
                 });
         });

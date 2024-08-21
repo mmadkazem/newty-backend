@@ -9,7 +9,7 @@ public sealed class BadRequestExceptionMiddleware : IMiddleware
         {
             await next(context);
         }
-        catch (ReservationBadRequestBaseException ex)
+        catch (NewtyBadRequestBaseException ex)
         {
             context.Response.StatusCode = 400;
             context.Response.Headers.Add("content-type", "application/json");

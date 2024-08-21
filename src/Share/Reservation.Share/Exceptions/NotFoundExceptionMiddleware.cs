@@ -8,7 +8,7 @@ public sealed class NotFoundExceptionMiddleware : IMiddleware
         {
             await next(context);
         }
-        catch (ReservationNotFoundBaseException ex)
+        catch (NewtyNotFoundBaseException ex)
         {
             context.Response.StatusCode = 404;
             context.Response.Headers.Add("content-type", "application/json");

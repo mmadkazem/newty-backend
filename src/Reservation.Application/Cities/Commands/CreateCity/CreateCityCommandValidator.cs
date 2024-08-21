@@ -12,9 +12,6 @@ public class CreateCityCommandValidator : AbstractValidator<CreateCityCommandReq
             .MaximumLength(50).WithMessage("نام شهر نباید بیشتر از 50 تا کلمه باشد")
             .Must(StringUtils.IsCensoredWords).WithMessage("این کلمه معتبر نیست لطفا درست وارد کنید");
 
-        RuleFor(b => b.State)
-            .NotEmpty().WithMessage("استان نباید خالی باشد")
-            .Must(StringUtils.IsCensoredWords).WithMessage("این کلمه معتبر نیست لطفا درست وارد کنید");
     }
 
     private async Task<bool> AlreadyExistCity(string city, CancellationToken cancellationToken)

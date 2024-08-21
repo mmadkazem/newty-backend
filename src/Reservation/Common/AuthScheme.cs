@@ -4,5 +4,6 @@ public class AuthScheme
 {
     public const string TempScheme = nameof(TempScheme);
     public const string UpdateScheme = nameof(UpdateScheme);
+    public const string BearerScheme = nameof(BearerScheme);
     public const string RefreshTokenScheme = nameof(RefreshTokenScheme);
 }

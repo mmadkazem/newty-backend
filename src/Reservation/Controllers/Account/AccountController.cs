@@ -27,8 +27,8 @@ public sealed class AccountController(ISender sender) : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(AuthenticationSchemes = AuthScheme.TempScheme)]
-    // [Authorize(Role.Business, AuthenticationSchemes = AuthScheme.TempScheme)]
+    [Authorize(Roles = Role.User, AuthenticationSchemes = AuthScheme.TempScheme)]
+    [Authorize(Roles = Role.Business, AuthenticationSchemes = AuthScheme.TempScheme)]
     public async Task<IActionResult> Login([FromQuery] string code,
         CancellationToken token)
     {
@@ -74,9 +74,9 @@ public sealed class AccountController(ISender sender) : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("Users")]
-    [Authorize(Roles = Role.Admin)]
-    public async Task<IActionResult> GetUserInfo(CancellationToken token)
+    [HttpGet]
+    [Authorize]
+    public async Task<IActionResult> GetInformation(CancellationToken token)
     {
         var result = await _sender.Send(new GetUserInfoQueryRequest(User.UserId()), token);
         return Ok(result);

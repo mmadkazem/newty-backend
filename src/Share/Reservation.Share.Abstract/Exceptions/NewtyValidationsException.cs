@@ -2,15 +2,15 @@
 
 namespace Reservation.Share.Abstract.Exceptions;
 
-public class ValidationsException : Exception
+public class NewtyValidationsException : Exception
 {
-    public ValidationsException()
+    public NewtyValidationsException()
         : base("One or more validation failures have occurred.")
     {
         Errors = new Dictionary<string, string[]>();
     }
 
-    public ValidationsException(IEnumerable<ValidationFailure> failures)
+    public NewtyValidationsException(IEnumerable<ValidationFailure> failures)
         : this()
     {
         Errors = failures

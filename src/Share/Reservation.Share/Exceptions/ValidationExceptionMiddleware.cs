@@ -8,7 +8,7 @@ public sealed class ValidationsExceptionMiddleware : IMiddleware
         {
             await next(context);
         }
-        catch (ValidationsException ex)
+        catch (NewtyValidationsException ex)
         {
             context.Response.StatusCode = 422;
             context.Response.Headers.Add("content-type", "application/json");
