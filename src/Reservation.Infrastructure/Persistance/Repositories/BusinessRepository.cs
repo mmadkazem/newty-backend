@@ -1,3 +1,5 @@
+using Reservation.Application.Businesses.Queries.GetBusinessesWaitingValid;
+
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 
@@ -61,6 +63,30 @@ public sealed class BusinessRepository(NewtyDbContext context) : IBusinessReposi
                                         b.EndHoursOfWor,
                                         b.IsCancelReserveTime
                                     )).FirstOrDefaultAsync(cancellationToken);
+
+    public async Task<IEnumerable<IResponse>> GetWaitingValidBusiness(int page, CancellationToken cancellationToken)
+        => await _context.Businesses.AsQueryable()
+                                    .AsNoTracking()
+                                    .Where(b => b.State == BusinessState.Waiting)
+                                    .Select(b => new GetBusinessesWaitingValidQueryResponse
+                                    (
+                                        b.Id,
+                                        b.Name,
+                                        b.Description,
+                                        b.CoverImagePath,
+                                        b.ParvaneKasbImagePath,
+                                        b.CardNumber,
+                                        b.Address,
+                                        b.PhoneNumber,
+                                        b.IsCancelReserveTime,
+                                        b.StartHoursOfWor,
+                                        b.EndHoursOfWor,
+                                        b.Holidays,
+                                        b.City.FaName
+                                    ))
+                                    .Skip((page - 1) * 25)
+                                    .Take(25)
+                                    .ToListAsync(cancellationToken);
 
     public async Task<IEnumerable<IResponse>> Search(int page, string key, CancellationToken cancellationToken = default)
         => await _context.Businesses.AsQueryable()

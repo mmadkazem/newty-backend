@@ -1,3 +1,5 @@
+using Reservation.Application.Businesses.Queries.GetBusinessesWaitingValid;
+
 namespace Reservation.Controllers.Businesses;
 
 [ApiController]
@@ -83,6 +85,24 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
     [HttpGet]
     [Authorize(Role.Business)]
     public async Task<IActionResult> Get(CancellationToken token)
+    {
+        var result = await _sender.Send(new GetBusinessQueryRequest(User.UserId()), token);
+        return Ok(result);
+    }
+
+    [HttpGet("Page/{page:int}")]
+    [Authorize(Role.Admin)]
+    public async Task<IActionResult> GetWaitingValidBusiness(int page,
+        CancellationToken token)
+    {
+        var responses = await _sender.Send(new GetBusinessesWaitingValidQueryRequest(page));
+        return Ok(responses);
+    }
+
+    [HttpPatch("Businesses/{businessId:guid}/IsValid/{IsValid:bool}")]
+    [Authorize(Role.Business)]
+    public async Task<IActionResult> Patch(Guid businessId, bool IsValid,
+        CancellationToken token)
     {
         var result = await _sender.Send(new GetBusinessQueryRequest(User.UserId()), token);
         return Ok(result);

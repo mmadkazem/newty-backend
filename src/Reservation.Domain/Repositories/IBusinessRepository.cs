@@ -13,4 +13,5 @@ public interface IBusinessRepository
     Task<IEnumerable<IResponse>> Search(int page, string key, CancellationToken cancellationToken = default);
     Task<Business> FindAsyncByIncludePoints(Guid businessId, CancellationToken cancellationToken);
     Task<IResponse> Get(Guid businessId, CancellationToken cancellationToken);
+    Task<IEnumerable<IResponse>> GetWaitingValidBusiness(int page, CancellationToken cancellationToken);
 }
