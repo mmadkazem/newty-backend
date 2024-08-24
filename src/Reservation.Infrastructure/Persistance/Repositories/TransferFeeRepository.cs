@@ -1,9 +1,9 @@
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 
-public sealed class TransferFeeRepository(ReservationDbContext context) : ITransferFeeRepository
+public sealed class TransferFeeRepository(NewtyDbContext context) : ITransferFeeRepository
 {
-    private readonly ReservationDbContext _context = context;
+    private readonly NewtyDbContext _context = context;
 
     public async Task<TransferFee> FindAsync(CancellationToken cancellationToken)
         => await _context.TransferFees.AsQueryable()

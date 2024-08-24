@@ -2,9 +2,9 @@ namespace Reservation.Infrastructure.Persistance.UnitOfWorks;
 
 public sealed class UnitOfWork : IUnitOfWork
 {
-    private readonly ReservationDbContext _context;
+    private readonly NewtyDbContext _context;
     public UnitOfWork(
-        ReservationDbContext context,
+        NewtyDbContext context,
         IUserRepository users,
         ICityRepository cities,
         IBusinessRepository businesses,

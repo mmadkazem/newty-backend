@@ -1,9 +1,9 @@
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 
-public sealed class ArtistRepository(ReservationDbContext context) : IArtistRepository
+public sealed class ArtistRepository(NewtyDbContext context) : IArtistRepository
 {
-    private readonly ReservationDbContext _context = context;
+    private readonly NewtyDbContext _context = context;
 
     public void Add(Artist artist)
         => _context.Artists.Add(artist);

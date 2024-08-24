@@ -1,10 +1,10 @@
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 
-public sealed class ReserveTimeRepository(ReservationDbContext context)
+public sealed class ReserveTimeRepository(NewtyDbContext context)
     : IReserveTimeRepository
 {
-    private readonly ReservationDbContext _context = context;
+    private readonly NewtyDbContext _context = context;
 
     public void Add(ReserveTimeReceipt reserveTime)
         => _context.ReserveTimesReceipt.Add(reserveTime);

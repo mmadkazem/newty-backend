@@ -1,9 +1,9 @@
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 
-public sealed class WalletRepository(ReservationDbContext context) : IWalletRepository
+public sealed class WalletRepository(NewtyDbContext context) : IWalletRepository
 {
-    private readonly ReservationDbContext _context = context;
+    private readonly NewtyDbContext _context = context;
 
     public void AddTransaction(Transaction transaction)
         => _context.Transactions.Add(transaction);

@@ -2,9 +2,9 @@
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 
-public sealed class UserRequestPayRepository(ReservationDbContext context) : IUserRequestPayRepository
+public sealed class UserRequestPayRepository(NewtyDbContext context) : IUserRequestPayRepository
 {
-    private readonly ReservationDbContext _context = context;
+    private readonly NewtyDbContext _context = context;
 
     public void Add(UserRequestPay userRequestPay)
         => _context.UserRequestPays.Add(userRequestPay);

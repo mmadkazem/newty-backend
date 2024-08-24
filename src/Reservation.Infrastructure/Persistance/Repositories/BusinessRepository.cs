@@ -1,9 +1,9 @@
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 
-public sealed class BusinessRepository(ReservationDbContext context) : IBusinessRepository
+public sealed class BusinessRepository(NewtyDbContext context) : IBusinessRepository
 {
-    private readonly ReservationDbContext _context = context;
+    private readonly NewtyDbContext _context = context;
 
     public void Add(Business business)
         => _context.Businesses.Add(business);

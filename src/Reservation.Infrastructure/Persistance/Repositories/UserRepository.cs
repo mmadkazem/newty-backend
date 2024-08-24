@@ -2,9 +2,9 @@ using Reservation.Application.Account.Queries.GetUserInfo;
 
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
-public sealed class UserRepository(ReservationDbContext context) : IUserRepository
+public sealed class UserRepository(NewtyDbContext context) : IUserRepository
 {
-    private readonly ReservationDbContext _context = context;
+    private readonly NewtyDbContext _context = context;
 
     public void Add(User user)
         => _context.Users.Add(user);

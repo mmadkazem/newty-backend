@@ -27,8 +27,7 @@ public sealed class AccountController(ISender sender) : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Roles = Role.User, AuthenticationSchemes = AuthScheme.TempScheme)]
-    [Authorize(Roles = Role.Business, AuthenticationSchemes = AuthScheme.TempScheme)]
+    [Authorize(Roles = Role.BusinessUser, AuthenticationSchemes = AuthScheme.TempScheme)]
     public async Task<IActionResult> Login([FromQuery] string code,
         CancellationToken token)
     {
@@ -48,7 +47,7 @@ public sealed class AccountController(ISender sender) : ControllerBase
     }
 
     [HttpPut]
-    [Authorize(AuthenticationSchemes = AuthScheme.UpdateScheme)]
+    [Authorize(Role.User)]
     public async Task<IActionResult> UpdateUser([FromBody] UpdateUserDTO model,
         CancellationToken token)
     {

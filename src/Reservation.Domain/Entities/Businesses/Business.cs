@@ -15,7 +15,7 @@ public class Business : BaseClass
     public TimeSpan StartHoursOfWor { get; set; }
     public TimeSpan EndHoursOfWor { get; set; }
     public List<DayOfWeek> Holidays { get; set; } = [];
-    public bool IsValid { get; set; } = false;
+    public BusinessState State { get; set; }
 
     // Business Wallet
     public Wallet Wallet { get; set; }
@@ -54,4 +54,12 @@ public class Business : BaseClass
     // Business Category
     public ICollection<Category> Categories { get; set; } = [];
 
+}
+
+
+public enum BusinessState
+{
+    Waiting,
+    InValid,
+    Valid
 }

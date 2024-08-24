@@ -1,9 +1,9 @@
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 
-public sealed class PostRepository(ReservationDbContext context) : IPostRepository
+public sealed class PostRepository(NewtyDbContext context) : IPostRepository
 {
-    private readonly ReservationDbContext _context = context;
+    private readonly NewtyDbContext _context = context;
 
     public void Add(Post post)
         => _context.Posts.Add(post);

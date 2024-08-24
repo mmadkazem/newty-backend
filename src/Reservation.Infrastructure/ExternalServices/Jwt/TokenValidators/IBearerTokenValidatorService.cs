@@ -53,7 +53,7 @@ public sealed class UserTokenValidatorService(IUnitOfWork uow) : IBearerTokenVal
                 // user has changed his/her password/roles/stat/IsActive
                 context.Fail("این توکن منقضی شده است. لطفا دوباره وارد شوید.");
             }
-            if (!business.IsValid)
+            if (business.State != BusinessState.Valid)
             {
                 context.Fail("لطفا اطلاعات را تکمیل کنید");
             }

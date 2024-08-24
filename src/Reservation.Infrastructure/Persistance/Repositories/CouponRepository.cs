@@ -2,9 +2,9 @@
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 
-public sealed class CouponRepository(ReservationDbContext context) : ICouponRepository
+public sealed class CouponRepository(NewtyDbContext context) : ICouponRepository
 {
-    private readonly ReservationDbContext _context = context;
+    private readonly NewtyDbContext _context = context;
 
     public void Add(Coupon coupon)
     {

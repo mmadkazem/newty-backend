@@ -1,9 +1,9 @@
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
-public sealed class BusinessRequestPayRepository(ReservationDbContext context)
+public sealed class BusinessRequestPayRepository(NewtyDbContext context)
     : IBusinessRequestPayRepository
 {
-    private readonly ReservationDbContext _context = context;
+    private readonly NewtyDbContext _context = context;
 
     public void Add(BusinessRequestPay businessRequestPay)
         => _context.BusinessRequestPays.Add(businessRequestPay);

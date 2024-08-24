@@ -17,8 +17,7 @@ public sealed class ReserveTimesReceiptController(ISender sender) : ControllerBa
     }
 
     [HttpPut("{id:guid}/State/{state}")]
-    [Authorize(Role.User)]
-    [Authorize(Role.Business)]
+    [Authorize(Role.BusinessUser)]
     public async Task<IActionResult> Put(Guid id, ReserveState state,
         CancellationToken token)
     {
@@ -77,8 +76,7 @@ public sealed class ReserveTimesReceiptController(ISender sender) : ControllerBa
     }
 
     [HttpGet("{id:guid}")]
-    [Authorize(Role.Business)]
-    [Authorize(Role.User)]
+    [Authorize(Role.BusinessUser)]
     public async Task<IActionResult> Get([AsParameters] GetReserveTimeByIdReceiptQueryRequest request,
         CancellationToken token)
     {

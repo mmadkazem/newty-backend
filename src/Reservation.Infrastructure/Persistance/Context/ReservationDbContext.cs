@@ -1,8 +1,8 @@
 namespace Reservation.Infrastructure.Persistance.Context;
 
-public sealed class ReservationDbContext : DbContext
+public sealed class NewtyDbContext : DbContext
 {
-    public ReservationDbContext(DbContextOptions<ReservationDbContext> options)
+    public NewtyDbContext(DbContextOptions<NewtyDbContext> options)
         : base(options)
     {
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);

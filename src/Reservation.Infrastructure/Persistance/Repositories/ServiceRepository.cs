@@ -1,9 +1,9 @@
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 
-public sealed class ServiceRepository(ReservationDbContext context) : IServiceRepository
+public sealed class ServiceRepository(NewtyDbContext context) : IServiceRepository
 {
-    private readonly ReservationDbContext _context = context;
+    private readonly NewtyDbContext _context = context;
 
     public void Add(BusinessService service)
         => _context.Services.Add(service);

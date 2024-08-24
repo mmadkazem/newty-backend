@@ -3,10 +3,10 @@
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 
-public sealed class SmsCreditRepository(ReservationDbContext context)
+public sealed class SmsCreditRepository(NewtyDbContext context)
     : ISmsCreditRepository
 {
-    private readonly ReservationDbContext _context = context;
+    private readonly NewtyDbContext _context = context;
 
     public void Add(SmsCredit smsCredit)
         => _context.SmsCredits.Add(smsCredit);

@@ -42,8 +42,7 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
     }
 
     [HttpPost("Points")]
-    [Authorize(Role.User)]
-    [Authorize(Role.Business)]
+    [Authorize(Role.BusinessUser)]
     public async Task<IActionResult> Post([FromBody] AddBusinessPointDTO model,
         CancellationToken token)
     {
@@ -63,7 +62,7 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
     }
 
     [HttpPut]
-    [Authorize(Role.Business)]
+    [Authorize(Role.Business, AuthenticationSchemes = AuthScheme.UpdateScheme)]
     public async Task<IActionResult> Put([FromBody] UpdateBusinessDTO model,
         CancellationToken token)
     {

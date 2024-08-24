@@ -1,9 +1,9 @@
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 
-public sealed class SmsPlanRepository(ReservationDbContext context) : ISmsPlanRepository
+public sealed class SmsPlanRepository(NewtyDbContext context) : ISmsPlanRepository
 {
-    private readonly ReservationDbContext _context = context;
+    private readonly NewtyDbContext _context = context;
 
     public void Add(SmsPlan smsPlan)
         => _context.SmsPlans.Add(smsPlan);

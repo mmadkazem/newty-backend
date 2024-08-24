@@ -15,7 +15,7 @@ public class SeedTestDataService(IServiceScopeFactory serviceScopeFactory) : ISe
     {
 
         using var serviceScope = _serviceScope.CreateScope();
-        using var _context = serviceScope.ServiceProvider.GetService<ReservationDbContext>();
+        using var _context = serviceScope.ServiceProvider.GetService<NewtyDbContext>();
         if (!_context.Businesses.Any())
         {
             var cityTehran = _context.Cities.FirstOrDefault(c => c.FaName == "تهران");
@@ -36,7 +36,7 @@ public class SeedTestDataService(IServiceScopeFactory serviceScopeFactory) : ISe
                 EndHoursOfWor = new TimeSpan(22, 0, 0),
                 CardNumber = "For Test",
                 Holidays = [DayOfWeek.Friday],
-                IsValid = true,
+                State = BusinessState.Valid,
                 IsActive = true,
                 ParvaneKasbImagePath = "For Test",
                 Wallet = new(),
@@ -100,7 +100,7 @@ public class SeedTestDataService(IServiceScopeFactory serviceScopeFactory) : ISe
                 StartHoursOfWor = new TimeSpan(9, 0, 0),
                 EndHoursOfWor = new TimeSpan(22, 0, 0),
                 Holidays = [DayOfWeek.Friday],
-                IsValid = true,
+                State = BusinessState.Valid,
                 ParvaneKasbImagePath = "For Test",
                 Wallet = new(),
                 IsCancelReserveTime = false,
@@ -162,7 +162,7 @@ public class SeedTestDataService(IServiceScopeFactory serviceScopeFactory) : ISe
                 StartHoursOfWor = new TimeSpan(9, 0, 0),
                 EndHoursOfWor = new TimeSpan(22, 0, 0),
                 Holidays = [DayOfWeek.Friday],
-                IsValid = true,
+                State = BusinessState.Valid,
                 ParvaneKasbImagePath = "For Test",
                 Wallet = new(),
                 IsCancelReserveTime = false,

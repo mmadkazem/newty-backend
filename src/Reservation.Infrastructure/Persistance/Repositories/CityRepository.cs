@@ -1,9 +1,9 @@
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 
-public class CityRepository(ReservationDbContext context) : ICityRepository
+public class CityRepository(NewtyDbContext context) : ICityRepository
 {
-    private readonly ReservationDbContext _context = context;
+    private readonly NewtyDbContext _context = context;
 
     public void Add(City city)
         => _context.Cities.Add(city);

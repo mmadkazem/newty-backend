@@ -30,7 +30,7 @@ public static class ConfigureServices
         services.AddTransient<IUnitOfWork, UnitOfWork>();
 
         // DI DbContext
-        services.AddDbContext<ReservationDbContext>(options =>
+        services.AddDbContext<NewtyDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("NewtyDb")));
 
         // DI Seeding Data

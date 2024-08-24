@@ -1,9 +1,9 @@
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 
-public class CategoryRepository(ReservationDbContext context) : ICategoryRepository
+public class CategoryRepository(NewtyDbContext context) : ICategoryRepository
 {
-    private readonly ReservationDbContext _context = context;
+    private readonly NewtyDbContext _context = context;
 
     public void Add(Category category)
         => _context.Categories.Add(category);

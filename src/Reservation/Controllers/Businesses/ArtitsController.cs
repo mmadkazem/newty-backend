@@ -17,8 +17,7 @@ public sealed class ArtistsController(ISender sender) : ControllerBase
     }
 
     [HttpPost("Points")]
-    [Authorize(Role.User)]
-    [Authorize(Role.Business)]
+    [Authorize(Role.BusinessUser)]
     public async Task<IActionResult> Post([FromBody] AddArtistPointDTO model,
         CancellationToken token)
     {

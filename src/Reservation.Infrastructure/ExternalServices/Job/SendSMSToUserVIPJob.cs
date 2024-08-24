@@ -18,7 +18,7 @@ public sealed class SendSMSToUserVIPService
     public void Execute(Guid businessId, DateTime sendDate, string message, IServiceScopeFactory _scopeFactory)
     {
         using var serviceScope = _scopeFactory.CreateScope();
-        using var _context = serviceScope.ServiceProvider.GetService<ReservationDbContext>();
+        using var _context = serviceScope.ServiceProvider.GetService<NewtyDbContext>();
         var _option = serviceScope.ServiceProvider.GetService<IOptions<SMSProviderOption>>();
         var count = 0;
         List<string> receptorNumber = [];

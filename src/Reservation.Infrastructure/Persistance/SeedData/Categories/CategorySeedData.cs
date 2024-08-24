@@ -13,7 +13,7 @@ public sealed class CategorySeedData(IServiceScopeFactory serviceScope) : ICateg
     public void SeedData()
     {
         using var serviceScope = _serviceScope.CreateScope();
-        using var _context = serviceScope.ServiceProvider.GetService<ReservationDbContext>();
+        using var _context = serviceScope.ServiceProvider.GetService<NewtyDbContext>();
         var _readService = serviceScope.ServiceProvider.GetService<IReadCategoryInJsonService>();
 
         if (!_context.Categories.Any())

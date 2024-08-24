@@ -1,10 +1,10 @@
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 
-public sealed class SmsTemplateRepository(ReservationDbContext context)
+public sealed class SmsTemplateRepository(NewtyDbContext context)
     : ISmsTemplateRepository
 {
-    private readonly ReservationDbContext _context = context;
+    private readonly NewtyDbContext _context = context;
 
     public void Add(SmsTemplate smsTemplate)
         => _context.SmsTemplates.Add(smsTemplate);
