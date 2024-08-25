@@ -78,7 +78,7 @@ public class CategoryRepository(NewtyDbContext context) : ICategoryRepository
         => await _context.Businesses.AsQueryable()
                                     .AsNoTracking()
                                     .OrderBy(c => c.Points.Average(p => p.Rate))
-                                    .Where(b => b.Categories.Any(c => c.Id == categoryId))
+                                    .Where(b => !b.Categories.Any(c => c.Id == categoryId))
                                     .Select(b => new GetCategoryBusinessesQueryResponse
                                     (
                                         b.Id,
