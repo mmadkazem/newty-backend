@@ -1,4 +1,4 @@
 namespace Reservation.Application.Businesses.Commands.RegisterBusiness;
 
 
-public record RegisterBusinessCommandRequest(string PhoneNumber, string City) : IRequest;
+public record RegisterBusinessCommandRequest(string PhoneNumber, string City, string Name) : IRequest;

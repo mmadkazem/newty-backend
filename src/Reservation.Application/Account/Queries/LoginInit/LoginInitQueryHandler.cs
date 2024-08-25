@@ -53,7 +53,7 @@ public sealed class LoginInitQueryHandler
             var businessCache = await _cache.GetAsync<BusinessRegisterCacheVM>(BusinessRegisterCacheVM.ToKey(request.PhoneNumber), cancellationToken);
             if (businessCache is not null)
             {
-                await _cache.SetAsync<BusinessLoginCacheVM>(BusinessLoginCacheVM.ToKey(businessCache.PhoneNumber), new(Guid.Empty, businessCache.PhoneNumber, code, true, businessCache.City), TimeSpan.FromMinutes(2), cancellationToken);
+                await _cache.SetAsync<BusinessLoginCacheVM>(BusinessLoginCacheVM.ToKey(businessCache.PhoneNumber), new(Guid.Empty, businessCache.PhoneNumber, code, true, businessCache.City, businessCache.Name), TimeSpan.FromMinutes(2), cancellationToken);
                 return _tokenFactory.CreateTempToken(code, request.PhoneNumber, Role.Business);
             }
         }

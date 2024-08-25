@@ -86,7 +86,7 @@ public static class ConfigureServices
                     },
                     OnTokenValidated = context =>
                     {
-                        var tokenValidatorService = context.HttpContext.RequestServices.GetRequiredService<ITempTokenValidatorService>();
+                        var tokenValidatorService = context.HttpContext.RequestServices.GetRequiredService<IBearerTokenValidatorService>();
                         tokenValidatorService.ValidateAsync(context);
                         return Task.CompletedTask;
                     },
@@ -187,7 +187,7 @@ public static class ConfigureServices
             options.AddDefaultPolicy(policy =>
                 {
                     policy
-                        .WithOrigins("http://localhost:3006", "https://newty.liara.run/")
+                        .WithOrigins("http://localhost:3006", "https://newty.liara.run")
                         .WithMethods("POST", "GET", "PUT", "DELETE", "PATCH")
                         // .AllowAnyOrigin()
                         // .AllowAnyMethod()

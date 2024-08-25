@@ -74,7 +74,7 @@ public sealed class AccountController(ISender sender) : ControllerBase
     }
 
     [HttpGet]
-    [Authorize]
+    [Authorize(Role.User)]
     public async Task<IActionResult> GetInformation(CancellationToken token)
     {
         var result = await _sender.Send(new GetUserInfoQueryRequest(User.UserId()), token);

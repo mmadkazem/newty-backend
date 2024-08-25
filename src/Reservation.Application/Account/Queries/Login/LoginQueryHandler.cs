@@ -68,6 +68,7 @@ public sealed class LoginQueryHandler(IUnitOfWork uow,
                     var city = await _uow.Cities.FindAsyncByName(businessCacheVM.City, cancellationToken);
                     Business finalBusiness = new()
                     {
+                        Name = businessCacheVM.Name,
                         City = city,
                         PhoneNumber = businessCacheVM.PhoneNumber,
                         IsActive = true

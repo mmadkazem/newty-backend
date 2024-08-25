@@ -1,3 +1,5 @@
+using Microsoft.Extensions.Primitives;
+
 namespace Reservation.Application.ExternalServices.Cash;
 
 
@@ -18,12 +20,12 @@ public record UserLoginCacheVM(Guid Id, string PhoneNumber, string OTPCode, bool
     public static string ToKey(string phoneNumber)
         => nameof(User) + "Login" + phoneNumber;
 }
-public record BusinessRegisterCacheVM(string City, string PhoneNumber)
+public record BusinessRegisterCacheVM(string City, string PhoneNumber, string Name)
 {
     public static string ToKey(string phoneNumber)
         => nameof(Business) + "Register" + phoneNumber;
 }
-public record BusinessLoginCacheVM(Guid Id, string PhoneNumber, string OTPCode, bool IsFirst, string? City = null)
+public record BusinessLoginCacheVM(Guid Id, string PhoneNumber, string OTPCode, bool IsFirst, string? City = null, string? Name = null)
 {
     public static string ToKey(string phoneNumber)
         => nameof(Business) + "Login" + phoneNumber;

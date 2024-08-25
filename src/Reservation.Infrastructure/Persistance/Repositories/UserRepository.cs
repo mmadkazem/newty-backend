@@ -32,6 +32,7 @@ public sealed class UserRepository(NewtyDbContext context) : IUserRepository
     public async Task<IResponse> Get(Guid id, CancellationToken cancellationToken)
         => await _context.Users.AsQueryable()
                                 .AsNoTracking()
+                                .Where(u => u.Id == id)
                                 .Select(u => new GetUserInfoQueryResponse
                                 (
                                     u.Id,
@@ -39,5 +40,5 @@ public sealed class UserRepository(NewtyDbContext context) : IUserRepository
                                     u.FullName,
                                     u.City.FaName
                                 ))
-                                .FirstOrDefaultAsync(u => u.Id == id, cancellationToken);
+                                .FirstOrDefaultAsync(cancellationToken);
 }
