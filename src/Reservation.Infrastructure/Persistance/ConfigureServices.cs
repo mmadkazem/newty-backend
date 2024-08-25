@@ -43,8 +43,8 @@ public static class ConfigureServices
 
     public static WebApplication UseSeedingData(this WebApplication app)
     {
-        // var seedDataCategory = app.Services.GetService<ICategorySeedData>();
-        // seedDataCategory.SeedData();
+        var seedDataCategory = app.Services.GetService<ICategorySeedData>();
+        seedDataCategory.SeedData();
         var seedTestData = app.Services.GetService<ISeedTestDataService>();
         seedTestData.SeedData();
         return app;

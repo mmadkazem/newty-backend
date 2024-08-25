@@ -213,7 +213,18 @@ public class SeedTestDataService(IServiceScopeFactory serviceScopeFactory) : ISe
                 CoverImagePath = "For Test",
                 Services = [service6]
             };
-            _context.Businesses.AddRange([business, business2, business3]);
+
+            Business business4 = new() {Id = Guid.NewGuid(), Name = "کلینیک مفید", City = cityTehran, Categories = categoriesClinic};
+            Business business5 = new() {Id = Guid.NewGuid(), Name = "سالن روزالین", City = cityTehran, Categories = categoriesSolon};
+            Business business6 = new() {Id = Guid.NewGuid(), Name = "سالن تتو خوش خظ و خال", City = cityTehran, Categories = categoriesTattoo};
+            Business business7 = new() {Id = Guid.NewGuid(), Name = "کلینیک ابر", City = cityAhwaz, Categories = categoriesClinic};
+            Business business8 = new() {Id = Guid.NewGuid(), Name = "سالن اشک", City = cityAhwaz, Categories = categoriesSolon};
+            Business business9 = new() {Id = Guid.NewGuid(), Name = "سالن تتو رز", City = cityAhwaz, Categories = categoriesTattoo};
+            Business business10 = new() {Id = Guid.NewGuid(), Name = "کلینیک مشهد", City = cityMashhad, Categories = categoriesClinic};
+            Business business11 = new() {Id = Guid.NewGuid(), Name = "سالن ماد", City = cityMashhad, Categories = categoriesSolon};
+            Business business12 = new() {Id = Guid.NewGuid(), Name = "سالن تتو باد", City = cityMashhad, Categories = categoriesTattoo};
+
+            _context.Businesses.AddRange([business, business2, business3, business4, business5, business6, business7, business8, business9, business10, business11, business12]);
             _context.Artists.AddRange([artist, artist2, artist3, artist4, artist5, artist6]);
             _context.Services.AddRange([service, service2, service3, service4, service5, service6]);
             _context.SaveChanges();

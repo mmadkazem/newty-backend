@@ -142,7 +142,7 @@ public sealed class ReserveTimeRepository(NewtyDbContext context)
     public async Task<IEnumerable<IResponse>> GetBusinessReserveTimesSenderByState(int page, ReserveState state, Guid businessId, CancellationToken cancellationToken)
         => await _context.ReserveTimesReceipt.AsQueryable()
                                         .AsNoTracking()
-                                        .Where(r => r.BusinessReceiptId == businessId && r.State == state)
+                                        .Where(r => r.BusinessReceiptId == businessId && r.State == state && !r.Finished)
                                         .Select(c => new GetReserveTimeSenderQueryResponse
                                         (
                                             c.Id,
@@ -167,7 +167,7 @@ public sealed class ReserveTimeRepository(NewtyDbContext context)
     public async Task<IEnumerable<IResponse>> GetUserReserveTimeByState(int page, Guid userId, ReserveState state, CancellationToken cancellationToken)
         => await _context.ReserveTimesReceipt.AsQueryable()
                                         .AsNoTracking()
-                                        .Where(r => r.UserId == userId && r.State == state)
+                                        .Where(r => r.UserId == userId && r.State == state && !r.Finished)
                                         .Select(c => new GetReserveTimeQueryResponse
                                         (
                                             c.Id,
