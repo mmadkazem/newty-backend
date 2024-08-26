@@ -85,7 +85,9 @@ public class CategoryRepository(NewtyDbContext context) : ICategoryRepository
                                         b.Id,
                                         b.Name,
                                         b.CoverImagePath,
-                                        b.City.FaName
+                                        b.IsClose,
+                                        b.Address,
+                                        (double)b.Points.Average(p => p.Rate)
                                     ))
                                     .Skip((page - 1) * 25)
                                     .Take(25)

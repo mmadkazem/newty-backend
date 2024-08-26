@@ -7,5 +7,7 @@ public sealed record GetCategoryBusinessesQueryResponse
 (
     Guid Id, string Name,
     string CoverImagePath,
-    string City
+    bool IsClose,
+    string Address,
+    double Point
 ) : IResponse;
