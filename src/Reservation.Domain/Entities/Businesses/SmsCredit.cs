@@ -1,7 +1,7 @@
 namespace Reservation.Domain.Entities.Businesses;
 
 
-public class SmsCredit : BaseClass
+public class SmsCredit : BaseClass<Guid>
 {
     public int SmsCount { get; set; }
 

@@ -15,12 +15,12 @@ public class CategoryRepository(NewtyDbContext context) : ICategoryRepository
         => await _context.Categories.AsQueryable()
                                     .AnyAsync(c => c.Title == title, cancellationToken);
 
-    public async Task<Category> FindAsync(Guid Id, CancellationToken cancellationToken = default)
+    public async Task<Category> FindAsync(int Id, CancellationToken cancellationToken = default)
         => await _context.Categories.AsQueryable()
                                     .Where(c => c.Id == Id)
                                     .FirstOrDefaultAsync(cancellationToken);
 
-    public async Task<IEnumerable<IResponse>> GetSubCategoryByCategoryId(Guid id, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<IResponse>> GetSubCategoryByCategoryId(int id, CancellationToken cancellationToken = default)
         => await _context.Categories.AsQueryable()
                                     .AsNoTracking()
                                     .Where(c => c.ParentCategory.Id == id)
@@ -48,9 +48,10 @@ public class CategoryRepository(NewtyDbContext context) : ICategoryRepository
                                         ))
                                         .ToListAsync(cancellationToken);
 
-    public async Task<IResponse> GetCategory(Guid id, CancellationToken cancellationToken = default)
+    public async Task<IResponse> GetCategory(int id, CancellationToken cancellationToken = default)
         => await _context.Categories.AsQueryable()
                                     .AsNoTracking()
+                                    .Where(c => c.Id == id)
                                     .Select(c => new GetCategoryQueryResponse
                                     (
                                         c.Id,
@@ -59,7 +60,7 @@ public class CategoryRepository(NewtyDbContext context) : ICategoryRepository
                                         c.CoverImagePath,
                                         c.ParentCategory.Id
                                     ))
-                                    .FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
+                                    .FirstOrDefaultAsync(cancellationToken);
 
     public async Task<IEnumerable<IResponse>> GetMainCategory(CancellationToken cancellationToken = default)
         => await _context.Categories.AsQueryable()
@@ -74,7 +75,7 @@ public class CategoryRepository(NewtyDbContext context) : ICategoryRepository
                                     ))
                                     .ToListAsync(cancellationToken);
 
-    public async Task<IEnumerable<IResponse>> GetBusiness(Guid categoryId, int page, CancellationToken cancellationToken)
+    public async Task<IEnumerable<IResponse>> GetBusiness(int categoryId, int page, CancellationToken cancellationToken)
         => await _context.Businesses.AsQueryable()
                                     .AsNoTracking()
                                     .OrderBy(c => c.Points.Average(p => p.Rate))

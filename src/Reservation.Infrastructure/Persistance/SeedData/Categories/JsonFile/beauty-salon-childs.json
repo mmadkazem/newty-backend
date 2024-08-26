@@ -1,30 +1,30 @@
 [
   {
-    "Id": "b9190746-3ebf-408f-948d-c92eb13308bb",
+    "Id": 4,
     "Title": "خدمات مو",
     "Description": "",
     "CoverImagePath": "d68c296b-0e54-4652-9bdd-851907b6ad0c@hair-service.webp"
   },
   {
-    "Id": "5c3eccdd-c518-4430-8a25-bfe161655cce",
+    "Id":5,
     "Title": "خدمات ناخن",
     "Description": "",
     "CoverImagePath": "d68c296b-0e54-4652-9bdd-851907b6ad0c@nail-service.webp"
   },
   {
-    "Id": "a39ab79e-d990-4c93-8b50-e9d20431f24b",
+    "Id": 6,
     "Title": "خدمات پوست",
     "Description": "",
     "CoverImagePath": "d68c296b-0e54-4652-9bdd-851907b6ad0c@facial.webp"
   },
   {
-    "Id": "0c19f6c1-24e6-42e5-b265-f6069a75aa60",
+    "Id": 7,
     "Title": "خدمات ابرو و مژه",
     "Description": "",
     "CoverImagePath": "d68c296b-0e54-4652-9bdd-851907b6ad0c@eyebrow-eyelash-service.webp"
   },
   {
-    "Id": "0640db8a-e9f2-4231-a5c7-5b0e821f321c",
+    "Id": 8,
     "Title": "آرایش و میکاپ",
     "Description": "",
     "CoverImagePath": "d68c296b-0e54-4652-9bdd-851907b6ad0c@makeup.webp"

@@ -17,7 +17,7 @@ public sealed class CreateCategoryCommandHandler(IUnitOfWork uow) : IRequestHand
 
         if (parentIdString is not null)
         {
-            var parentId = Guid.Parse(parentIdString);
+            var parentId = int.Parse(parentIdString);
 
             var parentCategory = await _uow.Categories.FindAsync(parentId, cancellationToken)
                 ?? throw new CategoryNotFoundException();

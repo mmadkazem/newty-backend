@@ -1,7 +1,7 @@
 namespace Reservation.Domain.Entities.Businesses;
 
 
-public class Business : BaseClass
+public class Business : BaseClass<Guid>
 {
     public string Name { get; set; }
     public string Description { get; set; }
@@ -12,10 +12,11 @@ public class Business : BaseClass
     public string PhoneNumber { get; set; }
     public bool IsActive { get; set; }
     public bool IsCancelReserveTime { get; set; }
+    public bool IsClose { get; set; }
     public TimeSpan StartHoursOfWor { get; set; }
     public TimeSpan EndHoursOfWor { get; set; }
     public List<DayOfWeek> Holidays { get; set; } = [];
-    public BusinessState State { get; set; }
+    public BusinessState State { get; set; } 
 
     // Business Wallet
     public Wallet Wallet { get; set; }
@@ -39,7 +40,7 @@ public class Business : BaseClass
 
     // Business City
     public City City { get; set; }
-    public Guid CityId { get; set; }
+    public int CityId { get; set; }
 
     // Business Post
     public ICollection<Post> Posts { get; set; }

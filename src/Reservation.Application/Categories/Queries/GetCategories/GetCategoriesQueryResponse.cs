@@ -2,6 +2,6 @@ namespace Reservation.Application.Categories.Queries.GetCategories;
 
 public record GetCategoriesQueryResponse
 (
-    Guid Id, string Title, string Description,
-    string CoverImagePath, Guid? ParentId
+    int Id, string Title, string Description,
+    string CoverImagePath, int? ParentId
 ) : IResponse;

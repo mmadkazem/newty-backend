@@ -1,18 +1,18 @@
 [
   {
-    "Id": "b338cfcf-cdb7-4bc7-bd45-6e9cc5de28a8",
+    "Id": 14,
     "Title": "تتو دائم",
     "Description": "",
     "CoverImagePath": "d68c296b-0e54-4652-9bdd-851907b6ad0c@tattoo.webp"
   },
   {
-    "Id": "0fb6acb4-8cde-400c-8450-8e6e9626ca18",
+    "Id": 15,
     "Title": "تتو موقت",
     "Description": "",
     "CoverImagePath": "d68c296b-0e54-4652-9bdd-851907b6ad0c@temporary-tattoo.webp"
   },
   {
-    "Id": "b518e7fb-7b84-4bfd-b2b1-3db28b138b3f",
+    "Id": 16,
     "Title": "پاک کردن تتو",
     "Description": "",
     "CoverImagePath": "d68c296b-0e54-4652-9bdd-851907b6ad0c@laser-tattoo.webp"

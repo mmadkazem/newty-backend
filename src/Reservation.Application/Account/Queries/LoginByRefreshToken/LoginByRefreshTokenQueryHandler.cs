@@ -10,20 +10,20 @@ public sealed class LoginByRefreshTokenQueryHandler(IUnitOfWork uow, ITokenFacto
         if (request.Role == Role.User)
         {
             var user = await _uow.Users.FindAsync(request.Id, cancellationToken);
-            return _tokenFactory.CreateBearerToken(user.Id, Role.User);
+            return _tokenFactory.CreateBearerToken(user.Id, Role.User, user.PhoneNumber, user.FullName);
         }
 
         else if (request.Role == Role.Business)
         {
 
             var business = await _uow.Businesses.FindAsync(request.Id, cancellationToken);
-            return _tokenFactory.CreateBearerToken(business.Id, Role.Business);
+            return _tokenFactory.CreateBearerToken(business.Id, Role.Business, business.PhoneNumber, business.Name);
         }
 
         else if (request.Role == Role.Admin)
         {
             var admin = await _uow.Users.FindAsync(request.Id, cancellationToken);
-            return _tokenFactory.CreateBearerToken(admin.Id, Role.Admin);
+            return _tokenFactory.CreateBearerToken(admin.Id, Role.Admin, admin.PhoneNumber, admin.FullName);
         }
 
         throw new UserOrBusinessNotExistException();

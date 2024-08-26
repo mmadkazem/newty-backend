@@ -88,10 +88,10 @@ public sealed class BusinessRepository(NewtyDbContext context) : IBusinessReposi
                                     .Take(25)
                                     .ToListAsync(cancellationToken);
 
-    public async Task<IEnumerable<IResponse>> Search(int page, string key, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<IResponse>> Search(int page, string key, string city, CancellationToken cancellationToken = default)
         => await _context.Businesses.AsQueryable()
                                     .AsNoTracking()
-                                    .Where(b => b.Address.Contains(key) || b.Name.Contains(key))
+                                    .Where(b => b.City.FaName == city && (b.Address.Contains(key) || b.Name.Contains(key)))
                                     .Select(b => new SearchQueryResponse
                                     (
                                         b.Id,

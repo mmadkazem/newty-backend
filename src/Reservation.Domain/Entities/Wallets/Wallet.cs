@@ -1,6 +1,6 @@
 namespace Reservation.Domain.Entities.Wallets;
 
-public class Wallet : BaseClass
+public class Wallet : BaseClass<Guid>
 {
     public decimal Credit { get; set; }
     public decimal BlockCredit { get; set; }

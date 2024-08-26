@@ -1,6 +1,6 @@
 namespace Reservation.Domain.Entities.Businesses;
 
-public sealed class Coupon : BaseClass
+public sealed class Coupon : BaseClass<Guid>
 {
     public string Code { get; set; }
     public DateTime Expire { get; set; }

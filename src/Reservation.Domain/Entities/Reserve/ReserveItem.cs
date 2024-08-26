@@ -1,6 +1,6 @@
 namespace Reservation.Domain.Entities.Reserve;
 
-public class ReserveItem : BaseClass
+public class ReserveItem : BaseClass<Guid>
 {
     public DateTime StartDate { get; set; }
     public DateTime EndDate { get; set; }

@@ -17,7 +17,7 @@ public sealed class CitiesController(ISender sender) : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
-    public async Task<IActionResult> Put(Guid id, string name, string state,
+    public async Task<IActionResult> Put(int id, string name, string state,
         CancellationToken token)
     {
         var request = UpdateCityCommandRequest.Create(id, name, state);
@@ -26,7 +26,7 @@ public sealed class CitiesController(ISender sender) : ControllerBase
     }
 
     [HttpDelete("{id:guid}")]
-    public async Task<IActionResult> Remove(Guid id,
+    public async Task<IActionResult> Remove(int id,
         CancellationToken token)
     {
         await _sender.Send(new RemoveCityCommandRequest(id), token);

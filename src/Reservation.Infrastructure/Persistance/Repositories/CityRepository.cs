@@ -15,7 +15,7 @@ public class CityRepository(NewtyDbContext context) : ICityRepository
         => await _context.Cities.AsQueryable()
                                 .AnyAsync(c => c.FaName == name, cancellationToken);
 
-    public async Task<City> FindAsync(Guid Id, CancellationToken cancellationToken = default)
+    public async Task<City> FindAsync(int Id, CancellationToken cancellationToken = default)
         => await _context.Cities.AsQueryable()
                                 .Where(c => c.Id == Id)
                                 .FirstOrDefaultAsync(cancellationToken);

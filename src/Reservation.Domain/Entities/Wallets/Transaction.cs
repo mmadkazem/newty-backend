@@ -1,6 +1,6 @@
 namespace Reservation.Domain.Entities.Wallets;
 
-public class Transaction : BaseClass
+public class Transaction : BaseClass<Guid>
 {
     public decimal Amount { get; set; }
     public TransactionType Type { get; set; }

@@ -1,3 +1,3 @@
 namespace Reservation.Application.Categories.Queries.GetCategory;
 
-public record GetCategoryQueryRequest(Guid Id) : IRequest<IResponse>;
+public record GetCategoryQueryRequest(int Id) : IRequest<IResponse>;

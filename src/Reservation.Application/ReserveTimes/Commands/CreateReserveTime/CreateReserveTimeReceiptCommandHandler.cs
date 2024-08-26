@@ -11,7 +11,10 @@ public sealed class CreateReserveTimeReceiptCommandHandler(IUnitOfWork uow)
             ?? throw new UserNotFoundException();
 
         var userReserveTime = new TimeSpan(request.DateTime.Hour, request.DateTime.Minute, request.DateTime.Second);
-
+        if (business.IsClose)
+        {
+            throw new BusinessClosedException();
+        }
         if (!(business.StartHoursOfWor <= userReserveTime &&
             userReserveTime <= business.EndHoursOfWor))
         {

@@ -5,7 +5,7 @@ public sealed class SearchBusinessHandler(IUnitOfWork uow) : IRequestHandler<Sea
 
     public async Task<IEnumerable<IResponse>> Handle(SearchBusinessRequest request, CancellationToken cancellationToken)
     {
-        var businesses = await _uow.Businesses.Search(request.Page, request.Key, cancellationToken);
+        var businesses = await _uow.Businesses.Search(request.Page, request.Key, request.City, cancellationToken);
         if (!businesses.Any())
         {
             throw new BusinessNotFoundException();

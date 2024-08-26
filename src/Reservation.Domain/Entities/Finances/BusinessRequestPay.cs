@@ -1,7 +1,7 @@
 namespace Reservation.Domain.Entities.Finances;
 
 
-public class BusinessRequestPay : BaseClass
+public class BusinessRequestPay : BaseClass<Guid>
 {
     public int Amount { get; set; }
     public bool IsPay { get; set; } = false;

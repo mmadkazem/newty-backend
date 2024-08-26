@@ -1,6 +1,6 @@
 namespace Reservation.Domain.Entities.Points;
 
-public class Point : BaseClass
+public class Point : BaseClass<Guid>
 {
     public int Rate { get; set; }
 

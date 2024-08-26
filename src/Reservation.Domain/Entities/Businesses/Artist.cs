@@ -1,7 +1,7 @@
 namespace Reservation.Domain.Entities.Businesses;
 
 
-public class Artist : BaseClass
+public class Artist : BaseClass<Guid>
 {
     public string Name { get; set; }
     public string CoverImagePath { get; set; }

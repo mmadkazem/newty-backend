@@ -1,7 +1,7 @@
 namespace Reservation.Domain.Entities.Businesses;
 
 
-public class BusinessService : BaseClass
+public class BusinessService : BaseClass<Guid>
 {
     public string Name { get; set; }
     public TimeOnly Time { get; set; }

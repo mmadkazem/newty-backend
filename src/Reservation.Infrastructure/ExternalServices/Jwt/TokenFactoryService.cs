@@ -40,14 +40,14 @@ public sealed class TokenFactoryService(IOptions<TokenOption> options) : ITokenF
         return new(tempToken);
     }
 
-    public JwtTokensData CreateBearerToken(Guid id, string role)
+    public JwtTokensData CreateBearerToken(Guid id, string role, string phoneNumber, string name)
     {
-        var accessToken = CreateBearerAccessToken(id, role);
+        var accessToken = CreateBearerAccessToken(id, role, phoneNumber, name);
         var refreshToken = CreateRefreshToken(id, role);
         return new(accessToken, refreshToken);
     }
 
-    private string CreateBearerAccessToken(Guid id, string role)
+    private string CreateBearerAccessToken(Guid id, string role, string phoneNumber, string name)
     {
         var claims = new List<Claim>
         {
@@ -57,7 +57,10 @@ public sealed class TokenFactoryService(IOptions<TokenOption> options) : ITokenF
             new(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Iss, _optionBearer.Issuer, ClaimValueTypes.String, _optionBearer.Issuer),
             // Issued at
             new(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64, _optionBearer.Issuer),
+            // User Costume Data
             new(ClaimTypes.NameIdentifier, id.ToString(), ClaimValueTypes.String, _optionBearer.Issuer),
+            new("PhoneNumber", phoneNumber, ClaimValueTypes.String, _optionBearer.Issuer),
+            new("Name", name, ClaimValueTypes.String, _optionBearer.Issuer),
             // add roles
             new(ClaimTypes.Role, role, ClaimValueTypes.String, _optionBearer.Issuer)
         };

@@ -35,7 +35,7 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
     }
 
     [HttpPost("Categories")]
-    public async Task<IActionResult> Post(IEnumerable<Guid> categories,
+    public async Task<IActionResult> Post(IEnumerable<int> categories,
         CancellationToken token)
     {
         var request = AddCategoriesToBusinessCommandRequest.Carate(User.UserId(), categories);
@@ -53,13 +53,12 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
         return Ok(new { Message = CommonMessage.PointRecorded });
     }
 
-    [HttpGet("Key/{key}/Page/{page:int}")]
+    [HttpGet("Key/{key}/City/{city}/Page/{page:int}")]
     [AllowAnonymous]
-    public async Task<IActionResult> Search(string key, int page,
+    public async Task<IActionResult> Search(string key, int page, string city,
         CancellationToken token)
     {
-        var request = SearchBusinessRequest.Create(page, key);
-        var results = await _sender.Send(request, token);
+        var results = await _sender.Send( new SearchBusinessRequest(page, key, city), token);
         return Ok(results);
     }
 

@@ -8,9 +8,6 @@ public sealed class UpdateUserCommandValidator : AbstractValidator<UpdateUserCom
     public UpdateUserCommandValidator(IUnitOfWork uow)
     {
         _uow = uow;
-        RuleFor(r => r.PhoneNumber)
-            .NotEmpty().WithMessage("شماره همراه نمی تواند خالی باشد")
-            .Must(StringUtils.IsValidPhone).WithMessage("شماره همراه اشتباه است");
 
         RuleFor(r => r.FullName)
             .NotEmpty().WithMessage("نام و نام خانوادگی نمی تواند خالی باشد")

@@ -10,7 +10,7 @@ public interface IBusinessRepository
     Task<Business> FindAsyncIncludeSMSCredit(Guid id, CancellationToken cancellationToken = default);
     Task<bool> AnyAsync(string phoneNumber, CancellationToken cancellationToken = default);
     Task<bool> AnyAsync(Guid businessId, CancellationToken cancellationToken = default);
-    Task<IEnumerable<IResponse>> Search(int page, string key, CancellationToken cancellationToken = default);
+    Task<IEnumerable<IResponse>> Search(int page, string key, string city, CancellationToken cancellationToken = default);
     Task<Business> FindAsyncByIncludePoints(Guid businessId, CancellationToken cancellationToken);
     Task<IResponse> Get(Guid businessId, CancellationToken cancellationToken);
     Task<IEnumerable<IResponse>> GetWaitingValidBusiness(int page, CancellationToken cancellationToken);

@@ -1,9 +1,9 @@
 namespace Reservation.Share.Abstract.Helper;
 
 
-public abstract class BaseClass
+public abstract class BaseClass<T>
 {
-    public Guid Id { get; set; }
+    public T Id { get; set; }
 
     public bool IsDeleted { get; set; }
 

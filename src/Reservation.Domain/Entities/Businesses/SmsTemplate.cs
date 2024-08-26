@@ -1,6 +1,6 @@
 namespace Reservation.Domain.Entities.Businesses;
 
-public class SmsTemplate : BaseClass
+public class SmsTemplate : BaseClass<Guid>
 {
     public string Name { get; set; }
     public string Description { get; set; }

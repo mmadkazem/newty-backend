@@ -9,10 +9,16 @@ public sealed class SoftDeleteInterceptor : SaveChangesInterceptor
 
         foreach (var entry in eventData.Context.ChangeTracker.Entries())
         {
-            if (entry is { State: EntityState.Deleted, Entity: BaseClass entity })
+            if (entry is { State: EntityState.Deleted, Entity: BaseClass<Guid> entityGuid })
             {
-                entity.IsDeleted = true;
-                entity.DeletedOn = DateTime.Now;
+                entityGuid.IsDeleted = true;
+                entityGuid.DeletedOn = DateTime.Now;
+                entry.State = EntityState.Modified;
+            }
+            if (entry is { State: EntityState.Deleted, Entity: BaseClass<int> entityInt })
+            {
+                entityInt.IsDeleted = true;
+                entityInt.DeletedOn = DateTime.Now;
                 entry.State = EntityState.Modified;
             }
         }
@@ -27,10 +33,16 @@ public sealed class SoftDeleteInterceptor : SaveChangesInterceptor
 
         foreach (var entry in eventData.Context.ChangeTracker.Entries())
         {
-            if (entry is { State: EntityState.Deleted, Entity: BaseClass entity })
+            if (entry is { State: EntityState.Deleted, Entity: BaseClass<Guid> entityGuid })
             {
-                entity.IsDeleted = true;
-                entity.DeletedOn = DateTime.Now;
+                entityGuid.IsDeleted = true;
+                entityGuid.DeletedOn = DateTime.Now;
+                entry.State = EntityState.Modified;
+            }
+            if (entry is { State: EntityState.Deleted, Entity: BaseClass<int> entityInt })
+            {
+                entityInt.IsDeleted = true;
+                entityInt.DeletedOn = DateTime.Now;
                 entry.State = EntityState.Modified;
             }
         }

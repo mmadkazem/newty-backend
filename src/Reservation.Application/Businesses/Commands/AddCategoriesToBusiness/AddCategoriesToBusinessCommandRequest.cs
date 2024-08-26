@@ -3,9 +3,9 @@ namespace Reservation.Application.Businesses.Commands.AddCategoriesToBusiness;
 
 
 
-public sealed record AddCategoriesToBusinessCommandRequest(Guid BusinessId, IEnumerable<Guid> Categories) : IRequest
+public sealed record AddCategoriesToBusinessCommandRequest(Guid BusinessId, IEnumerable<int> Categories) : IRequest
 {
-    public static AddCategoriesToBusinessCommandRequest Carate(Guid businessId, IEnumerable<Guid> categories)
+    public static AddCategoriesToBusinessCommandRequest Carate(Guid businessId, IEnumerable<int> categories)
         => new(businessId, categories);
 }
 

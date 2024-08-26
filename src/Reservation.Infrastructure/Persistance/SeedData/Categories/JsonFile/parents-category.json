@@ -1,18 +1,18 @@
 [
   {
-    "Id": "63476efe-c54b-430e-9c8f-029f967603fa",
+    "Id": 1,
     "Title": "سالن های زیبایی",
     "Description": "",
     "CoverImagePath": "d68c296b-0e54-4652-9bdd-851907b6ad0c@beauty-salon.webp"
   },
   {
-    "Id": "45283f8c-dac5-4216-8bf1-b5736196f0a1",
+    "Id": 2,
     "Title": "کلینیک زیبایی",
     "Description": "",
     "CoverImagePath": "d68c296b-0e54-4652-9bdd-851907b6ad0c@beauty-clinic.webp"
   },
   {
-    "Id": "5a9d4f68-0243-4f30-bbba-8c7343c7462c",
+    "Id": 3,
     "Title": "تتو",
     "Description": "",
     "CoverImagePath": "d68c296b-0e54-4652-9bdd-851907b6ad0c@tattoo-salon.webp"

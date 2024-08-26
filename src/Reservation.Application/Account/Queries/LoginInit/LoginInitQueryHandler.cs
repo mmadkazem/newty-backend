@@ -18,11 +18,11 @@ public sealed class LoginInitQueryHandler
         {
             if (user.Role == Role.Admin)
             {
-                await _cache.SetAsync<UserLoginCacheVM>("Admin" + request.PhoneNumber, new(user.Id, user.PhoneNumber, code, false), TimeSpan.FromMinutes(2), cancellationToken);
+                await _cache.SetAsync<UserLoginCacheVM>("Admin" + request.PhoneNumber, new(user.Id, user.PhoneNumber, code, false, user.FullName), TimeSpan.FromMinutes(2), cancellationToken);
                 return _tokenFactory.CreateTempToken(code, request.PhoneNumber, Role.Admin);
             }
 
-            await _cache.SetAsync<UserLoginCacheVM>(UserLoginCacheVM.ToKey(request.PhoneNumber), new(user.Id, user.PhoneNumber, code, false), TimeSpan.FromMinutes(2), cancellationToken);
+            await _cache.SetAsync<UserLoginCacheVM>(UserLoginCacheVM.ToKey(request.PhoneNumber), new(user.Id, user.PhoneNumber, code, false, user.FullName), TimeSpan.FromMinutes(2), cancellationToken);
 
             // await _smsProvider.SendLookup(request.PhoneNumber, code, user.FullName);
             return _tokenFactory.CreateTempToken(code, request.PhoneNumber, Role.User);
@@ -31,7 +31,7 @@ public sealed class LoginInitQueryHandler
         var business = await _uow.Businesses.FindAsyncByPhoneNumber(request.PhoneNumber, cancellationToken);
         if (business is not null)
         {
-            await _cache.SetAsync<BusinessLoginCacheVM>(BusinessLoginCacheVM.ToKey(business.PhoneNumber), new(business.Id, business.PhoneNumber, code, false), TimeSpan.FromMinutes(2), cancellationToken);
+            await _cache.SetAsync<BusinessLoginCacheVM>(BusinessLoginCacheVM.ToKey(business.PhoneNumber), new(business.Id, business.PhoneNumber, code, false, Name: business.Name), TimeSpan.FromMinutes(2), cancellationToken);
             await _uow.SaveChangeAsync(cancellationToken);
 
             // await _smsProvider.SendLookup(request.PhoneNumber, code);

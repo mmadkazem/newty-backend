@@ -1,7 +1,7 @@
 namespace Reservation.Domain.Entities.Businesses;
 
 
-public class Post : BaseClass
+public class Post : BaseClass<Guid>
 {
     public string Title { get; set; }
     public string Description { get; set; }

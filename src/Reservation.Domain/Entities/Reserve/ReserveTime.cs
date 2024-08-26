@@ -1,7 +1,7 @@
 namespace Reservation.Domain.Entities.Reserve;
 
 
-public class ReserveTimeReceipt : BaseClass
+public class ReserveTimeReceipt : BaseClass<Guid>
 {
     public DateTime TotalStartDate { get; set; }
     public DateTime TotalEndDate { get; set; }
@@ -33,7 +33,7 @@ public class ReserveTimeReceipt : BaseClass
     public ICollection<ReserveItem> ReserveItems { get; set; }
 }
 
-public class ReserveTimeSender : BaseClass
+public class ReserveTimeSender : BaseClass<Guid>
 {
     public DateTime TotalStartDate { get; set; }
     public DateTime TotalEndDate { get; set; }

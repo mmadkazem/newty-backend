@@ -38,7 +38,7 @@ public sealed class LoginQueryHandler(IUnitOfWork uow,
                     await _cache.RemoveAsync(UserLoginCacheVM.ToKey(request.PhoneNumber), cancellationToken);
                     await _cache.RemoveAsync(UserRegisterCacheVM.ToKey(request.PhoneNumber), cancellationToken);
 
-                    return new(_tokenFactory.CreateBearerToken(finalUser.Id, Role.User), AccountSuccessMessage.Registered);
+                    return new(_tokenFactory.CreateBearerToken(finalUser.Id, Role.User, finalUser.PhoneNumber, finalUser.FullName), AccountSuccessMessage.Registered);
                 }
 
                 var user = await _uow.Users.FindAsyncByNumber(request.PhoneNumber, cancellationToken)
@@ -49,7 +49,7 @@ public sealed class LoginQueryHandler(IUnitOfWork uow,
 
                 await _cache.RemoveAsync(UserLoginCacheVM.ToKey(request.PhoneNumber), cancellationToken);
 
-                return new(_tokenFactory.CreateBearerToken(user.Id, Role.User), AccountSuccessMessage.loggedIn);
+                return new(_tokenFactory.CreateBearerToken(user.Id, Role.User, user.PhoneNumber, user.FullName), AccountSuccessMessage.loggedIn);
             }
             catch { }
         }
@@ -79,7 +79,7 @@ public sealed class LoginQueryHandler(IUnitOfWork uow,
                     await _cache.RemoveAsync(BusinessLoginCacheVM.ToKey(request.PhoneNumber), cancellationToken);
                     await _cache.RemoveAsync(BusinessRegisterCacheVM.ToKey(request.PhoneNumber), cancellationToken);
 
-                    return new(_tokenFactory.CreateBearerToken(finalBusiness.Id, Role.Business), AccountSuccessMessage.Registered);
+                    return new(_tokenFactory.CreateBearerToken(finalBusiness.Id, Role.Business, finalBusiness.PhoneNumber, finalBusiness.Name), AccountSuccessMessage.Registered);
                 }
 
                 var business = await _uow.Businesses.FindAsyncByPhoneNumber(request.PhoneNumber, cancellationToken)
@@ -90,7 +90,7 @@ public sealed class LoginQueryHandler(IUnitOfWork uow,
 
                 await _cache.RemoveAsync(BusinessLoginCacheVM.ToKey(request.PhoneNumber), cancellationToken);
 
-                return new(_tokenFactory.CreateBearerToken(business.Id, Role.Business), AccountSuccessMessage.loggedIn);
+                return new(_tokenFactory.CreateBearerToken(business.Id, Role.Business, business.PhoneNumber, business.Name), AccountSuccessMessage.loggedIn);
             }
             catch { }
         }

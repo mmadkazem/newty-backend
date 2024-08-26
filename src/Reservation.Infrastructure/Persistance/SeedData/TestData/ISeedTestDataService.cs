@@ -21,9 +21,9 @@ public class SeedTestDataService(IServiceScopeFactory serviceScopeFactory) : ISe
             var cityTehran = _context.Cities.FirstOrDefault(c => c.FaName == "تهران");
             var cityMashhad = _context.Cities.FirstOrDefault(c => c.FaName == "مشهد");
             var cityAhwaz = _context.Cities.FirstOrDefault(c => c.FaName == "اهواز");
-            var categoriesSolon = _context.Categories.Where(u => u.ParentCategory.Title == "سالن های زیبایی").ToList();
-            var categoriesTattoo = _context.Categories.Where(u => u.ParentCategory.Title == "تتو").ToList();
-            var categoriesClinic = _context.Categories.Where(u => u.ParentCategory.Title == "کلینیک زیبایی").ToList();
+            var categoriesSolon = _context.Categories.Where(u => u.ParentCategory.Title == "سالن های زیبایی" || u.Title == "سالن های زیبایی").ToList();
+            var categoriesTattoo = _context.Categories.Where(u => u.ParentCategory.Title == "تتو" || u.Title == "تتو").ToList();
+            var categoriesClinic = _context.Categories.Where(u => u.ParentCategory.Title == "کلینیک زیبایی" || u.Title == "کلینیک زیبایی").ToList();
             Business business = new()
             {
                 Id = Guid.NewGuid(),
@@ -214,15 +214,15 @@ public class SeedTestDataService(IServiceScopeFactory serviceScopeFactory) : ISe
                 Services = [service6]
             };
 
-            Business business4 = new() {Id = Guid.NewGuid(), Name = "کلینیک مفید", City = cityTehran, Categories = categoriesClinic};
-            Business business5 = new() {Id = Guid.NewGuid(), Name = "سالن روزالین", City = cityTehran, Categories = categoriesSolon};
-            Business business6 = new() {Id = Guid.NewGuid(), Name = "سالن تتو خوش خظ و خال", City = cityTehran, Categories = categoriesTattoo};
-            Business business7 = new() {Id = Guid.NewGuid(), Name = "کلینیک ابر", City = cityAhwaz, Categories = categoriesClinic};
-            Business business8 = new() {Id = Guid.NewGuid(), Name = "سالن اشک", City = cityAhwaz, Categories = categoriesSolon};
-            Business business9 = new() {Id = Guid.NewGuid(), Name = "سالن تتو رز", City = cityAhwaz, Categories = categoriesTattoo};
-            Business business10 = new() {Id = Guid.NewGuid(), Name = "کلینیک مشهد", City = cityMashhad, Categories = categoriesClinic};
-            Business business11 = new() {Id = Guid.NewGuid(), Name = "سالن ماد", City = cityMashhad, Categories = categoriesSolon};
-            Business business12 = new() {Id = Guid.NewGuid(), Name = "سالن تتو باد", City = cityMashhad, Categories = categoriesTattoo};
+            Business business4 = new() { Id = Guid.NewGuid(), Name = "کلینیک مفید", City = cityTehran, Categories = categoriesClinic };
+            Business business5 = new() { Id = Guid.NewGuid(), Name = "سالن روزالین", City = cityTehran, Categories = categoriesSolon };
+            Business business6 = new() { Id = Guid.NewGuid(), Name = "سالن تتو خوش خظ و خال", City = cityTehran, Categories = categoriesTattoo };
+            Business business7 = new() { Id = Guid.NewGuid(), Name = "کلینیک ابر", City = cityAhwaz, Categories = categoriesClinic };
+            Business business8 = new() { Id = Guid.NewGuid(), Name = "سالن اشک", City = cityAhwaz, Categories = categoriesSolon };
+            Business business9 = new() { Id = Guid.NewGuid(), Name = "سالن تتو رز", City = cityAhwaz, Categories = categoriesTattoo };
+            Business business10 = new() { Id = Guid.NewGuid(), Name = "کلینیک مشهد", City = cityMashhad, Categories = categoriesClinic };
+            Business business11 = new() { Id = Guid.NewGuid(), Name = "سالن ماد", City = cityMashhad, Categories = categoriesSolon };
+            Business business12 = new() { Id = Guid.NewGuid(), Name = "سالن تتو باد", City = cityMashhad, Categories = categoriesTattoo };
 
             _context.Businesses.AddRange([business, business2, business3, business4, business5, business6, business7, business8, business9, business10, business11, business12]);
             _context.Artists.AddRange([artist, artist2, artist3, artist4, artist5, artist6]);

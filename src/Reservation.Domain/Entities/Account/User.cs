@@ -1,6 +1,6 @@
 namespace Reservation.Domain.Entities.Account;
 
-public class User : BaseClass
+public class User : BaseClass<Guid>
 {
     public string FullName { get; set; }
     public string PhoneNumber { get; set; }
