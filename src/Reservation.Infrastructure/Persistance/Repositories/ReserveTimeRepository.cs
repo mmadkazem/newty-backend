@@ -48,13 +48,37 @@ public sealed class ReserveTimeRepository(NewtyDbContext context)
         => await _context.ReserveTimesReceipt.AsQueryable()
                                         .AsNoTracking()
                                         .Where(r => r.Id == id)
-                                        .Select(c => new GetReserveTimeQueryResponse
+                                        .Select(c => new GetReserveTimeDetailQueryResponse
                                         (
                                             c.Id,
                                             c.TotalStartDate,
                                             c.TotalEndDate,
                                             c.TotalPrice,
                                             c.UserId,
+                                            c.State.ToString(),
+                                            c.ReserveItems.Select(r => new ReserveItemsResponse
+                                                            (
+                                                                r.Id,
+                                                                r.StartDate,
+                                                                r.EndDate,
+                                                                r.Price,
+                                                                r.ServiceId
+                                                            )).ToList()
+                                        ))
+                                        .FirstOrDefaultAsync(cancellationToken);
+
+    public async Task<IResponse> GetReserveTimeSender(Guid id, CancellationToken cancellationToken = default)
+        => await _context.ReserveTimesSender.AsQueryable()
+                                        .AsNoTracking()
+                                        .Where(r => r.Id == id)
+                                        .Select(c => new GetReserveTimeSenderByIdQueryResponse
+                                        (
+                                            c.Id,
+                                            c.TotalStartDate,
+                                            c.TotalEndDate,
+                                            c.TotalPrice,
+                                            c.BusinessReceiptId,
+                                            c.State.ToString(),
                                             c.ReserveItems.Select(r => new ReserveItemsResponse
                                                             (
                                                                 r.Id,
@@ -70,21 +94,12 @@ public sealed class ReserveTimeRepository(NewtyDbContext context)
         => await _context.ReserveTimesReceipt.AsQueryable()
                                         .AsNoTracking()
                                         .Where(r => r.BusinessReceiptId == businessId && r.State == state)
-                                        .Select(c => new GetReserveTimeQueryResponse
+                                        .Select(c => new GetReserveTimeBusinessReceiptQueryResponse
                                         (
                                             c.Id,
                                             c.TotalStartDate,
                                             c.TotalEndDate,
-                                            c.TotalPrice,
-                                            c.UserId,
-                                            c.ReserveItems.Select(r => new ReserveItemsResponse
-                                                            (
-                                                                r.Id,
-                                                                r.StartDate,
-                                                                r.EndDate,
-                                                                r.Price,
-                                                                r.ServiceId
-                                                            )).ToList()
+                                            c.User.FullName
                                         ))
                                         .Skip((page - 1) * 20)
                                         .Take(20)
@@ -94,21 +109,14 @@ public sealed class ReserveTimeRepository(NewtyDbContext context)
         => await _context.ReserveTimesReceipt.AsQueryable()
                                         .AsNoTracking()
                                         .Where(r => r.BusinessReceiptId == businessId && r.Finished == finished && r.State == ReserveState.Confirmed)
-                                        .Select(c => new GetReserveTimeQueryResponse
+                                        .Select(c => new GetReserveTimeUserQueryResponse
                                         (
                                             c.Id,
                                             c.TotalStartDate,
                                             c.TotalEndDate,
-                                            c.TotalPrice,
-                                            c.UserId,
-                                            c.ReserveItems.Select(r => new ReserveItemsResponse
-                                                            (
-                                                                r.Id,
-                                                                r.StartDate,
-                                                                r.EndDate,
-                                                                r.Price,
-                                                                r.ServiceId
-                                                            )).ToList()
+                                            c.BusinessReceipt.Name,
+                                            c.BusinessReceipt.Address,
+                                            c.BusinessReceipt.CoverImagePath
                                         ))
                                         .Skip((page - 1) * 20)
                                         .Take(20)
@@ -118,22 +126,14 @@ public sealed class ReserveTimeRepository(NewtyDbContext context)
         => await _context.ReserveTimesReceipt.AsQueryable()
                                         .AsNoTracking()
                                         .Where(r => r.BusinessReceiptId == businessId && r.Finished == finished)
-                                        .Select(c => new GetReserveTimeSenderQueryResponse
+                                        .Select(c => new GetReserveTimeBusinessSenderQueryResponse
                                         (
                                             c.Id,
                                             c.TotalStartDate,
                                             c.TotalEndDate,
-                                            c.TotalPrice,
-                                            c.UserId,
-                                            c.State.ToString(),
-                                            c.ReserveItems.Select(r => new ReserveItemsResponse
-                                                            (
-                                                                r.Id,
-                                                                r.StartDate,
-                                                                r.EndDate,
-                                                                r.Price,
-                                                                r.ServiceId
-                                                            )).ToList()
+                                            c.BusinessReceipt.Name,
+                                            c.BusinessReceipt.Address,
+                                            c.BusinessReceipt.CoverImagePath
                                         ))
                                         .Skip((page - 1) * 20)
                                         .Take(20)
@@ -143,22 +143,14 @@ public sealed class ReserveTimeRepository(NewtyDbContext context)
         => await _context.ReserveTimesReceipt.AsQueryable()
                                         .AsNoTracking()
                                         .Where(r => r.BusinessReceiptId == businessId && r.State == state && !r.Finished)
-                                        .Select(c => new GetReserveTimeSenderQueryResponse
+                                        .Select(c => new GetReserveTimeBusinessSenderQueryResponse
                                         (
                                             c.Id,
                                             c.TotalStartDate,
                                             c.TotalEndDate,
-                                            c.TotalPrice,
-                                            c.UserId,
-                                            c.State.ToString(),
-                                            c.ReserveItems.Select(r => new ReserveItemsResponse
-                                                            (
-                                                                r.Id,
-                                                                r.StartDate,
-                                                                r.EndDate,
-                                                                r.Price,
-                                                                r.ServiceId
-                                                            )).ToList()
+                                            c.BusinessReceipt.Name,
+                                            c.BusinessReceipt.Address,
+                                            c.BusinessReceipt.CoverImagePath
                                         ))
                                         .Skip((page - 1) * 20)
                                         .Take(20)
@@ -168,21 +160,14 @@ public sealed class ReserveTimeRepository(NewtyDbContext context)
         => await _context.ReserveTimesReceipt.AsQueryable()
                                         .AsNoTracking()
                                         .Where(r => r.UserId == userId && r.State == state && !r.Finished)
-                                        .Select(c => new GetReserveTimeQueryResponse
+                                        .Select(c => new GetReserveTimeUserQueryResponse
                                         (
                                             c.Id,
                                             c.TotalStartDate,
                                             c.TotalEndDate,
-                                            c.TotalPrice,
-                                            c.UserId,
-                                            c.ReserveItems.Select(r => new ReserveItemsResponse
-                                                            (
-                                                                r.Id,
-                                                                r.StartDate,
-                                                                r.EndDate,
-                                                                r.Price,
-                                                                r.ServiceId
-                                                            )).ToList()
+                                            c.BusinessReceipt.Name,
+                                            c.BusinessReceipt.Address,
+                                            c.BusinessReceipt.CoverImagePath
                                         ))
                                         .Skip((page - 1) * 20)
                                         .Take(20)
@@ -192,21 +177,14 @@ public sealed class ReserveTimeRepository(NewtyDbContext context)
         => await _context.ReserveTimesReceipt.AsQueryable()
                                         .AsNoTracking()
                                         .Where(r => r.UserId == userId && r.Finished == finished && r.State == ReserveState.Confirmed)
-                                        .Select(c => new GetReserveTimeQueryResponse
+                                        .Select(c => new GetReserveTimeUserQueryResponse
                                         (
                                             c.Id,
                                             c.TotalStartDate,
                                             c.TotalEndDate,
-                                            c.TotalPrice,
-                                            c.UserId,
-                                            c.ReserveItems.Select(r => new ReserveItemsResponse
-                                                            (
-                                                                r.Id,
-                                                                r.StartDate,
-                                                                r.EndDate,
-                                                                r.Price,
-                                                                r.ServiceId
-                                                            )).ToList()
+                                            c.BusinessReceipt.Name,
+                                            c.BusinessReceipt.Address,
+                                            c.BusinessReceipt.CoverImagePath
                                         ))
                                         .Skip((page - 1) * 20)
                                         .Take(20)

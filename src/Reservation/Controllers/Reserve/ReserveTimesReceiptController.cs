@@ -28,6 +28,7 @@ public sealed class ReserveTimesReceiptController(ISender sender) : ControllerBa
 
     [HttpGet("Businesses/Finished/{finished:bool}/Page/{page:int}")]
     [Authorize(Role.Business)]
+    [ProducesResponseType(typeof(GetReserveTimeBusinessReceiptQueryResponse), 200)]
     public async Task<IActionResult> GetBusinessReserveTime(bool finished, int page,
         CancellationToken token)
     {
@@ -36,8 +37,20 @@ public sealed class ReserveTimesReceiptController(ISender sender) : ControllerBa
         return Ok(results);
     }
 
+    [HttpGet("Businesses/State/{state}/Page/{page:int}")]
+    [Authorize(Role.Business)]
+    [ProducesResponseType(typeof(GetReserveTimeBusinessReceiptQueryResponse), 200)]
+    public async Task<IActionResult> GetBusinessReserveTimeByState(ReserveState state, int page,
+        CancellationToken token)
+    {
+        var request = GetBusinessReserveTimeByStateReceiptQueryRequest.Create(page, state, User.UserId());
+        var results = await _sender.Send(request, token);
+        return Ok(results);
+    }
+
     [HttpGet("Businesses/{businessId:guid}")]
     [AllowAnonymous]
+    [ProducesResponseType(typeof(GetFreeTimeQueryResponse), 200)]
     public async Task<IActionResult> GetBusinessFreeTimes(Guid businessId,
         CancellationToken token)
     {
@@ -47,6 +60,7 @@ public sealed class ReserveTimesReceiptController(ISender sender) : ControllerBa
 
     [HttpGet("Users/Finished/{finished:bool}/Page/{page:int}")]
     [Authorize(Role.User)]
+    [ProducesResponseType(typeof(GetReserveTimeUserQueryResponse), 200)]
     public async Task<IActionResult> GetUserReserveTime(bool finished, int page,
         CancellationToken token)
     {
@@ -55,18 +69,9 @@ public sealed class ReserveTimesReceiptController(ISender sender) : ControllerBa
         return Ok(results);
     }
 
-    [HttpGet("Businesses/State/{state}/Page/{page:int}")]
-    [Authorize(Role.Business)]
-    public async Task<IActionResult> GetBusinessReserveTimeByState(ReserveState state, int page,
-        CancellationToken token)
-    {
-        var request = GetBusinessReserveTimeByStateReceiptQueryRequest.Create(page, state, User.UserId());
-        var results = await _sender.Send(request, token);
-        return Ok(results);
-    }
-
     [HttpGet("Users/State/{state}/Page/{page:int}")]
     [Authorize(Role.User)]
+    [ProducesResponseType(typeof(GetReserveTimeUserQueryResponse), 200)]
     public async Task<IActionResult> GetUserReserveTimeByState(ReserveState state, int page,
         CancellationToken token)
     {
@@ -77,6 +82,7 @@ public sealed class ReserveTimesReceiptController(ISender sender) : ControllerBa
 
     [HttpGet("{id:guid}")]
     [Authorize(Role.BusinessUser)]
+    [ProducesResponseType(typeof(GetReserveTimeDetailQueryResponse), 200)]
     public async Task<IActionResult> Get([AsParameters] GetReserveTimeByIdReceiptQueryRequest request,
         CancellationToken token)
     {

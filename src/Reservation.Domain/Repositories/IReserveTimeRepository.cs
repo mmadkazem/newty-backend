@@ -17,4 +17,5 @@ public interface IReserveTimeRepository
     Task<IEnumerable<IResponse>> GetUserReserveTimes(int page, Guid userId, bool finished, CancellationToken cancellationToken = default);
     Task<IEnumerable<IResponse>> GetBusinessReserveTimesSender(int page, bool finished, Guid businessId, CancellationToken cancellationToken);
     Task<IEnumerable<IResponse>> GetBusinessReserveTimesSenderByState(int page, ReserveState state, Guid businessId, CancellationToken cancellationToken);
+    Task<IResponse> GetReserveTimeSender(Guid id, CancellationToken cancellationToken = default);
 }

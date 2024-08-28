@@ -6,12 +6,15 @@ public sealed class GetFreeTimeQueryHandler(IUnitOfWork uow) : IRequestHandler<G
 
     public async Task<IEnumerable<IResponse>> Handle(GetFreeTimeQueryRequest request, CancellationToken cancellationToken)
     {
+        var business = await _uow.Businesses.FindAsync(request.BusinessId, cancellationToken)
+            ?? throw new BusinessNotFoundException();
+
         var reserveTimes = await _uow.ReserveTimes.FindAsyncByBusinessId(request.BusinessId, cancellationToken);
         if (reserveTimes.Count == 0)
         {
             throw new ReserveTimeNotFoundException();
         }
-        var (start, end) = GetBusinessWorkOfHour();
+        var (start, end) = GetBusinessWorkOfHour(business.StartHoursOfWor, business.EndHoursOfWor);
         List<GetFreeTimeQueryResponse> responses = [];
 
         GetFreeTimeQueryResponse startResponse = new(start, reserveTimes[0].TotalStartDate);
@@ -33,13 +36,13 @@ public sealed class GetFreeTimeQueryHandler(IUnitOfWork uow) : IRequestHandler<G
         return responses;
     }
 
-    private static (DateTime start, DateTime end) GetBusinessWorkOfHour()
+    private static (DateTime start, DateTime end) GetBusinessWorkOfHour(TimeSpan start, TimeSpan end)
     {
         var now = DateTime.Now;
         return
         (
-            new DateTime(now.Year, now.Month, now.Day, 9, 0, 0),
-            new DateTime(now.Year, now.Month, now.Day, 22, 0, 0)
+            new DateTime(now.Year, now.Month, now.Day, start.Hours, start.Minutes, start.Seconds),
+            new DateTime(now.Year, now.Month, now.Day, end.Hours, end.Minutes, end.Seconds)
         );
     }
 }

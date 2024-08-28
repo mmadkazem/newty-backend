@@ -95,6 +95,7 @@ global using Microsoft.AspNetCore.Authentication.JwtBearer;
 global using Reservation.Application.ReserveTimes.Messages;
 global using Reservation.Application.TransferFees.Messages;
 global using Reservation.Application.SmsTemplates.Message;
+global using Reservation.Application.ReserveTimes.Queries;
 global using Reservation.Infrastructure.ExternalServices;
 global using Reservation.Application.Businesses.Messages;
 global using Reservation.Application.Categories.Messages;
