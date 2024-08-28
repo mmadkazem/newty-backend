@@ -1,5 +1,3 @@
-using Reservation.Application.Account.Queries.GetUserInfo;
-
 namespace Reservation.Controllers.Account;
 
 [ApiController]
@@ -28,6 +26,7 @@ public sealed class AccountController(ISender sender) : ControllerBase
 
     [HttpGet]
     [Authorize(Roles = Role.BusinessUser, AuthenticationSchemes = AuthScheme.TempScheme)]
+    [ProducesResponseType(typeof(LoginQueryResponse), 200)]
     public async Task<IActionResult> Login([FromQuery] string code,
         CancellationToken token)
     {
@@ -39,6 +38,7 @@ public sealed class AccountController(ISender sender) : ControllerBase
 
     [HttpGet]
     [Authorize(AuthenticationSchemes = AuthScheme.RefreshTokenScheme)]
+    [ProducesResponseType(typeof(JwtTokensData), 200)]
     public async Task<IActionResult> LoginByRefreshToken(CancellationToken token)
     {
         var request = new LoginByRefreshTokenQueryRequest(User.UserId(), User.Roles());
@@ -66,6 +66,7 @@ public sealed class AccountController(ISender sender) : ControllerBase
 
     [HttpGet("/api/Account/Admin/Login")]
     [Authorize(Roles = Role.Admin, AuthenticationSchemes = AuthScheme.TempScheme)]
+    [ProducesResponseType(typeof(AdminLoginQueryResponse), 200)]
     public async Task<IActionResult> AdminLogin([FromQuery] string code,
         CancellationToken token)
     {
@@ -75,6 +76,7 @@ public sealed class AccountController(ISender sender) : ControllerBase
 
     [HttpGet]
     [Authorize(Role.User)]
+    [ProducesResponseType(typeof(GetUserInfoQueryResponse), 200)]
     public async Task<IActionResult> GetInformation(CancellationToken token)
     {
         var result = await _sender.Send(new GetUserInfoQueryRequest(User.UserId()), token);

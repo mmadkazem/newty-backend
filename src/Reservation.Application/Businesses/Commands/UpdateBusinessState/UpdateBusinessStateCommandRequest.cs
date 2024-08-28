@@ -1,4 +1,3 @@
-
 namespace Reservation.Application.Businesses.Commands.UpdateBusinessState;
 
 

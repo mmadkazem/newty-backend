@@ -35,6 +35,7 @@ public sealed class CategoriesController(ISender sender) : ControllerBase
 
     [HttpGet("{id:int}/SubCategory")]
     [AllowAnonymous]
+    [ProducesResponseType(typeof(GetSubCategoriesByCategoryIdQueryResponse), 200)]
     public async Task<IActionResult> GetSubCategory(int id,
         CancellationToken token)
     {
@@ -44,6 +45,7 @@ public sealed class CategoriesController(ISender sender) : ControllerBase
 
     [HttpGet("{id:int}")]
     [AllowAnonymous]
+    [ProducesResponseType(typeof(GetCategoryQueryResponse), 200)]
     public async Task<IActionResult> Get(int id,
         CancellationToken token)
     {
@@ -53,6 +55,7 @@ public sealed class CategoriesController(ISender sender) : ControllerBase
 
     [HttpGet]
     [AllowAnonymous]
+    [ProducesResponseType(typeof(GetCategoriesQueryResponse), 200)]
     public async Task<IActionResult> Get(CancellationToken token)
     {
         var results = await _sender.Send(new GetCategoriesQueryRequest(), token);
@@ -61,6 +64,7 @@ public sealed class CategoriesController(ISender sender) : ControllerBase
 
     [HttpGet("Main")]
     [AllowAnonymous]
+    [ProducesResponseType(typeof(GetMainCategoryQueryResponse), 200)]
     public async Task<IActionResult> GetMainCategory(CancellationToken token)
     {
         var results = await _sender.Send(new GetMainCategoryQueryRequest(), token);
@@ -69,6 +73,7 @@ public sealed class CategoriesController(ISender sender) : ControllerBase
 
     [HttpGet("{categoryId:int}/Businesses/Page/{page:int}")]
     [AllowAnonymous]
+    [ProducesResponseType(typeof(GetCategoryBusinessesQueryResponse), 200)]
     public async Task<IActionResult> Get(int categoryId, int page,
         CancellationToken token)
     {
@@ -78,6 +83,7 @@ public sealed class CategoriesController(ISender sender) : ControllerBase
 
     [HttpGet("{key}")]
     [AllowAnonymous]
+    [ProducesResponseType(typeof(SearchCategoryQueryResponse), 200)]
     public async Task<IActionResult> Get(string key,
         CancellationToken token)
     {

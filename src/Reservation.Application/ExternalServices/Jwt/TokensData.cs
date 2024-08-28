@@ -5,4 +5,4 @@ public record JwtTempData(string TempToken)
     public static implicit operator string(JwtTempData temp)
         => temp.TempToken;
 }
-public record JwtTokensData(string AccessToken, string RefreshToken);
+public readonly record struct JwtTokensData(string AccessToken, string RefreshToken);

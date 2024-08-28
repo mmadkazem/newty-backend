@@ -34,6 +34,7 @@ public sealed class SmsTemplatesController(ISender sender) : ControllerBase
     }
 
     [HttpGet("Businesses/{businessId:guid}")]
+    [ProducesResponseType(typeof(GetSmsTemplatesQueryResponse), 200)]
     public async Task<IActionResult> GetAll(Guid businessId,
         CancellationToken token)
     {
@@ -42,6 +43,7 @@ public sealed class SmsTemplatesController(ISender sender) : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
+    [ProducesResponseType(typeof(GetSmsTemplateQueryResponse), 200)]
     public async Task<IActionResult> Get(Guid id,
         CancellationToken token)
     {

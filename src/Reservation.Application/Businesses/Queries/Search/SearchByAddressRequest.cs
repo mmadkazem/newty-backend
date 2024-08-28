@@ -1,3 +1,3 @@
 namespace Reservation.Application.Businesses.Queries.Search;
 
-public record SearchBusinessRequest(int Page, string Key, string City) : IRequest<IEnumerable<IResponse>>;
+public record SearchBusinessQueryRequest(int Page, string Key, string City) : IRequest<IEnumerable<IResponse>>;

@@ -25,6 +25,7 @@ public class UserRequestPaysController(ISender sender) : ControllerBase
     }
 
     [HttpGet("Page/{Page:int}")]
+    [ProducesResponseType(typeof(GetUserRequestPaysQueryResponse), 200)]
     public async Task<IActionResult> Get(int page,
         CancellationToken token)
     {

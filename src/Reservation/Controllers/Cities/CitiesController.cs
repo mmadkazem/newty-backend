@@ -35,6 +35,7 @@ public sealed class CitiesController(ISender sender) : ControllerBase
 
     [HttpGet]
     [AllowAnonymous]
+    [ProducesResponseType(typeof(GetCitiesQueryResponse), 200)]
     public async Task<IActionResult> GetAll(CancellationToken token)
     {
         var results = await _sender.Send(new GetCitiesQueryRequest(), token);

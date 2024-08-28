@@ -12,7 +12,7 @@ public sealed class WalletsController(ISender sender) : ControllerBase
     public async Task<IActionResult> PostBusiness(CancellationToken token)
     {
         await _sender.Send(new CreateBusinessWalletCommandRequest(User.UserId()), token);
-        return Ok(new { Message = WalletSuccessMessage.Created});
+        return Ok(new { Message = WalletSuccessMessage.Created });
     }
 
     [HttpPost("Users")]
@@ -20,7 +20,7 @@ public sealed class WalletsController(ISender sender) : ControllerBase
     public async Task<IActionResult> PostUsers(CancellationToken token)
     {
         await _sender.Send(new CreateUserWalletCommandRequest(User.UserId()), token);
-        return Ok(new { Message = WalletSuccessMessage.Created});
+        return Ok(new { Message = WalletSuccessMessage.Created });
     }
 
     [HttpPut("Users/Found")]
@@ -29,7 +29,7 @@ public sealed class WalletsController(ISender sender) : ControllerBase
         CancellationToken token)
     {
         await _sender.Send(request, token);
-        return Ok(new { Message = WalletSuccessMessage.Founded});
+        return Ok(new { Message = WalletSuccessMessage.Founded });
     }
 
     [HttpPut("Businesses/Found")]
@@ -38,7 +38,7 @@ public sealed class WalletsController(ISender sender) : ControllerBase
         CancellationToken token)
     {
         await _sender.Send(request, token);
-        return Ok(new { Message = WalletSuccessMessage.Founded});
+        return Ok(new { Message = WalletSuccessMessage.Founded });
     }
 
     [HttpPut("Businesses/Withdraw")]
@@ -48,7 +48,7 @@ public sealed class WalletsController(ISender sender) : ControllerBase
     {
         var request = WithdrawBusinessWalletCommandRequest.Create(User.UserId(), amount);
         await _sender.Send(request, token);
-        return Ok(new { Message = WalletSuccessMessage.Withdraw});
+        return Ok(new { Message = WalletSuccessMessage.Withdraw });
     }
 
     [HttpPut("Users/Withdraw")]
@@ -58,11 +58,12 @@ public sealed class WalletsController(ISender sender) : ControllerBase
     {
         var request = WithdrawUserWalletCommandRequest.Create(User.UserId(), amount);
         await _sender.Send(request, token);
-        return Ok(new { Message = WalletSuccessMessage.Withdraw});
+        return Ok(new { Message = WalletSuccessMessage.Withdraw });
     }
 
     [HttpGet("Users")]
     [Authorize(Role.User)]
+    [ProducesResponseType(typeof(GetUserWalletQueryResponse), 200)]
     public async Task<IActionResult> GetUserWallet(CancellationToken token)
     {
         var result = await _sender.Send(new GetUserWalletQueryRequest(User.UserId()), token);
@@ -71,6 +72,7 @@ public sealed class WalletsController(ISender sender) : ControllerBase
 
     [HttpGet("Businesses")]
     [Authorize(Role.Business)]
+    [ProducesResponseType(typeof(GetBusinessWalletQueryResponse), 200)]
     public async Task<IActionResult> GetBusinessWallet(CancellationToken token)
     {
         var result = await _sender.Send(new GetBusinessWalletQueryRequest(User.UserId()), token);
@@ -79,6 +81,7 @@ public sealed class WalletsController(ISender sender) : ControllerBase
 
     [HttpGet("Users/Transactions/Page/{page:int}")]
     [Authorize(Role.User)]
+    [ProducesResponseType(typeof(GetWalletTransactionsQueryResponse), 200)]
     public async Task<IActionResult> GetUserTransactions(int page,
         CancellationToken token)
     {
@@ -89,6 +92,7 @@ public sealed class WalletsController(ISender sender) : ControllerBase
 
     [HttpGet("Businesses/Transactions/Page/{page:int}")]
     [Authorize(Role.Business)]
+    [ProducesResponseType(typeof(GetWalletTransactionsQueryResponse), 200)]
     public async Task<IActionResult> GetBusinessesTransactions(int page,
         CancellationToken token)
     {

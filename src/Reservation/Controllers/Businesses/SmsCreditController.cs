@@ -27,6 +27,7 @@ public sealed class SmsCreditController(ISender sender) : ControllerBase
     }
 
     [HttpGet]
+    [ProducesResponseType(typeof(GetSmsCreditQueryResponse), 200)]
     public async Task<IActionResult> Get(CancellationToken token)
     {
         var result = await _sender.Send(new GetSmsCreditQueryRequest(User.UserId()), token);

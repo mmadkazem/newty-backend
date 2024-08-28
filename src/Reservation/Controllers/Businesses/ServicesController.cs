@@ -16,15 +16,6 @@ public sealed class ServicesController(ISender sender) : ControllerBase
         return Ok(new { Message = ServiceSuccessMessage.Created });
     }
 
-    [HttpGet("Businesses/{businessId:guid}/Page/{page:int}")]
-    [AllowAnonymous]
-    public async Task<IActionResult> GetByBusinessId(Guid businessId, int page,
-        CancellationToken token)
-    {
-        var services = await _sender.Send(new GetServicesByBusinessIdQueryRequest(page, businessId), token);
-        return Ok(services);
-    }
-
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Put(Guid id, [FromBody] UpdateServiceDTO model,
         CancellationToken token)
@@ -40,5 +31,15 @@ public sealed class ServicesController(ISender sender) : ControllerBase
     {
         await _sender.Send(new RemoveServiceCommandRequest(id, User.UserId()), token);
         return Ok(new { Message = ServiceSuccessMessage.Removed });
+    }
+
+    [HttpGet("Businesses/{businessId:guid}/Page/{page:int}")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(GetServicesByBusinessIdQueryResponse), 200)]
+    public async Task<IActionResult> GetByBusinessId(Guid businessId, int page,
+        CancellationToken token)
+    {
+        var services = await _sender.Send(new GetServicesByBusinessIdQueryRequest(page, businessId), token);
+        return Ok(services);
     }
 }

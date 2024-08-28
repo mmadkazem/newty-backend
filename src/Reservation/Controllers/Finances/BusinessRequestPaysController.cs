@@ -24,6 +24,7 @@ public sealed class BusinessRequestPaysController(ISender sender) : ControllerBa
     }
 
     [HttpGet("Page/{Page:int}")]
+    [ProducesResponseType(typeof(GetBusinessRequestPaysQueryResponse), 200)]
     public async Task<IActionResult> Get(int page,
         CancellationToken token)
     {

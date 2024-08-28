@@ -92,7 +92,7 @@ public sealed class BusinessRepository(NewtyDbContext context) : IBusinessReposi
         => await _context.Businesses.AsQueryable()
                                     .AsNoTracking()
                                     .Where(b => b.City.FaName == city && (b.Address.Contains(key) || b.Name.Contains(key)))
-                                    .Select(b => new SearchQueryResponse
+                                    .Select(b => new SearchBusinessQueryResponse
                                     (
                                         b.Id,
                                         b.Name,

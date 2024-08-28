@@ -35,6 +35,7 @@ public sealed class SmsPlansController(ISender sender) : ControllerBase
 
     [HttpGet("{page:int}")]
     [Authorize(Role.Business)]
+    [ProducesResponseType(typeof(GetSmsPlansQueryResponse), 200)]
     public async Task<IActionResult> Get(int page,
         CancellationToken token)
     {

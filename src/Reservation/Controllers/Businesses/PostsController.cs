@@ -34,6 +34,7 @@ public sealed class PostsController(ISender sender) : ControllerBase
 
     [HttpGet("{id:guid}")]
     [AllowAnonymous]
+    [ProducesResponseType(typeof(GetPostQueryResponse), 200)]
     public async Task<IActionResult> Get(Guid id,
         CancellationToken token)
     {
@@ -43,6 +44,7 @@ public sealed class PostsController(ISender sender) : ControllerBase
 
     [HttpGet("Businesses/{businessId:guid}/Page/{page:int}")]
     [AllowAnonymous]
+    [ProducesResponseType(typeof(GetPostsQueryResponse), 200)]
     public async Task<IActionResult> Get(Guid businessId, int page,
         CancellationToken token)
     {

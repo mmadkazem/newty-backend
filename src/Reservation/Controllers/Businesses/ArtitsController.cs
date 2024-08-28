@@ -34,33 +34,6 @@ public sealed class ArtistsController(ISender sender) : ControllerBase
         return Ok(new { Message = ArtistSuccessMessage.ServiceAdded });
     }
 
-    [HttpGet("{id:guid}")]
-    [AllowAnonymous]
-    public async Task<IActionResult> Get(Guid id,
-        CancellationToken token)
-    {
-        var result = await _sender.Send(new GetArtistQueryRequest(id), token);
-        return Ok(result);
-    }
-
-    [HttpGet("{id:guid}/Services")]
-    [AllowAnonymous]
-    public async Task<IActionResult> GetArtistService(Guid id,
-        CancellationToken token)
-    {
-        var results = await _sender.Send(new GetArtistServicesQueryRequest(id), token);
-        return Ok(results);
-    }
-
-    [HttpGet("Businesses/{businessId:guid}")]
-    [AllowAnonymous]
-    public async Task<IActionResult> GetArtistByBusinessId(Guid businessId,
-        CancellationToken token)
-    {
-        var results = await _sender.Send(new GetArtistByBusinessIdQueryRequest(businessId), token);
-        return Ok(results);
-    }
-
     [HttpPut("{id:guid}")]
     public async Task<IActionResult> Put(Guid id, [FromBody] UpdateArtistDTO model,
         CancellationToken token)
@@ -76,5 +49,36 @@ public sealed class ArtistsController(ISender sender) : ControllerBase
     {
         await _sender.Send(new RemoveArtistCommandRequest(id, User.UserId()), token);
         return Ok(new { Message = ArtistSuccessMessage.Removed });
+    }
+
+    [HttpGet("{id:guid}")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(GetArtistQueryResponse), 200)]
+
+    public async Task<IActionResult> Get(Guid id,
+        CancellationToken token)
+    {
+        var result = await _sender.Send(new GetArtistQueryRequest(id), token);
+        return Ok(result);
+    }
+
+    [HttpGet("{id:guid}/Services")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(GetArtistServicesQueryResponse), 200)]
+    public async Task<IActionResult> GetArtistService(Guid id,
+        CancellationToken token)
+    {
+        var results = await _sender.Send(new GetArtistServicesQueryRequest(id), token);
+        return Ok(results);
+    }
+
+    [HttpGet("Businesses/{businessId:guid}")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(GetArtistByBusinessIdQueryResponse), 200)]
+    public async Task<IActionResult> GetArtistByBusinessId(Guid businessId,
+        CancellationToken token)
+    {
+        var results = await _sender.Send(new GetArtistByBusinessIdQueryRequest(businessId), token);
+        return Ok(results);
     }
 }
