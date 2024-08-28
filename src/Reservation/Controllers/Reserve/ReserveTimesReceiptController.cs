@@ -45,7 +45,7 @@ public sealed class ReserveTimesReceiptController(ISender sender) : ControllerBa
         return Ok(results);
     }
 
-    [HttpGet("Users/Finished/{finished:bool}/Page/{page:int}/")]
+    [HttpGet("Users/Finished/{finished:bool}/Page/{page:int}")]
     [Authorize(Role.User)]
     public async Task<IActionResult> GetUserReserveTime(bool finished, int page,
         CancellationToken token)

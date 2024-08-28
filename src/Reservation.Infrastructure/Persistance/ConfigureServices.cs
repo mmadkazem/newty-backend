@@ -31,7 +31,7 @@ public static class ConfigureServices
 
         // DI DbContext
         services.AddDbContext<NewtyDbContext>(options =>
-            options.UseNpgsql(configuration.GetConnectionString("NewtyDb")));
+            options.UseNpgsql(configuration.GetConnectionString("NewtyDb")), ServiceLifetime.Transient);
 
         // DI Seeding Data
         services.AddSingleton<ICategorySeedData, CategorySeedData>();
