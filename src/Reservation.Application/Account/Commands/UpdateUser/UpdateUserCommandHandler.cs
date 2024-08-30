@@ -1,4 +1,3 @@
-
 namespace Reservation.Application.Account.Commands.UpdateUser;
 
 public sealed class UpdateUserCommandHandler(IUnitOfWork uow) : IRequestHandler<UpdateUserCommandRequest>
@@ -14,6 +13,7 @@ public sealed class UpdateUserCommandHandler(IUnitOfWork uow) : IRequestHandler<
             ?? throw new CityNotFoundException();
 
         user.FullName = request.FullName;
+        user.PhoneNumber = request.PhoneNumber;
         user.City = city;
         user.ModifiedOn = DateTime.Now;
 

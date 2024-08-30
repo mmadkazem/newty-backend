@@ -1,17 +1,17 @@
-
 namespace Reservation.Application.Posts.Queries.GetPosts;
 
-public sealed class GetPostsQueryHandler(IUnitOfWork uow) : IRequestHandler<GetPostsQueryRequest, IEnumerable<IResponse>>
+public sealed class GetPostsQueryHandler(IUnitOfWork uow) : IRequestHandler<GetPostsQueryRequest, Response>
 {
     private readonly IUnitOfWork _uow = uow;
 
-    public async Task<IEnumerable<IResponse>> Handle(GetPostsQueryRequest request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(GetPostsQueryRequest request, CancellationToken cancellationToken)
     {
-        var responses = await _uow.Posts.GetPosts(request.Page, request.BusinessId, cancellationToken);
-        if (!responses.Any())
+        var responses = await _uow.Posts.GetPosts(request.Page, request.Size, request.BusinessId, cancellationToken);
+        if (!responses.Any() || responses.Count() < request.Size)
         {
-            throw new PostNotFoundException();
+            return new Response(true, responses);
         }
-        return responses;
+
+        return new Response(false, responses);
     }
 }

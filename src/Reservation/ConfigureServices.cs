@@ -6,7 +6,7 @@ public static class ConfigureServices
     public static IServiceCollection RegisterApiServices(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddCorsPolicies();
-        services.AddControllers();
+        services.AddControllers().AddNewtonsoftJson();
         services.AddEndpointsApiExplorer();
         services
             .AddAuthenticationConfig(configuration)

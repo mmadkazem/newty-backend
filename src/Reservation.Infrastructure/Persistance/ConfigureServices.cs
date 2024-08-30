@@ -1,5 +1,3 @@
-using Reservation.Infrastructure.Persistance.SeedData.TestData;
-
 namespace Reservation.Infrastructure.Persistance;
 
 
@@ -25,13 +23,15 @@ public static class ConfigureServices
         services.AddTransient<IUserRepository, UserRepository>();
         services.AddTransient<IPostRepository, PostRepository>();
 
-
         // DI UnitOfWork
         services.AddTransient<IUnitOfWork, UnitOfWork>();
 
         // DI DbContext
         services.AddDbContext<NewtyDbContext>(options =>
             options.UseNpgsql(configuration.GetConnectionString("NewtyDb")), ServiceLifetime.Transient);
+
+        services.AddDbContext<NewtyDbContextCommand>(options =>
+            options.UseNpgsql(configuration.GetConnectionString("NewtyDb")));
 
         // DI Seeding Data
         services.AddSingleton<ICategorySeedData, CategorySeedData>();

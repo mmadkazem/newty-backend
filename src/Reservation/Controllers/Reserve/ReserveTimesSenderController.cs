@@ -29,25 +29,23 @@ public class ReserveTimesSenderController(ISender sender) : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("Finished/{finished:bool}/Page/{page:int}")]
+    [HttpGet("Finished/{finished:bool}/Page/{page:int}/Size/{size:int}")]
     [Authorize(Role.Business)]
-    [ProducesResponseType(typeof(GetReserveTimeBusinessSenderQueryResponse), 200)]
-    public async Task<IActionResult> GetUserReserveTime(bool finished, int page,
+    [ProducesResponseType(typeof(Response<GetReserveTimeBusinessSenderQueryResponse>), 200)]
+    public async Task<IActionResult> GetUserReserveTime(bool finished, int page, int size,
         CancellationToken token)
     {
-        var request = GetBusinessReserveTimeSenderQueryRequest.Create(page, finished, User.UserId());
-        var results = await _sender.Send(request, token);
+        var results = await _sender.Send(new GetBusinessReserveTimeSenderQueryRequest(page, size, finished, User.UserId()), token);
         return Ok(results);
     }
 
-    [HttpGet("State/{state}/Page/{page:int}")]
+    [HttpGet("State/{state}/Page/{page:int}/Size/{size:int}")]
     [Authorize(Role.Business)]
-    [ProducesResponseType(typeof(GetReserveTimeBusinessSenderQueryResponse), 200)]
-    public async Task<IActionResult> GetBusinessReserveTimeByState(ReserveState state, int page,
+    [ProducesResponseType(typeof(Response<GetReserveTimeBusinessSenderQueryResponse>), 200)]
+    public async Task<IActionResult> GetBusinessReserveTimeByState(ReserveState state, int page, int size,
         CancellationToken token)
     {
-        var request = GetBusinessReserveTimeSenderByStateQueryRequest.Create(page, state, User.UserId());
-        var results = await _sender.Send(request, token);
+        var results = await _sender.Send(new GetBusinessReserveTimeSenderByStateQueryRequest(page, size, state, User.UserId()), token);
         return Ok(results);
     }
 

@@ -1,7 +1,7 @@
 namespace Reservation.Application.Categories.Queries.GetCategoryBusinesses;
 
 
-public sealed record GetCategoryBusinessesQueryRequest(int CategoryId, int Page) : IRequest<IEnumerable<IResponse>>;
+public sealed record GetCategoryBusinessesQueryRequest(int CategoryId, int Page, int Size, string City) : IRequest<Response>;
 
 public sealed record GetCategoryBusinessesQueryResponse
 (
@@ -9,5 +9,5 @@ public sealed record GetCategoryBusinessesQueryResponse
     string CoverImagePath,
     bool IsClose,
     string Address,
-    double Point
+    double? Point
 ) : IResponse;

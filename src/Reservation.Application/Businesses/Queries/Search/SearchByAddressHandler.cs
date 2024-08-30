@@ -1,16 +1,16 @@
 namespace Reservation.Application.Businesses.Queries.Search;
-public sealed class SearchBusinessHandler(IUnitOfWork uow) : IRequestHandler<SearchBusinessQueryRequest, IEnumerable<IResponse>>
+public sealed class SearchBusinessHandler(IUnitOfWork uow) : IRequestHandler<SearchBusinessQueryRequest, Response>
 {
     private readonly IUnitOfWork _uow = uow;
 
-    public async Task<IEnumerable<IResponse>> Handle(SearchBusinessQueryRequest request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(SearchBusinessQueryRequest request, CancellationToken cancellationToken)
     {
-        var businesses = await _uow.Businesses.Search(request.Page, request.Key, request.City, cancellationToken);
-        if (!businesses.Any())
+        var responses = await _uow.Businesses.Search(request.Page, request.Size, request.Key, request.City, cancellationToken);
+        if (!responses.Any() || responses.Count() < request.Size)
         {
-            throw new BusinessNotFoundException();
+            return new Response(true, responses);
         }
 
-        return businesses;
+        return new Response(false, responses);
     }
 }

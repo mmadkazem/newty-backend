@@ -1,11 +1,11 @@
 namespace Reservation.Application.Wallets.Queries.GetBusinessTransactions;
 
 public sealed class GetBusinessTransactionsQueryHandler(IUnitOfWork uow)
-    : IRequestHandler<GetBusinessTransactionsQueryRequest, IEnumerable<IResponse>>
+    : IRequestHandler<GetBusinessTransactionsQueryRequest, Response>
 {
     private readonly IUnitOfWork _uow = uow;
 
-    public async Task<IEnumerable<IResponse>> Handle(GetBusinessTransactionsQueryRequest request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(GetBusinessTransactionsQueryRequest request, CancellationToken cancellationToken)
     {
         var walletId = await _uow.Wallets.FindAsyncBusinessWalletId(request.BusinessId, cancellationToken);
         if (walletId == Guid.Empty)
@@ -13,12 +13,12 @@ public sealed class GetBusinessTransactionsQueryHandler(IUnitOfWork uow)
             throw new UserNotFoundException();
         }
 
-        var responses = await _uow.Wallets.GetTransactions(request.Page, walletId, cancellationToken);
-        if (!responses.Any())
+        var responses = await _uow.Wallets.GetTransactions(request.Page, request.Size, walletId, cancellationToken);
+        if (!responses.Any() || responses.Count() < request.Size)
         {
-            throw new TransactionNotFoundException();
+            return new Response(true, responses);
         }
 
-        return responses;
+        return new Response(false, responses);
     }
 }

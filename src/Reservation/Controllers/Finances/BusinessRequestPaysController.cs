@@ -23,12 +23,12 @@ public sealed class BusinessRequestPaysController(ISender sender) : ControllerBa
         return Ok(result);
     }
 
-    [HttpGet("Page/{Page:int}")]
-    [ProducesResponseType(typeof(GetBusinessRequestPaysQueryResponse), 200)]
-    public async Task<IActionResult> Get(int page,
+    [HttpGet("Page/{page:int}/Size/{size:int}")]
+    [ProducesResponseType(typeof(Response<GetBusinessRequestPaysQueryResponse>), 200)]
+    public async Task<IActionResult> Get(int page, int size,
         CancellationToken token)
     {
-        var results = await _sender.Send(new GetBusinessRequestPaysQueryRequest(page, User.UserId()), token);
+        var results = await _sender.Send(new GetBusinessRequestPaysQueryRequest(page, size, User.UserId()), token);
         return Ok(results);
     }
 }

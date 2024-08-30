@@ -1,16 +1,17 @@
 namespace Reservation.Application.Categories.Queries.GetCategoryBusinesses;
 
-public sealed class GetCategoryBusinessesQueryHandler(IUnitOfWork uow) : IRequestHandler<GetCategoryBusinessesQueryRequest, IEnumerable<IResponse>>
+public sealed class GetCategoryBusinessesQueryHandler(IUnitOfWork uow) : IRequestHandler<GetCategoryBusinessesQueryRequest, Response>
 {
     private readonly IUnitOfWork _uow = uow;
 
-    public async Task<IEnumerable<IResponse>> Handle(GetCategoryBusinessesQueryRequest request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(GetCategoryBusinessesQueryRequest request, CancellationToken cancellationToken)
     {
-        var responses = await _uow.Categories.GetBusiness(request.CategoryId, request.Page, cancellationToken);
-        if (!responses.Any())
+        var responses = await _uow.Categories.GetBusiness(request.CategoryId, request.Page, request.Size, request.City, cancellationToken);
+        if (!responses.Any() || responses.Count() < request.Size)
         {
-            throw new BusinessNotFoundException();
+            return new Response(true, responses);
         }
-        return responses;
+
+        return new Response(false, responses);
     }
 }

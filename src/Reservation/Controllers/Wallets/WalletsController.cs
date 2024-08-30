@@ -1,3 +1,5 @@
+using Npgsql.Internal;
+
 namespace Reservation.Controllers.Wallets;
 
 
@@ -79,25 +81,23 @@ public sealed class WalletsController(ISender sender) : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("Users/Transactions/Page/{page:int}")]
+    [HttpGet("Users/Transactions/Page/{page:int}/Size/{size:int}")]
     [Authorize(Role.User)]
-    [ProducesResponseType(typeof(GetWalletTransactionsQueryResponse), 200)]
-    public async Task<IActionResult> GetUserTransactions(int page,
+    [ProducesResponseType(typeof(Response<GetWalletTransactionsQueryResponse>), 200)]
+    public async Task<IActionResult> GetUserTransactions(int page, int size,
         CancellationToken token)
     {
-        var request = GetUserTransactionsQueryRequest.Create(User.UserId(), page);
-        var results = await _sender.Send(request, token);
+        var results = await _sender.Send(new GetUserTransactionsQueryRequest(User.UserId(), page, size), token);
         return Ok(results);
     }
 
-    [HttpGet("Businesses/Transactions/Page/{page:int}")]
+    [HttpGet("Businesses/Transactions/Page/{page:int}/Size/{size:int}")]
     [Authorize(Role.Business)]
-    [ProducesResponseType(typeof(GetWalletTransactionsQueryResponse), 200)]
-    public async Task<IActionResult> GetBusinessesTransactions(int page,
+    [ProducesResponseType(typeof(Response<GetWalletTransactionsQueryResponse>), 200)]
+    public async Task<IActionResult> GetBusinessesTransactions(int page, int size,
         CancellationToken token)
     {
-        var request = GetBusinessTransactionsQueryRequest.Create(User.UserId(), page);
-        var results = await _sender.Send(request, token);
+        var results = await _sender.Send(new GetBusinessTransactionsQueryRequest(User.UserId(), page, size), token);
         return Ok(results);
     }
 }

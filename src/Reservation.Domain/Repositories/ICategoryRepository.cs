@@ -11,6 +11,6 @@ public interface ICategoryRepository
     Task<bool> AnyAsync(string title, CancellationToken cancellationToken = default);
     Task<IEnumerable<IResponse>> GetCategories(CancellationToken cancellationToken = default);
     Task<IResponse> GetCategory(int id, CancellationToken cancellationToken = default);
-    Task<IEnumerable<IResponse>> GetBusiness(int categoryId, int page, CancellationToken cancellationToken = default);
+    Task<IEnumerable<IResponse>> GetBusiness(int categoryId, int page, int size, string city, CancellationToken cancellationToken = default);
     Task<IEnumerable<IResponse>> Search(string key, CancellationToken cancellationToken = default);
 }

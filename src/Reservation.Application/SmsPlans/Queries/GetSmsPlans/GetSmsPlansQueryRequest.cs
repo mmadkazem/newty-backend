@@ -1,7 +1,7 @@
 namespace Reservation.Application.SmsPlans.Queries.GetSmsPlans;
 
 
-public sealed record GetSmsPlansQueryRequest(int Page) : IRequest<IEnumerable<IResponse>>;
+public sealed record GetSmsPlansQueryRequest(int Page, int Size) : IRequest<Response>;
 
 public sealed record GetSmsPlansQueryResponse
 (
@@ -11,17 +11,17 @@ public sealed record GetSmsPlansQueryResponse
     string CoverImagePath, int Discount
 ) : IResponse;
 
-public sealed class GetSmsPlansQueryHandler(IUnitOfWork uow) : IRequestHandler<GetSmsPlansQueryRequest, IEnumerable<IResponse>>
+public sealed class GetSmsPlansQueryHandler(IUnitOfWork uow) : IRequestHandler<GetSmsPlansQueryRequest, Response>
 {
     private readonly IUnitOfWork _uow = uow;
-    async Task<IEnumerable<IResponse>> IRequestHandler<GetSmsPlansQueryRequest, IEnumerable<IResponse>>.Handle(GetSmsPlansQueryRequest request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(GetSmsPlansQueryRequest request, CancellationToken cancellationToken)
     {
-        var smsPlans = await _uow.SmsPlans.Get(request.Page, cancellationToken);
-        if (!smsPlans.Any())
+        var responses = await _uow.SmsPlans.Get(request.Page, request.Size, cancellationToken);
+        if (!responses.Any() || responses.Count() < request.Size)
         {
-            throw new SmsPlanNotFoundException();
+            return new Response(true, responses);
         }
 
-        return smsPlans;
+        return new Response(false, responses);
     }
 }

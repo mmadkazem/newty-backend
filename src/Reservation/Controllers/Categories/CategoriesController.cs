@@ -71,16 +71,6 @@ public sealed class CategoriesController(ISender sender) : ControllerBase
         return Ok(results);
     }
 
-    [HttpGet("{categoryId:int}/Businesses/Page/{page:int}")]
-    [AllowAnonymous]
-    [ProducesResponseType(typeof(GetCategoryBusinessesQueryResponse), 200)]
-    public async Task<IActionResult> Get(int categoryId, int page,
-        CancellationToken token)
-    {
-        var result = await _sender.Send(new GetCategoryBusinessesQueryRequest(categoryId, page), token);
-        return Ok(result);
-    }
-
     [HttpGet("{key}")]
     [AllowAnonymous]
     [ProducesResponseType(typeof(SearchCategoryQueryResponse), 200)]
@@ -88,6 +78,16 @@ public sealed class CategoriesController(ISender sender) : ControllerBase
         CancellationToken token)
     {
         var result = await _sender.Send(new SearchCategoryQueryRequest(key), token);
+        return Ok(result);
+    }
+
+    [HttpGet("{categoryId:int}/Businesses/City/{city}/Page/{page:int}/Size/{size:int}")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(Response<GetCategoryBusinessesQueryResponse>), 200)]
+    public async Task<IActionResult> Get(int categoryId, string city, int page, int size,
+        CancellationToken token)
+    {
+        var result = await _sender.Send(new GetCategoryBusinessesQueryRequest(categoryId, page, size, city), token);
         return Ok(result);
     }
 

@@ -51,8 +51,7 @@ public sealed class AccountController(ISender sender) : ControllerBase
     public async Task<IActionResult> UpdateUser([FromBody] UpdateUserDTO model,
         CancellationToken token)
     {
-        var request = new UpdateUserCommandRequest(User.UserId(), model.FullName, model.PhoneNumber, model.City);
-        await _sender.Send(request, token);
+        await _sender.Send(new UpdateUserCommandRequest(User.UserId(), model.PhoneNumber, model.FullName, model.City), token);
         return Ok(new { Message = AccountSuccessMessage.UserUpdated });
     }
 

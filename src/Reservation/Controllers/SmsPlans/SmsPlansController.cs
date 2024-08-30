@@ -33,13 +33,13 @@ public sealed class SmsPlansController(ISender sender) : ControllerBase
         return Ok(new { Message = SmsPlanSuccessMessage.Removed });
     }
 
-    [HttpGet("{page:int}")]
+    [HttpGet("{page:int}/Size/{size:int}")]
     [Authorize(Role.Business)]
-    [ProducesResponseType(typeof(GetSmsPlansQueryResponse), 200)]
-    public async Task<IActionResult> Get(int page,
+    [ProducesResponseType(typeof(Response<GetSmsPlansQueryResponse>), 200)]
+    public async Task<IActionResult> Get(int page, int size,
         CancellationToken token)
     {
-        var results = await _sender.Send(new GetSmsPlansQueryRequest(page), token);
+        var results = await _sender.Send(new GetSmsPlansQueryRequest(page, size), token);
         return Ok(results);
     }
 }

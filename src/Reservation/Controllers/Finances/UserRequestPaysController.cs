@@ -24,12 +24,12 @@ public class UserRequestPaysController(ISender sender) : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("Page/{Page:int}")]
-    [ProducesResponseType(typeof(GetUserRequestPaysQueryResponse), 200)]
-    public async Task<IActionResult> Get(int page,
+    [HttpGet("Page/{Page:int}/Size/{size:int}")]
+    [ProducesResponseType(typeof(Response<GetUserRequestPaysQueryResponse>), 200)]
+    public async Task<IActionResult> Get(int page, int size,
         CancellationToken token)
     {
-        var results = await _sender.Send(new GetUserRequestPaysQueryRequest(User.UserId(), page), token);
+        var results = await _sender.Send(new GetUserRequestPaysQueryRequest(User.UserId(), page, size), token);
         return Ok(results);
     }
 }

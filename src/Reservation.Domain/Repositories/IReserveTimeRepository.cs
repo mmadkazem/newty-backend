@@ -11,11 +11,11 @@ public interface IReserveTimeRepository
     Task<List<ReserveTimeSender>> FindAsyncBusinessSenderId(Guid businessSenderId, CancellationToken cancellationToken);
     Task<IEnumerable<ReserveTimeReceipt>> FindAsyncByUserId(Guid userId, CancellationToken cancellationToken = default);
     Task<IResponse> Get(Guid id, CancellationToken cancellationToken = default);
-    Task<IEnumerable<IResponse>> GetBusinessReserveTimeByState(int page, ReserveState state, Guid businessId, CancellationToken cancellationToken = default);
-    Task<IEnumerable<IResponse>> GetBusinessReserveTimes(int page, Guid businessId, bool finished, CancellationToken cancellationToken = default);
-    Task<IEnumerable<IResponse>> GetUserReserveTimeByState(int page, Guid userId, ReserveState state, CancellationToken cancellationToken = default);
-    Task<IEnumerable<IResponse>> GetUserReserveTimes(int page, Guid userId, bool finished, CancellationToken cancellationToken = default);
-    Task<IEnumerable<IResponse>> GetBusinessReserveTimesSender(int page, bool finished, Guid businessId, CancellationToken cancellationToken);
-    Task<IEnumerable<IResponse>> GetBusinessReserveTimesSenderByState(int page, ReserveState state, Guid businessId, CancellationToken cancellationToken);
+    Task<IEnumerable<IResponse>> GetBusinessReserveTimeByState(int page, int size, ReserveState state, Guid businessId, CancellationToken cancellationToken = default);
+    Task<IEnumerable<IResponse>>  GetBusinessReserveTimes(int page, int size, Guid businessId, bool finished, CancellationToken cancellationToken = default);
+    Task<IEnumerable<IResponse>> GetUserReserveTimeByState(int page, int size, Guid userId, ReserveState state, CancellationToken cancellationToken = default);
+    Task<IEnumerable<IResponse>> GetUserReserveTimes(int page, int size, Guid userId, bool finished, CancellationToken cancellationToken = default);
+    Task<IEnumerable<IResponse>> GetBusinessReserveTimesSender(int page, int size, bool finished, Guid businessId, CancellationToken cancellationToken = default);
+    Task<IEnumerable<IResponse>> GetBusinessReserveTimesSenderByState(int page, int size, ReserveState state, Guid businessId, CancellationToken cancellationToken = default);
     Task<IResponse> GetReserveTimeSender(Guid id, CancellationToken cancellationToken = default);
 }

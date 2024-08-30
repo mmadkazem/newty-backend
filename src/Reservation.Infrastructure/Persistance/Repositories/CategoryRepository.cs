@@ -1,22 +1,23 @@
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 
-public class CategoryRepository(NewtyDbContext context) : ICategoryRepository
+public class CategoryRepository(NewtyDbContext context, NewtyDbContextCommand contextCommand) : ICategoryRepository
 {
     private readonly NewtyDbContext _context = context;
+    private readonly NewtyDbContextCommand _contextCommand = contextCommand;
 
     public void Add(Category category)
-        => _context.Categories.Add(category);
+        => _contextCommand.Categories.Add(category);
 
     public void Remove(Category category)
-        => _context.Categories.Remove(category);
+        => _contextCommand.Categories.Remove(category);
 
     public async Task<bool> AnyAsync(string title, CancellationToken cancellationToken)
-        => await _context.Categories.AsQueryable()
+        => await _contextCommand.Categories.AsQueryable()
                                     .AnyAsync(c => c.Title == title, cancellationToken);
 
     public async Task<Category> FindAsync(int Id, CancellationToken cancellationToken = default)
-        => await _context.Categories.AsQueryable()
+        => await _contextCommand.Categories.AsQueryable()
                                     .Where(c => c.Id == Id)
                                     .FirstOrDefaultAsync(cancellationToken);
 
@@ -75,11 +76,11 @@ public class CategoryRepository(NewtyDbContext context) : ICategoryRepository
                                     ))
                                     .ToListAsync(cancellationToken);
 
-    public async Task<IEnumerable<IResponse>> GetBusiness(int categoryId, int page, CancellationToken cancellationToken)
+    public async Task<IEnumerable<IResponse>> GetBusiness(int categoryId, int page, int size, string city, CancellationToken cancellationToken)
         => await _context.Businesses.AsQueryable()
                                     .AsNoTracking()
                                     .OrderBy(c => c.Points.Average(p => p.Rate))
-                                    .Where(b => !b.Categories.Any(c => c.Id == categoryId))
+                                    .Where(b => b.Categories.Any(c => c.Id == categoryId) && b.City.FaName == city)
                                     .Select(b => new GetCategoryBusinessesQueryResponse
                                     (
                                         b.Id,
@@ -89,8 +90,8 @@ public class CategoryRepository(NewtyDbContext context) : ICategoryRepository
                                         b.Address,
                                         (double)b.Points.Average(p => p.Rate)
                                     ))
-                                    .Skip((page - 1) * 25)
-                                    .Take(25)
+                                    .Skip((page - 1) * size)
+                                    .Take(size)
                                     .ToListAsync(cancellationToken);
 
     public async Task<IEnumerable<IResponse>> Search(string key, CancellationToken cancellationToken)

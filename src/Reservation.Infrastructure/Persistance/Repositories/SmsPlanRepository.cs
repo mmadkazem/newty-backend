@@ -1,25 +1,26 @@
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 
-public sealed class SmsPlanRepository(NewtyDbContext context) : ISmsPlanRepository
+public sealed class SmsPlanRepository(NewtyDbContext context, NewtyDbContextCommand contextCommand) : ISmsPlanRepository
 {
     private readonly NewtyDbContext _context = context;
+    private readonly NewtyDbContextCommand _contextCommand = contextCommand;
 
     public void Add(SmsPlan smsPlan)
-        => _context.SmsPlans.Add(smsPlan);
+        => _contextCommand.SmsPlans.Add(smsPlan);
 
     public void Remove(SmsPlan smsPlan)
-        => _context.SmsPlans.Remove(smsPlan);
+        => _contextCommand.SmsPlans.Remove(smsPlan);
 
     public async Task<bool> AnyAsync(string name, CancellationToken cancellationToken)
-        => await _context.SmsPlans.AsQueryable()
+        => await _contextCommand.SmsPlans.AsQueryable()
                                 .AnyAsync(s => s.Name == name, cancellationToken);
 
     public async Task<SmsPlan> FindAsync(Guid id, CancellationToken cancellationToken)
-        => await _context.SmsPlans.AsQueryable()
+        => await _contextCommand.SmsPlans.AsQueryable()
                                 .FirstOrDefaultAsync(s => s.Id == id, cancellationToken);
 
-    public async Task<IEnumerable<IResponse>> Get(int page, CancellationToken cancellationToken = default)
+    public async Task<IEnumerable<IResponse>> Get(int page, int size, CancellationToken cancellationToken = default)
         => await _context.SmsPlans.AsQueryable()
                                 .AsNoTracking()
                                 .OrderBy(s => s.Price)
@@ -33,7 +34,7 @@ public sealed class SmsPlanRepository(NewtyDbContext context) : ISmsPlanReposito
                                     s.CoverImagePath,
                                     s.Discount
                                 ))
-                                .Skip((page - 1) * 5)
-                                .Take(5)
+                                .Skip((page - 1) * size)
+                                .Take(size)
                                 .ToListAsync(cancellationToken);
 }

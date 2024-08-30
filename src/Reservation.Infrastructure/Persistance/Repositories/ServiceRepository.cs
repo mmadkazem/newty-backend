@@ -1,26 +1,27 @@
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 
-public sealed class ServiceRepository(NewtyDbContext context) : IServiceRepository
+public sealed class ServiceRepository(NewtyDbContext context, NewtyDbContextCommand contextCommand) : IServiceRepository
 {
     private readonly NewtyDbContext _context = context;
+    private readonly NewtyDbContextCommand _contextCommand = contextCommand;
 
     public void Add(BusinessService service)
-        => _context.Services.Add(service);
+        => _contextCommand.Services.Add(service);
 
     public void Remove(BusinessService service)
-        => _context.Services.Remove(service);
+        => _contextCommand.Services.Remove(service);
 
     public async Task<bool> AnyAsync(string name, CancellationToken cancellationToken = default)
-        => await _context.Services.AsQueryable()
+        => await _contextCommand.Services.AsQueryable()
                                     .AnyAsync(s => s.Name == name, cancellationToken);
 
     public async Task<BusinessService> FindAsync(Guid id, CancellationToken cancellationToken)
-        => await _context.Services.AsQueryable()
+        => await _contextCommand.Services.AsQueryable()
                                     .FirstOrDefaultAsync(b => b.Id == id, cancellationToken);
 
     public async Task<BusinessService> FindAsyncIncludeArtist(Guid serviceId, CancellationToken cancellationToken)
-        => await _context.Services.AsQueryable()
+        => await _contextCommand.Services.AsQueryable()
                                     .Include(s => s.Artist)
                                     .FirstOrDefaultAsync(b => b.Id == serviceId, cancellationToken);
 
@@ -41,7 +42,7 @@ public sealed class ServiceRepository(NewtyDbContext context) : IServiceReposito
                                                             )).ToList()
                                     ).FirstOrDefaultAsync(cancellationToken);
 
-    public async Task<IEnumerable<IResponse>> GetServiceByBusinessId(int page, Guid businessId, CancellationToken cancellationToken)
+    public async Task<IEnumerable<IResponse>> GetServiceByBusinessId(int page, int size, Guid businessId, CancellationToken cancellationToken)
         => await _context.Services.AsQueryable()
                                     .Where(c => c.BusinessId == businessId)
                                     .AsNoTracking()
@@ -53,8 +54,8 @@ public sealed class ServiceRepository(NewtyDbContext context) : IServiceReposito
                                         c.Time,
                                         c.Active
                                     ))
-                                    .Skip((page - 1) * 25)
-                                    .Take(25)
+                                    .Skip((page - 1) * size)
+                                    .Take(size)
                                     .ToListAsync(cancellationToken);
 
 }

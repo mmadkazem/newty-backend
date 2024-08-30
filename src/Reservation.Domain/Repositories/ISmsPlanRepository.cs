@@ -7,5 +7,5 @@ public interface ISmsPlanRepository
     void Remove(SmsPlan smsPlan);
     Task<bool> AnyAsync(string name, CancellationToken cancellationToken = default);
     Task<SmsPlan> FindAsync(Guid id, CancellationToken cancellationToken = default);
-    Task<IEnumerable<IResponse>> Get(int page, CancellationToken cancellationToken = default);
+    Task<IEnumerable<IResponse>> Get(int page, int size, CancellationToken cancellationToken = default);
 }

@@ -33,13 +33,13 @@ public sealed class ServicesController(ISender sender) : ControllerBase
         return Ok(new { Message = ServiceSuccessMessage.Removed });
     }
 
-    [HttpGet("Businesses/{businessId:guid}/Page/{page:int}")]
+    [HttpGet("Businesses/{businessId:guid}/Page/{page:int}/Size/{size:int}")]
     [AllowAnonymous]
-    [ProducesResponseType(typeof(GetServicesByBusinessIdQueryResponse), 200)]
-    public async Task<IActionResult> GetByBusinessId(Guid businessId, int page,
+    [ProducesResponseType(typeof(Response<GetServicesByBusinessIdQueryResponse>), 200)]
+    public async Task<IActionResult> GetByBusinessId(Guid businessId, int page, int size,
         CancellationToken token)
     {
-        var services = await _sender.Send(new GetServicesByBusinessIdQueryRequest(page, businessId), token);
-        return Ok(services);
+        var results = await _sender.Send(new GetServicesByBusinessIdQueryRequest(page, size, businessId), token);
+        return Ok(results);
     }
 }

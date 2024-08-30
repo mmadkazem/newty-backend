@@ -1,18 +1,18 @@
 namespace Reservation.Application.Finances.UserRequestPays.Queries.GetUserRequestPays;
 
-public class GetUserRequestPaysQueryHandler(IUnitOfWork uow) : IRequestHandler<GetUserRequestPaysQueryRequest, IEnumerable<IResponse>>
+public class GetUserRequestPaysQueryHandler(IUnitOfWork uow) : IRequestHandler<GetUserRequestPaysQueryRequest, Response>
 {
     private readonly IUnitOfWork _uow = uow;
 
-    public async Task<IEnumerable<IResponse>> Handle(GetUserRequestPaysQueryRequest request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(GetUserRequestPaysQueryRequest request, CancellationToken cancellationToken)
     {
-        var responses = await _uow.UserRequestPays.Gets(request.Page, request.UserId, cancellationToken);
+        var responses = await _uow.UserRequestPays.Gets(request.Page, request.Size, request.UserId, cancellationToken);
 
-        if (!responses.Any())
+        if (!responses.Any() || responses.Count() < request.Size)
         {
-            throw new UserRequestPayNotFoundException();
+            return new Response(true, responses);
         }
 
-        return responses;
+        return new Response(false, responses);
     }
 }

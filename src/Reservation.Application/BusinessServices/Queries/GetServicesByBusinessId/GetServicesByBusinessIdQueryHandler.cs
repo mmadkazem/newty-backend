@@ -1,18 +1,18 @@
 namespace Reservation.Application.BusinessServices.Queries.GetServicesByBusinessId;
 
-public sealed class GetServicesByBusinessIdQueryHandler(IUnitOfWork uow) : IRequestHandler<GetServicesByBusinessIdQueryRequest, IEnumerable<IResponse>>
+public sealed class GetServicesByBusinessIdQueryHandler(IUnitOfWork uow) : IRequestHandler<GetServicesByBusinessIdQueryRequest, Response>
 {
     private readonly IUnitOfWork _uow = uow;
 
-    public async Task<IEnumerable<IResponse>> Handle(GetServicesByBusinessIdQueryRequest request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(GetServicesByBusinessIdQueryRequest request, CancellationToken cancellationToken)
     {
-        var services = await _uow.Services.GetServiceByBusinessId(request.Page, request.BusinessId, cancellationToken);
+        var responses = await _uow.Services.GetServiceByBusinessId(request.Page, request.Size, request.BusinessId, cancellationToken);
 
-        if (!services.Any())
+        if (!responses.Any() || responses.Count() < request.Size)
         {
-            throw new ServiceNotFoundException();
+            return new Response(true, responses);
         }
 
-        return services;
+        return new Response(false, responses);
     }
 }

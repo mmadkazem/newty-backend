@@ -1,5 +1,3 @@
-using Reservation.Application.Businesses.Commands.UpdateBusinessState;
-
 namespace Reservation.Controllers.Businesses;
 
 [ApiController]
@@ -90,24 +88,33 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
         return Ok(result);
     }
 
-
-    [HttpGet("Page/{page:int}")]
-    [Authorize(Role.Admin)]
-    [ProducesResponseType(typeof(GetBusinessesWaitingValidQueryResponse), 200)]
-    public async Task<IActionResult> GetWaitingValidBusiness(int page,
-        CancellationToken token)
+    [HttpGet("{id:guid}")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(GetBusinessByIdQueryResponse), 200)]
+    public async Task<IActionResult> GetBusinessById(Guid id, CancellationToken token)
     {
-        var responses = await _sender.Send(new GetBusinessesWaitingValidQueryRequest(page));
-        return Ok(responses);
+        var result = await _sender.Send(new GetBusinessByIdQueryRequest(id), token);
+        return Ok(result);
     }
 
-    [HttpGet("Key/{key}/City/{city}/Page/{page:int}")]
-    [AllowAnonymous]
-    [ProducesResponseType(typeof(SearchBusinessQueryResponse), 200)]
-    public async Task<IActionResult> Search(string key, int page, string city,
+
+    [HttpGet("Page/{page:int}/Size/{size:int}")]
+    [Authorize(Role.Admin)]
+    [ProducesResponseType(typeof(Response<GetBusinessesWaitingValidItemQueryResponse>), 200)]
+    public async Task<IActionResult> GetWaitingValidBusiness(int page, int size,
         CancellationToken token)
     {
-        var results = await _sender.Send( new SearchBusinessQueryRequest(page, key, city), token);
+        var results = await _sender.Send(new GetBusinessesWaitingValidQueryRequest(page, size), token);
+        return Ok(results);
+    }
+
+    [HttpGet("Key/{key}/City/{city}/Page/{page:int}/Size/{size:int}")]
+    [AllowAnonymous]
+    [ProducesResponseType(typeof(Response<SearchBusinessQueryResponse>), 200)]
+    public async Task<IActionResult> Search(string key, int page, int size, string city,
+        CancellationToken token)
+    {
+        var results = await _sender.Send(new SearchBusinessQueryRequest(page, size, key, city), token);
         return Ok(results);
     }
 }

@@ -42,13 +42,13 @@ public sealed class PostsController(ISender sender) : ControllerBase
         return Ok(result);
     }
 
-    [HttpGet("Businesses/{businessId:guid}/Page/{page:int}")]
+    [HttpGet("Businesses/{businessId:guid}/Page/{page:int}/Size/{size:int}")]
     [AllowAnonymous]
-    [ProducesResponseType(typeof(GetPostsQueryResponse), 200)]
-    public async Task<IActionResult> Get(Guid businessId, int page,
+    [ProducesResponseType(typeof(Response<GetPostsQueryResponse>), 200)]
+    public async Task<IActionResult> Get(Guid businessId, int page, int size,
         CancellationToken token)
     {
-        var result = await _sender.Send(new GetPostsQueryRequest(page, businessId), token);
-        return Ok(result);
+        var results = await _sender.Send(new GetPostsQueryRequest(page, size, businessId), token);
+        return Ok(results);
     }
 }

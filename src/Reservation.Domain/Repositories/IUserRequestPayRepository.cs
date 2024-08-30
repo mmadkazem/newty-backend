@@ -7,5 +7,5 @@ public interface IUserRequestPayRepository
     void Remove(UserRequestPay userRequestPay);
     Task<UserRequestPay> FindAsync(Guid id, CancellationToken cancellationToken);
     Task<IResponse> Get(Guid id, CancellationToken cancellationToken);
-    Task<IEnumerable<IResponse>> Gets(int page, Guid userId, CancellationToken cancellationToken);
+    Task<IEnumerable<IResponse>> Gets(int page, int size, Guid userId, CancellationToken cancellationToken);
 }

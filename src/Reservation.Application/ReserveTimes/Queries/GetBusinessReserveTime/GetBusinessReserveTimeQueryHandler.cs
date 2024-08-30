@@ -1,17 +1,19 @@
 namespace Reservation.Application.ReserveTimes.Queries.GetBusinessReserveTime;
 
-public sealed class GetBusinessReserveTimeReceiptQueryHandler(IUnitOfWork uow) : IRequestHandler<GetBusinessReserveTimeReceiptQueryRequest, IEnumerable<IResponse>>
+public sealed class GetBusinessReserveTimeReceiptQueryHandler(IUnitOfWork uow)
+    : IRequestHandler<GetBusinessReserveTimeReceiptQueryRequest, Response>
 {
     private readonly IUnitOfWork _uow = uow;
 
-    public async Task<IEnumerable<IResponse>> Handle(GetBusinessReserveTimeReceiptQueryRequest request, CancellationToken cancellationToken)
+    public async Task<Response> Handle(GetBusinessReserveTimeReceiptQueryRequest request, CancellationToken cancellationToken)
     {
-        var response = await _uow.ReserveTimes.GetBusinessReserveTimes(request.Page, request.BusinessId, request.Finished, cancellationToken);
-        if (!response.Any())
+        var responses = await _uow.ReserveTimes.GetBusinessReserveTimes(request.Page, request.Size, request.BusinessId, request.Finished, cancellationToken);
+
+        if (!responses.Any() || responses.Count() < request.Size)
         {
-            throw new ReserveTimeNotFoundException();
+            return new Response(true, responses);
         }
 
-        return response;
+        return new Response(false, responses);
     }
 }

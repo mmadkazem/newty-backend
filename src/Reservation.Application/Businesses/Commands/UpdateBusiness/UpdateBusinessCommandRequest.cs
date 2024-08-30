@@ -10,12 +10,12 @@ public sealed record UpdateBusinessCommandRequest
     public static UpdateBusinessCommandRequest Create(Guid Id, UpdateBusinessDTO model)
         => new(Id, model.Name, model.CoverImagePath, model.CardNumber, model.IsClose,
             model.ParvaneKasbImagePath, model.Description, model.Address, model.City,
-            model.Holidays, model.StartHoursOfWor, model.EndHoursOfWor);
+            model.Holidays, model.StartHoursOfWork, model.EndHoursOfWork);
 }
 
 public readonly record struct UpdateBusinessDTO
 (
     string Name, string CoverImagePath, string CardNumber, bool IsClose,
     string ParvaneKasbImagePath, string Description, string Address, string City,
-    IEnumerable<DayOfWeek> Holidays, Time StartHoursOfWor, Time EndHoursOfWor
+    IEnumerable<DayOfWeek> Holidays, Time StartHoursOfWork, Time EndHoursOfWork
 );
