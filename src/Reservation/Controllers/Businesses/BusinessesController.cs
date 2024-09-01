@@ -2,13 +2,11 @@ namespace Reservation.Controllers.Businesses;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Role.Business)]
 public sealed class BusinessesController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;
 
     [HttpPost]
-    [AllowAnonymous]
     public async Task<IActionResult> Post([FromBody] RegisterBusinessCommandRequest request,
         CancellationToken token)
     {
@@ -17,6 +15,7 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
     }
 
     [HttpPost("SendSMS")]
+    [Authorize(Role.Business)]
     public async Task<IActionResult> SendSMS(DateTime sendDate, Guid templateId,
         CancellationToken token)
     {
@@ -25,6 +24,7 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
     }
 
     [HttpPost("UserVIP")]
+    [Authorize(Role.Business)]
     public async Task<IActionResult> PostUserVIP(Guid userId,
     CancellationToken token)
     {
@@ -33,6 +33,7 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
     }
 
     [HttpPost("Categories")]
+    [Authorize(Role.Business)]
     public async Task<IActionResult> Post(IEnumerable<int> categories,
         CancellationToken token)
     {
@@ -75,7 +76,7 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
     public async Task<IActionResult> Patch(Guid businessId, bool IsValid,
         CancellationToken token)
     {
-        await _sender.Send(new UpdateBusinessStateCommandRequest(User.UserId(), IsValid), token);
+        await _sender.Send(new UpdateBusinessStateCommandRequest(businessId, IsValid), token);
         return Ok();
     }
 
@@ -89,7 +90,6 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
-    [AllowAnonymous]
     [ProducesResponseType(typeof(GetBusinessByIdQueryResponse), 200)]
     public async Task<IActionResult> GetBusinessById(Guid id, CancellationToken token)
     {

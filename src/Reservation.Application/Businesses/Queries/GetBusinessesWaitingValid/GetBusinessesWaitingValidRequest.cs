@@ -7,7 +7,7 @@ public sealed record GetBusinessesWaitingValidItemQueryResponse
 (
   Guid Id, string Name, string Description, string CoverImagePath, string ParvaneKasbImagePath,
   string CardNumber, string Address, string PhoneNumber, bool IsCancelReserveTime,
-  TimeSpan StartHoursOfWor, TimeSpan EndHoursOfWor, List<DayOfWeek> Holidays, string City
+  Time StartHoursOfWork, Time EndHoursOfWork, List<DayOfWeek> Holidays, string City
 ) : IResponse;
 
 public sealed class GetBusinessesWaitingValidQueryHandler(IUnitOfWork uow) : IRequestHandler<GetBusinessesWaitingValidQueryRequest, Response>

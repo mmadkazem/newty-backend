@@ -19,7 +19,7 @@ public sealed class UpdateBusinessCommandHandler(IUnitOfWork uow) : IRequestHand
         business.City = city;
         business.ParvaneKasbImagePath = request.ParvaneKasbImagePath;
         business.ModifiedOn = DateTime.Now;
-        
+
         business.Holidays.Clear();
         foreach (var holiday in request.Holidays)
         {
@@ -27,6 +27,7 @@ public sealed class UpdateBusinessCommandHandler(IUnitOfWork uow) : IRequestHand
         }
         business.StartHoursOfWor = new(request.StartHoursOfWor.Hour, request.StartHoursOfWor.Minute, 0);
         business.EndHoursOfWor = new(request.EndHoursOfWor.Hour, request.EndHoursOfWor.Minute, 0);
+        business.State = BusinessState.Waiting;
 
         await _uow.SaveChangeAsync(cancellationToken);
     }

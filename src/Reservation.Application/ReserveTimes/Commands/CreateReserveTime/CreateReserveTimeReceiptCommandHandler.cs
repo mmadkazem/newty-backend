@@ -8,7 +8,7 @@ public sealed class CreateReserveTimeReceiptCommandHandler(IUnitOfWork uow)
     public async Task Handle(CreateReserveTimeReceiptCommandRequest request, CancellationToken cancellationToken)
     {
         var business = await _uow.Businesses.FindAsync(request.BusinessId, cancellationToken)
-            ?? throw new UserNotFoundException();
+            ?? throw new BusinessNotFoundException();
 
         var userReserveTime = new TimeSpan(request.DateTime.Hour, request.DateTime.Minute, request.DateTime.Second);
         if (business.IsClose)

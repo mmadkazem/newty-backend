@@ -94,8 +94,8 @@ public sealed class BusinessRepository(NewtyDbContext context, NewtyDbContextCom
                                         b.Address,
                                         b.PhoneNumber,
                                         b.IsCancelReserveTime,
-                                        b.StartHoursOfWor,
-                                        b.EndHoursOfWor,
+                                        new Time(b.StartHoursOfWor.Hours, b.StartHoursOfWor.Minutes),
+                                        new Time(b.EndHoursOfWor.Hours, b.EndHoursOfWor.Minutes),
                                         b.Holidays,
                                         b.City.FaName
                                     ))
