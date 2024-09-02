@@ -5,9 +5,8 @@ public interface IBearerTokenValidatorService
     Task ValidateAsync(TokenValidatedContext context);
 }
 
-public sealed class UserTokenValidatorService(IUnitOfWork uow) : IBearerTokenValidatorService
+public sealed class UserTokenValidatorService : IBearerTokenValidatorService
 {
-    private readonly IUnitOfWork _uow = uow;
 
     public async Task ValidateAsync(TokenValidatedContext context)
     {
@@ -30,33 +29,38 @@ public sealed class UserTokenValidatorService(IUnitOfWork uow) : IBearerTokenVal
             context.Fail("این توکن صادر شده ما نیست. هیچ شناسه کاربری ندارد.");
             return;
         }
+        await Task.CompletedTask;
+        // var role = claimsIdentity.FindFirst(ClaimTypes.Role).Value;
+        // if (!(role== Role.Business))
+        // {
+        //     var user = await _uow.Users.FindAsync(id);
+        //     if (user == null || !user.IsActive)
+        //     {
+        //         // user has changed his/her password/roles/stat/IsActive
+        //         context.Fail("این توکن منقضی شده است. لطفا دوباره وارد شوید.");
+        //         return;
+        //     }
 
-        if (!(claimsIdentity.RoleClaimType == Role.Business))
-        {
-            var user = await _uow.Users.FindAsync(id);
-            if (user == null || !user.IsActive)
-            {
-                // user has changed his/her password/roles/stat/IsActive
-                context.Fail("این توکن منقضی شده است. لطفا دوباره وارد شوید.");
-            }
-
-            if (user.Role != claimsIdentity.RoleClaimType)
-            {
-                context.Fail("شما به این سرویس دسترسی ندارید");
-            }
-        }
-        else
-        {
-            var business = await _uow.Businesses.FindAsync(id);
-            if (business == null || !business.IsActive)
-            {
-                // user has changed his/her password/roles/stat/IsActive
-                context.Fail("این توکن منقضی شده است. لطفا دوباره وارد شوید.");
-            }
-            if (business.State != BusinessState.Valid)
-            {
-                context.Fail("لطفا اطلاعات را تکمیل کنید");
-            }
-        }
+        //     if (user.Role != role)
+        //     {
+        //         context.Fail("شما به این سرویس دسترسی ندارید");
+        //         return;
+        //     }
+        // }
+        // else
+        // {
+        //     var business = await _uow.Businesses.FindAsync(id);
+        //     if (business == null || !business.IsActive)
+        //     {
+        //         // user has changed his/her password/roles/stat/IsActive
+        //         context.Fail("این توکن منقضی شده است. لطفا دوباره وارد شوید.");
+        //         return;
+        //     }
+        //     if (business.State != BusinessState.Valid)
+        //     {
+        //         context.Fail("لطفا اطلاعات را تکمیل کنید");
+        //         return;
+        //     }
+        // }
     }
 }

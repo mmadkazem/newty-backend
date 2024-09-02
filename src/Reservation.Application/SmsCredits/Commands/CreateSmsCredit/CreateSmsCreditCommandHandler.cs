@@ -17,7 +17,6 @@ public sealed class CreateSmsCreditCommandHandler(IUnitOfWork uow)
 
         SmsCredit smsCredit = new()
         {
-            SmsCount = request.Count,
             Business = business
         };
         _uow.SmsCredits.Add(smsCredit);

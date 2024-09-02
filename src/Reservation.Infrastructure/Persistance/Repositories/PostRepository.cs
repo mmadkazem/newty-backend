@@ -1,23 +1,21 @@
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 
-public sealed class PostRepository(NewtyDbContext context, NewtyDbContextCommand contextCommand) : IPostRepository
+public sealed class PostRepository(NewtyDbContext context) : IPostRepository
 {
     private readonly NewtyDbContext _context = context;
-    private readonly NewtyDbContextCommand _contextCommand = contextCommand;
-
     public void Add(Post post)
-        => _contextCommand.Posts.Add(post);
+        => _context.Posts.Add(post);
 
     public void Remove(Post post)
-        => _contextCommand.Posts.Remove(post);
+        => _context.Posts.Remove(post);
 
     public async Task<bool> AnyAsync(string title, CancellationToken cancellationToken)
-        => await _contextCommand.Posts.AsQueryable()
+        => await _context.Posts.AsQueryable()
                                 .AnyAsync(b => b.Title == title, cancellationToken);
 
     public async Task<Post> FindAsync(Guid id, CancellationToken cancellationToken)
-        => await _contextCommand.Posts.AsQueryable()
+        => await _context.Posts.AsQueryable()
                                 .FirstOrDefaultAsync(b => b.Id == id, cancellationToken);
 
     public async Task<IResponse> Get(Guid id, CancellationToken cancellationToken)

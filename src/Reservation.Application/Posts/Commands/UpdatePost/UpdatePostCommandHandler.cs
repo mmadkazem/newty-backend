@@ -9,7 +9,7 @@ public sealed class UpdatePostCommandHandler(IUnitOfWork uow) : IRequestHandler<
         var post = await _uow.Posts.FindAsync(request.Id, cancellationToken)
             ?? throw new PostNotFoundException();
 
-        if (post.Title != request.Title && !await _uow.Posts.AnyAsync(request.Title, cancellationToken))
+        if (post.Title != request.Title && await _uow.Posts.AnyAsync(request.Title, cancellationToken))
         {
             throw new TitleAlreadyExistException();
         }

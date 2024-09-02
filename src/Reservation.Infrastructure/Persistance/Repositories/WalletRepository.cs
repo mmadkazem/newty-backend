@@ -1,33 +1,31 @@
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 
-public sealed class WalletRepository(NewtyDbContext context, NewtyDbContextCommand contextCommand) : IWalletRepository
+public sealed class WalletRepository(NewtyDbContext context) : IWalletRepository
 {
     private readonly NewtyDbContext _context = context;
-    private readonly NewtyDbContextCommand _contextCommand = contextCommand;
-
 
     public void AddTransaction(Transaction transaction)
-        => _contextCommand.Transactions.Add(transaction);
+        => _context.Transactions.Add(transaction);
 
     public async Task<Wallet> FindAsyncByBusinessId(Guid businessId, CancellationToken cancellationToken)
-        => await _contextCommand.Businesses.AsQueryable()
+        => await _context.Businesses.AsQueryable()
                                 .Select(u => u.Wallet)
                                 .FirstOrDefaultAsync(b => b.Id == businessId, cancellationToken);
 
     public async Task<Wallet> FindAsyncByUserId(Guid userId, CancellationToken cancellationToken)
-        => await _contextCommand.Users.AsQueryable()
+        => await _context.Users.AsQueryable()
                                 .Select(u => u.Wallet)
                                 .FirstOrDefaultAsync(u => u.Id == userId, cancellationToken);
 
     public async Task<Guid> FindAsyncUserWalletId(Guid userId, CancellationToken cancellationToken)
-        => await _contextCommand.Users.AsQueryable()
+        => await _context.Users.AsQueryable()
                                 .Where(u => u.Id == userId)
                                 .Select(u => u.Wallet.Id)
                                 .FirstOrDefaultAsync(cancellationToken);
 
     public async Task<Guid> FindAsyncBusinessWalletId(Guid businessId, CancellationToken cancellationToken)
-        => await _contextCommand.Businesses.AsQueryable()
+        => await _context.Businesses.AsQueryable()
                                 .Where(u => u.Id == businessId)
                                 .Select(u => u.Wallet.Id)
                                 .FirstOrDefaultAsync(cancellationToken);

@@ -26,12 +26,9 @@ public static class ConfigureServices
         // DI UnitOfWork
         services.AddTransient<IUnitOfWork, UnitOfWork>();
 
-        // DI DbContext
+        // DI DbContexts
         services.AddDbContext<NewtyDbContext>(options =>
-            options.UseNpgsql(configuration.GetConnectionString("NewtyDb")), ServiceLifetime.Transient);
-
-        services.AddDbContext<NewtyDbContextCommand>(options =>
-            options.UseNpgsql(configuration.GetConnectionString("NewtyDb")));
+            options.UseNpgsql(configuration.GetConnectionString("NewtyDb"), options => options.CommandTimeout(180)));
 
         // DI Seeding Data
         services.AddSingleton<ICategorySeedData, CategorySeedData>();

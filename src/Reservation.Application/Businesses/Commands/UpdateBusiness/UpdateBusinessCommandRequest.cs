@@ -1,21 +1,39 @@
+
 namespace Reservation.Application.Businesses.Commands.UpdateBusiness;
+
 
 public sealed record UpdateBusinessCommandRequest
 (
-    Guid Id, string Name, string CoverImagePath, string CardNumber, bool IsClose,
-    string ParvaneKasbImagePath, string Description, string Address, string City,
-    IEnumerable<DayOfWeek> Holidays, Time StartHoursOfWor, Time EndHoursOfWor
+    Guid Id, Time StartHoursOfWork, Time EndHoursOfWor,
+    IEnumerable<DayOfWeek> Holidays, bool IsClose
 ) : IRequest
 {
-    public static UpdateBusinessCommandRequest Create(Guid Id, UpdateBusinessDTO model)
-        => new(Id, model.Name, model.CoverImagePath, model.CardNumber, model.IsClose,
-            model.ParvaneKasbImagePath, model.Description, model.Address, model.City,
-            model.Holidays, model.StartHoursOfWork, model.EndHoursOfWork);
+    public static UpdateBusinessCommandRequest Create(Guid id, UpdateBusinessDTO model)
+        => new(id, model.StartHoursOfWork, model.EndHoursOfWor, model.Holidays, model.IsClose);
 }
 
 public readonly record struct UpdateBusinessDTO
 (
-    string Name, string CoverImagePath, string CardNumber, bool IsClose,
-    string ParvaneKasbImagePath, string Description, string Address, string City,
-    IEnumerable<DayOfWeek> Holidays, Time StartHoursOfWork, Time EndHoursOfWork
+    Time StartHoursOfWork, Time EndHoursOfWor,
+    IEnumerable<DayOfWeek> Holidays, bool IsClose
 );
+
+public sealed class UpdateBusinessCommandHandler(IUnitOfWork uow) : IRequestHandler<UpdateBusinessCommandRequest>
+{
+    private readonly IUnitOfWork _uow = uow;
+
+    public async Task Handle(UpdateBusinessCommandRequest request, CancellationToken cancellationToken)
+    {
+        var business = await _uow.Businesses.FindAsync(request.Id, cancellationToken)
+            ?? throw new BusinessNotFoundException();
+
+        business.Holidays.Clear();
+        foreach (var holiday in request.Holidays)
+        {
+            business.Holidays.Add(holiday);
+        }
+        business.StartHoursOfWor = new(request.StartHoursOfWork.Hour, request.StartHoursOfWork.Minute, 0);
+        business.EndHoursOfWor = new(request.EndHoursOfWor.Hour, request.EndHoursOfWor.Minute, 0);
+        await _uow.SaveChangeAsync(cancellationToken);
+    }
+}

@@ -5,6 +5,6 @@ public record GetServicesByBusinessIdQueryResponse
     Guid Id,
     string Name,
     int Price,
-    TimeOnly Time,
+    Time Time,
     bool Active
 ) : IResponse;

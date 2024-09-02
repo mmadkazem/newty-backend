@@ -21,5 +21,5 @@ public sealed class CreatePostCommandValidator : AbstractValidator<CreatePostCom
     }
 
     private async Task<bool> AlreadyExistTitle(string title, CancellationToken cancellationToken)
-        => await _uow.Posts.AnyAsync(title, cancellationToken);
+        => !await _uow.Posts.AnyAsync(title, cancellationToken);
 }

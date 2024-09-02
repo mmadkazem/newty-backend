@@ -1,19 +1,18 @@
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
-public sealed class BusinessRequestPayRepository(NewtyDbContext context, NewtyDbContextCommand contextCommand)
+public sealed class BusinessRequestPayRepository(NewtyDbContext context)
     : IBusinessRequestPayRepository
 {
     private readonly NewtyDbContext _context = context;
-    private readonly NewtyDbContextCommand _contextCommand = contextCommand;
 
     public void Add(BusinessRequestPay businessRequestPay)
-        => _contextCommand.BusinessRequestPays.Add(businessRequestPay);
+        => _context.BusinessRequestPays.Add(businessRequestPay);
 
     public void Remove(BusinessRequestPay businessRequestPay)
-        => _contextCommand.BusinessRequestPays.Remove(businessRequestPay);
+        => _context.BusinessRequestPays.Remove(businessRequestPay);
 
     public async Task<BusinessRequestPay> FindAsync(Guid id, CancellationToken cancellationToken)
-        => await _contextCommand.BusinessRequestPays.AsQueryable()
+        => await _context.BusinessRequestPays.AsQueryable()
                                                 .FirstOrDefaultAsync(r => r.Id == id && !r.IsPay, cancellationToken);
 
     public async Task<IResponse> Get(Guid id, CancellationToken cancellationToken)

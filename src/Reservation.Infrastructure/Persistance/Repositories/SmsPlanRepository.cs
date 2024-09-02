@@ -1,23 +1,22 @@
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 
-public sealed class SmsPlanRepository(NewtyDbContext context, NewtyDbContextCommand contextCommand) : ISmsPlanRepository
+public sealed class SmsPlanRepository(NewtyDbContext context) : ISmsPlanRepository
 {
     private readonly NewtyDbContext _context = context;
-    private readonly NewtyDbContextCommand _contextCommand = contextCommand;
 
     public void Add(SmsPlan smsPlan)
-        => _contextCommand.SmsPlans.Add(smsPlan);
+        => _context.SmsPlans.Add(smsPlan);
 
     public void Remove(SmsPlan smsPlan)
-        => _contextCommand.SmsPlans.Remove(smsPlan);
+        => _context.SmsPlans.Remove(smsPlan);
 
     public async Task<bool> AnyAsync(string name, CancellationToken cancellationToken)
-        => await _contextCommand.SmsPlans.AsQueryable()
+        => await _context.SmsPlans.AsQueryable()
                                 .AnyAsync(s => s.Name == name, cancellationToken);
 
     public async Task<SmsPlan> FindAsync(Guid id, CancellationToken cancellationToken)
-        => await _contextCommand.SmsPlans.AsQueryable()
+        => await _context.SmsPlans.AsQueryable()
                                 .FirstOrDefaultAsync(s => s.Id == id, cancellationToken);
 
     public async Task<IEnumerable<IResponse>> Get(int page, int size, CancellationToken cancellationToken = default)

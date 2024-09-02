@@ -19,6 +19,17 @@ public sealed class UpdateServiceCommandValidator : AbstractValidator<UpdateServ
     private bool IsValidPrice(int price)
         => price > 10_000;
     private bool IsValidTime(Time time)
-        => time.Minute > 5
-        && time.Hour < 10;
+    {
+        if (!(time.Minute >= 0 && time.Minute <= 60))
+        {
+            return false;
+        }
+
+        if (!(time.Hour >= 0 && time.Hour <= 24))
+        {
+            return false;
+        }
+
+        return true;
+    }
 }

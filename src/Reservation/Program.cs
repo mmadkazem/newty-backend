@@ -1,3 +1,5 @@
+using Reservation.Infrastructure;
+
 var builder = WebApplication.CreateBuilder(args);
 
 var configuration = builder.Configuration;

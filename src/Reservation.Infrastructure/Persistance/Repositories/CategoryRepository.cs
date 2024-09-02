@@ -1,23 +1,22 @@
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 
-public class CategoryRepository(NewtyDbContext context, NewtyDbContextCommand contextCommand) : ICategoryRepository
+public class CategoryRepository(NewtyDbContext context) : ICategoryRepository
 {
     private readonly NewtyDbContext _context = context;
-    private readonly NewtyDbContextCommand _contextCommand = contextCommand;
 
     public void Add(Category category)
-        => _contextCommand.Categories.Add(category);
+        => _context.Categories.Add(category);
 
     public void Remove(Category category)
-        => _contextCommand.Categories.Remove(category);
+        => _context.Categories.Remove(category);
 
     public async Task<bool> AnyAsync(string title, CancellationToken cancellationToken)
-        => await _contextCommand.Categories.AsQueryable()
+        => await _context.Categories.AsQueryable()
                                     .AnyAsync(c => c.Title == title, cancellationToken);
 
     public async Task<Category> FindAsync(int Id, CancellationToken cancellationToken = default)
-        => await _contextCommand.Categories.AsQueryable()
+        => await _context.Categories.AsQueryable()
                                     .Where(c => c.Id == Id)
                                     .FirstOrDefaultAsync(cancellationToken);
 
@@ -95,13 +94,13 @@ public class CategoryRepository(NewtyDbContext context, NewtyDbContextCommand co
                                     .ToListAsync(cancellationToken);
 
     public async Task<IEnumerable<IResponse>> Search(string key, CancellationToken cancellationToken)
-        => await _context.Businesses.AsQueryable()
+        => await _context.Categories.AsQueryable()
                                     .AsNoTracking()
-                                    .Where(b => b.Name.Contains(key))
+                                    .Where(b => b.Title.Contains(key))
                                     .Select(b => new SearchCategoryQueryResponse
                                     (
                                         b.Id,
-                                        b.Name,
+                                        b.Title,
                                         b.CoverImagePath
                                     ))
                                     .ToListAsync(cancellationToken);

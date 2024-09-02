@@ -1,7 +1,6 @@
-
 using Reservation.Infrastructure.ExternalServices;
 
-namespace Liaro.Infrastructure;
+namespace Reservation.Infrastructure;
 
 public static class ConfigureServices
 {

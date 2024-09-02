@@ -1,9 +1,9 @@
-namespace Reservation.Application.Businesses.Commands.UpdateBusiness;
+namespace Reservation.Application.Businesses.Commands.ValidateBusiness;
 
-public class UpdateBusinessCommandValidator : AbstractValidator<UpdateBusinessCommandRequest>
+public class ValidateBusinessCommandValidator : AbstractValidator<ValidateBusinessCommandRequest>
 {
     private readonly IUnitOfWork _uow;
-    public UpdateBusinessCommandValidator(IUnitOfWork uow)
+    public ValidateBusinessCommandValidator(IUnitOfWork uow)
     {
         _uow = uow;
         RuleFor(b => b.Address)
@@ -36,5 +36,5 @@ public class UpdateBusinessCommandValidator : AbstractValidator<UpdateBusinessCo
     // }
 
     private async Task<bool> IsNotExistCity(string city, CancellationToken cancellationToken)
-        => await  _uow.Cities.AnyAsync(city, cancellationToken);
+        => await _uow.Cities.AnyAsync(city, cancellationToken);
 }

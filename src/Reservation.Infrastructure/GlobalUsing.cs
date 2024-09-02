@@ -61,6 +61,7 @@ global using Reservation.Domain.Entities.Finances;
 global using Reservation.Domain.Entities.Account;
 global using Reservation.Domain.Entities.Wallets;
 global using Reservation.Domain.Entities.Reserve;
+global using Reservation.Application.Common.DTOs;
 global using Reservation.Domain.Entities.Cities;
 global using Microsoft.Extensions.Configuration;
 global using Reservation.Domain.Entities.Points;

@@ -1,7 +1,7 @@
 namespace Reservation.Infrastructure.Persistance.UnitOfWorks;
 
 public sealed class UnitOfWork(
-    NewtyDbContextCommand contextCommand,
+    NewtyDbContext context,
     IUserRepository users,
     ICityRepository cities,
     IBusinessRepository businesses,
@@ -19,7 +19,7 @@ public sealed class UnitOfWork(
     ITransferFeeRepository transferFees,
     ICouponRepository coupons) : IUnitOfWork
 {
-    private readonly NewtyDbContextCommand _contextCommand = contextCommand;
+    private readonly NewtyDbContext _context = context;
 
 
     private readonly IUserRepository _users = users;
@@ -83,7 +83,7 @@ public sealed class UnitOfWork(
         => _coupons;
 
     public async Task SaveChangeAsync(CancellationToken cancellationToken)
-        => await _contextCommand.SaveChangesAsync(cancellationToken);
+        => await _context.SaveChangesAsync(cancellationToken);
 
 
 }

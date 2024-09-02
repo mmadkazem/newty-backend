@@ -2,20 +2,18 @@
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 
-public sealed class UserRequestPayRepository(NewtyDbContext context, NewtyDbContextCommand contextCommand) : IUserRequestPayRepository
+public sealed class UserRequestPayRepository(NewtyDbContext context) : IUserRequestPayRepository
 {
     private readonly NewtyDbContext _context = context;
-    private readonly NewtyDbContextCommand _contextCommand = contextCommand;
-
 
     public void Add(UserRequestPay userRequestPay)
-        => _contextCommand.UserRequestPays.Add(userRequestPay);
+        => _context.UserRequestPays.Add(userRequestPay);
 
     public void Remove(UserRequestPay userRequestPay)
-        => _contextCommand.UserRequestPays.Remove(userRequestPay);
+        => _context.UserRequestPays.Remove(userRequestPay);
 
     public async Task<UserRequestPay> FindAsync(Guid id, CancellationToken cancellationToken)
-        => await _contextCommand.UserRequestPays.AsQueryable()
+        => await _context.UserRequestPays.AsQueryable()
                                             .FirstOrDefaultAsync(r => r.Id == id && !r.IsPay, cancellationToken);
 
     public async Task<IResponse> Get(Guid id, CancellationToken cancellationToken)

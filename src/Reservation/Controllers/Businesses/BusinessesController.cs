@@ -1,3 +1,5 @@
+using Reservation.Application.Businesses.Commands.ValidateBusiness;
+
 namespace Reservation.Controllers.Businesses;
 
 [ApiController]
@@ -52,7 +54,16 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
         return Ok(new { Message = CommonMessage.PointRecorded });
     }
 
-    [HttpPut]
+    [HttpPut("Validate")]
+    [Authorize(Role.Business, AuthenticationSchemes = AuthScheme.UpdateScheme)]
+    public async Task<IActionResult> Validate([FromBody] ValidateBusinessDTO model,
+        CancellationToken token)
+    {
+        var request = ValidateBusinessCommandRequest.Create(User.UserId(), model);
+        await _sender.Send(request, token);
+        return Ok(new { Message = BusinessSuccessMessage.Updated });
+    }
+    [HttpPut()]
     [Authorize(Role.Business, AuthenticationSchemes = AuthScheme.UpdateScheme)]
     public async Task<IActionResult> Put([FromBody] UpdateBusinessDTO model,
         CancellationToken token)
@@ -61,7 +72,6 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
         await _sender.Send(request, token);
         return Ok(new { Message = BusinessSuccessMessage.Updated });
     }
-
     [HttpPatch]
     [Authorize(Role.Business)]
     public async Task<IActionResult> Patch(bool isCancelReserveTime,
@@ -77,7 +87,7 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
         CancellationToken token)
     {
         await _sender.Send(new UpdateBusinessStateCommandRequest(businessId, IsValid), token);
-        return Ok();
+        return Ok(new {Message = "کسب و کار با موفقیت تایید شد"});
     }
 
     [HttpGet]

@@ -1,20 +1,19 @@
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 
-public sealed class ReserveTimeRepository(NewtyDbContext context, NewtyDbContextCommand contextCommand)
+public sealed class ReserveTimeRepository(NewtyDbContext context)
     : IReserveTimeRepository
 {
     private readonly NewtyDbContext _context = context;
-    private readonly NewtyDbContextCommand _contextCommand = contextCommand;
 
     public void Add(ReserveTimeReceipt reserveTime)
         => _context.ReserveTimesReceipt.Add(reserveTime);
 
     public void Add(ReserveTimeSender reserveTime)
-        => _contextCommand.ReserveTimesSender.Add(reserveTime);
+        => _context.ReserveTimesSender.Add(reserveTime);
 
     public async Task<ReserveTimeReceipt> FindAsyncIncludeService(Guid id, CancellationToken cancellationToken)
-        => await _contextCommand.ReserveTimesReceipt.AsQueryable()
+        => await _context.ReserveTimesReceipt.AsQueryable()
                                         .Include(r => r.ReserveItems)
                                         .ThenInclude(r => r.Service)
                                         .ThenInclude(s => s.Artist)
@@ -22,7 +21,7 @@ public sealed class ReserveTimeRepository(NewtyDbContext context, NewtyDbContext
                                         .FirstOrDefaultAsync(cancellationToken);
 
     public async Task<List<ReserveTimeReceipt>> FindAsyncByBusinessId(Guid businessId, CancellationToken cancellationToken)
-        => await _contextCommand.ReserveTimesReceipt.AsQueryable()
+        => await _context.ReserveTimesReceipt.AsQueryable()
                                         .Include(r => r.ReserveItems)
                                         .ThenInclude(r => r.Service)
                                         .ThenInclude(s => s.Artist)
@@ -30,7 +29,7 @@ public sealed class ReserveTimeRepository(NewtyDbContext context, NewtyDbContext
                                         .ToListAsync(cancellationToken);
 
     public async Task<IEnumerable<ReserveTimeReceipt>> FindAsyncByUserId(Guid userId, CancellationToken cancellationToken = default)
-        => await _contextCommand.ReserveTimesReceipt.AsQueryable()
+        => await _context.ReserveTimesReceipt.AsQueryable()
                                         .Include(r => r.ReserveItems)
                                         .ThenInclude(r => r.Service)
                                         .ThenInclude(s => s.Artist)
@@ -38,7 +37,7 @@ public sealed class ReserveTimeRepository(NewtyDbContext context, NewtyDbContext
                                         .ToListAsync(cancellationToken);
 
     public async Task<List<ReserveTimeSender>> FindAsyncBusinessSenderId(Guid businessSenderId, CancellationToken cancellationToken)
-        => await _contextCommand.ReserveTimesSender.AsQueryable()
+        => await _context.ReserveTimesSender.AsQueryable()
                                         .Include(r => r.ReserveItems)
                                         .ThenInclude(r => r.Service)
                                         .ThenInclude(s => s.Artist)
@@ -124,7 +123,7 @@ public sealed class ReserveTimeRepository(NewtyDbContext context, NewtyDbContext
                                         .ToListAsync(cancellationToken);
 
     public async Task<IEnumerable<IResponse>> GetBusinessReserveTimesSender(int page, int size, bool finished, Guid businessId, CancellationToken cancellationToken)
-        => await _context.ReserveTimesReceipt.AsQueryable()
+        => await _context.ReserveTimesSender.AsQueryable()
                                         .AsNoTracking()
                                         .Where(r => r.BusinessReceiptId == businessId && r.Finished == finished)
                                         .Select(c => new GetReserveTimeBusinessSenderQueryResponse
@@ -141,7 +140,7 @@ public sealed class ReserveTimeRepository(NewtyDbContext context, NewtyDbContext
                                         .ToListAsync(cancellationToken);
 
     public async Task<IEnumerable<IResponse>> GetBusinessReserveTimesSenderByState(int page, int size, ReserveState state, Guid businessId, CancellationToken cancellationToken)
-        => await _context.ReserveTimesReceipt.AsQueryable()
+        => await _context.ReserveTimesSender.AsQueryable()
                                         .AsNoTracking()
                                         .Where(r => r.BusinessReceiptId == businessId && r.State == state && !r.Finished)
                                         .Select(c => new GetReserveTimeBusinessSenderQueryResponse
@@ -192,7 +191,7 @@ public sealed class ReserveTimeRepository(NewtyDbContext context, NewtyDbContext
                                         .ToListAsync(cancellationToken);
 
     public async Task<ReserveTimeSender> FindAsyncReserveTimeSender(Guid id, CancellationToken cancellationToken = default)
-        => await _contextCommand.ReserveTimesSender.AsQueryable()
+        => await _context.ReserveTimesSender.AsQueryable()
                                         .Include(r => r.ReserveItems)
                                         .ThenInclude(r => r.Service)
                                         .ThenInclude(s => s.Artist)
@@ -200,7 +199,7 @@ public sealed class ReserveTimeRepository(NewtyDbContext context, NewtyDbContext
                                         .FirstOrDefaultAsync(cancellationToken);
 
     public async Task<ReserveTimeReceipt> FindAsyncIncludeTransaction(Guid id, CancellationToken cancellationToken = default)
-        => await _contextCommand.ReserveTimesReceipt.AsQueryable()
+        => await _context.ReserveTimesReceipt.AsQueryable()
                                         .Include(r => r.TransactionReceipt)
                                         .Include(r => r.TransactionSender)
                                         .AsSplitQuery()

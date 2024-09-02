@@ -1,24 +1,23 @@
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 
-public sealed class SmsTemplateRepository(NewtyDbContext context, NewtyDbContextCommand contextCommand)
+public sealed class SmsTemplateRepository(NewtyDbContext context)
     : ISmsTemplateRepository
 {
     private readonly NewtyDbContext _context = context;
-    private readonly NewtyDbContextCommand _contextCommand = contextCommand;
 
     public void Add(SmsTemplate smsTemplate)
-        => _contextCommand.SmsTemplates.Add(smsTemplate);
+        => _context.SmsTemplates.Add(smsTemplate);
 
     public void Remove(SmsTemplate smsTemplate)
-        => _contextCommand.SmsTemplates.Remove(smsTemplate);
+        => _context.SmsTemplates.Remove(smsTemplate);
 
     public async Task<bool> AnyAsync(string name, CancellationToken cancellationToken)
-        => await _contextCommand.SmsTemplates.AsQueryable()
+        => await _context.SmsTemplates.AsQueryable()
                                         .AnyAsync(s => s.Name == name, cancellationToken);
 
     public async Task<SmsTemplate> FindAsync(Guid id, CancellationToken cancellationToken)
-        => await _contextCommand.SmsTemplates.AsQueryable()
+        => await _context.SmsTemplates.AsQueryable()
                                         .FirstOrDefaultAsync(s => s.Id == id, cancellationToken);
 
     public async Task<IResponse> Get(Guid id, CancellationToken cancellationToken)

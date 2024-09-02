@@ -1,63 +1,63 @@
-namespace Reservation.Infrastructure.Persistance.Context;
+// namespace Reservation.Infrastructure.Persistance.Context;
 
 
 
-public sealed class NewtyDbContextCommand : DbContext
-{
-    public NewtyDbContextCommand(DbContextOptions<NewtyDbContextCommand> options) : base(options)
-    {
-        AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
-    }
+// public sealed class NewtyDbContextReadOnly : DbContext
+// {
+//     public NewtyDbContextReadOnly(DbContextOptions<NewtyDbContextReadOnly> options) : base(options)
+//     {
+//         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+//     }
 
-    public DbSet<User> Users { get; set; }
+//     public IQueryable<User> GetUsers() => Set<User>().AsQueryable();
 
-    // Business
-    public DbSet<Business> Businesses { get; set; }
-    public DbSet<BusinessService> Services { get; set; }
-    public DbSet<Artist> Artists { get; set; }
-    public DbSet<Post> Posts { get; set; }
-    public DbSet<UserVIP> UsersVIP { get; set; }
-    public DbSet<SmsCredit> SmsCredits { get; set; }
-    public DbSet<SmsTemplate> SmsTemplates { get; set; }
+//     // Business
+//     public IQueryable<Business> GetBusinesses() => Set<Business>().AsQueryable();
+//     public IQueryable<BusinessService> GetServices() => Set<BusinessService>().AsQueryable();
+//     public IQueryable<Artist> GetArtists() => Set<Artist>().AsQueryable();
+//     public IQueryable<Post> GetPosts() => Set<Post>().AsQueryable();
+//     public IQueryable<UserVIP> GetUsersVIP() => Set<UserVIP>().AsQueryable();
+//     public IQueryable<SmsCredit> GetSmsCredits() => Set<SmsCredit>().AsQueryable();
+//     public IQueryable<SmsTemplate> GetSmsTemplates() => Set<SmsTemplate>().AsQueryable();
 
-    // Reserve
-    public DbSet<ReserveTimeReceipt> ReserveTimesReceipt { get; set; }
-    public DbSet<ReserveTimeSender> ReserveTimesSender { get; set; }
-    public DbSet<ReserveItem> ReserveItems { get; set; }
+//     // Reserve
+//     public IQueryable<ReserveTimeReceipt> GetReserveTimesReceipt() => Set<ReserveTimeReceipt>().AsQueryable();
+//     public IQueryable<ReserveTimeSender> GetReserveTimesSender() => Set<ReserveTimeSender>().AsQueryable();
+//     public IQueryable<ReserveItem> GetReserveItems() => Set<ReserveItem>().AsQueryable();
 
-    // Category
-    public DbSet<Category> Categories { get; set; }
+//     // Category
+//     public IQueryable<Category> GetCategories() => Set<Category>().AsQueryable();
 
-    // Point
-    public DbSet<Point> Points { get; set; }
+//     // Point
+//     public IQueryable<Point> GetPoints() => Set<Point>().AsQueryable();
 
-    // City
-    public DbSet<City> Cities { get; set; }
+//     // City
+//     public IQueryable<City> GetCities() => Set<City>().AsQueryable();
 
-    // Finance
-    public DbSet<BusinessRequestPay> BusinessRequestPays { get; set; }
-    public DbSet<UserRequestPay> UserRequestPays { get; set; }
+//     // Finance
+//     public IQueryable<BusinessRequestPay> GetBusinessRequestPays() => Set<BusinessRequestPay>().AsQueryable();
+//     public IQueryable<UserRequestPay> GetUserRequestPays() => Set<UserRequestPay>().AsQueryable();
 
-    // Wallet
-    public DbSet<Wallet> Wallets { get; set; }
-    public DbSet<Transaction> Transactions { get; set; }
+//     // Wallet
+//     public IQueryable<Wallet> GetWallets() => Set<Wallet>().AsQueryable();
+//     public IQueryable<Transaction> GetTransactions() => Set<Transaction>().AsQueryable();
 
-    // SmsPlan
-    public DbSet<SmsPlan> SmsPlans { get; set; }
+//     // SmsPlan
+//     public IQueryable<SmsPlan> GetSmsPlans() => Set<SmsPlan>().AsQueryable();
 
-    // FeeTransfer
-    public DbSet<TransferFee> TransferFees { get; set; }
+//     // FeeTransfer
+//     public IQueryable<TransferFee> GetTransferFees() => Set<TransferFee>().AsQueryable();
 
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        base.OnConfiguring(optionsBuilder);
-        optionsBuilder.AddInterceptors(new SoftDeleteInterceptor());
-    }
-    protected override void OnModelCreating(ModelBuilder modelBuilder)
-    {
-        base.OnModelCreating(modelBuilder);
+//     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+//     {
+//         base.OnConfiguring(optionsBuilder);
+//         optionsBuilder.AddInterceptors(new SoftDeleteInterceptor());
+//     }
+//     protected override void OnModelCreating(ModelBuilder modelBuilder)
+//     {
+//         base.OnModelCreating(modelBuilder);
 
-        modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
-        modelBuilder.ConfigSoftDeleteFilter();
-    }
-}
+//         modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+//         modelBuilder.ConfigSoftDeleteFilter();
+//     }
+// }
