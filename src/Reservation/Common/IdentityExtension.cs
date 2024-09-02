@@ -25,7 +25,7 @@ public static class IdentityExtension
         {
             if (user.Identity.IsAuthenticated)
             {
-                return Guid.Parse(user.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                return Guid.Parse(user.FindFirst("Id")?.Value);
             }
             else
                 return Guid.Empty;

@@ -58,7 +58,7 @@ public sealed class TokenFactoryService(IOptions<TokenOption> options) : ITokenF
             // Issued at
             new(System.IdentityModel.Tokens.Jwt.JwtRegisteredClaimNames.Iat, DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString(), ClaimValueTypes.Integer64, _optionBearer.Issuer),
             // User Costume Data
-            new(ClaimTypes.NameIdentifier, id.ToString(), ClaimValueTypes.String, _optionBearer.Issuer),
+            new("Id", id.ToString(), ClaimValueTypes.String, _optionBearer.Issuer),
             new("PhoneNumber", phoneNumber, ClaimValueTypes.String, _optionBearer.Issuer),
             new("Name", name, ClaimValueTypes.String, _optionBearer.Issuer),
             // add roles
@@ -91,7 +91,7 @@ public sealed class TokenFactoryService(IOptions<TokenOption> options) : ITokenF
             // for invalidation
             new(ClaimTypes.SerialNumber, StringUtils.CreateCryptographicallySecureGuid(), ClaimValueTypes.String, _optionsRefresh.Issuer),
             // custom data
-            new(ClaimTypes.NameIdentifier, id.ToString(), ClaimValueTypes.String, _optionsRefresh.Issuer),
+            new("Id", id.ToString(), ClaimValueTypes.String, _optionsRefresh.Issuer),
             // add roles
             new(ClaimTypes.Role, role, ClaimValueTypes.String, _optionsRefresh.Issuer)
         };

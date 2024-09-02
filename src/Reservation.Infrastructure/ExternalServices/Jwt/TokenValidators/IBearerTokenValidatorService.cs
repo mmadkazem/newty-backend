@@ -7,6 +7,12 @@ public interface IBearerTokenValidatorService
 
 public sealed class UserTokenValidatorService : IBearerTokenValidatorService
 {
+    // private readonly IUnitOfWork _uow;
+
+    // public UserTokenValidatorService(IUnitOfWork uow)
+    // {
+    //     _uow = uow;
+    // }
 
     public async Task ValidateAsync(TokenValidatedContext context)
     {

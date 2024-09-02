@@ -3,7 +3,7 @@ namespace Reservation.Application.Businesses.Commands.ValidateBusiness;
 public sealed record ValidateBusinessCommandRequest
 (
     Guid Id, string Name, string CoverImagePath, string CardNumber,
-    string ParvaneKasbImagePath, string Description, string Address, string City
+    string? ParvaneKasbImagePath, string Description, string Address, string City
 ) : IRequest
 {
     public static ValidateBusinessCommandRequest Create(Guid Id, ValidateBusinessDTO model)
@@ -14,5 +14,5 @@ public sealed record ValidateBusinessCommandRequest
 public readonly record struct ValidateBusinessDTO
 (
     string Name, string CoverImagePath, string CardNumber,
-    string ParvaneKasbImagePath, string Description, string Address, string City
+    string? ParvaneKasbImagePath, string Description, string Address, string City
 );

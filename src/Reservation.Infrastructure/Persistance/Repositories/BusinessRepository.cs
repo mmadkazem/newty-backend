@@ -64,7 +64,8 @@ public sealed class BusinessRepository(NewtyDbContext context)
                                         b.Holidays,
                                         new Time(b.StartHoursOfWor.Hours, b.StartHoursOfWor.Minutes),
                                         new Time(b.EndHoursOfWor.Hours, b.EndHoursOfWor.Minutes),
-                                        b.IsCancelReserveTime
+                                        b.IsCancelReserveTime,
+                                        b.State.ToString()
                                     )).FirstOrDefaultAsync(cancellationToken);
 
     public async Task<IResponse> GetBusinessById(Guid businessId, CancellationToken cancellationToken)

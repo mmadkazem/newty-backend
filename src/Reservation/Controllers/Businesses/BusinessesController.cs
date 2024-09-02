@@ -61,7 +61,7 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
     {
         var request = ValidateBusinessCommandRequest.Create(User.UserId(), model);
         await _sender.Send(request, token);
-        return Ok(new { Message = BusinessSuccessMessage.Updated });
+        return Ok(new { Message = BusinessSuccessMessage.WaitingValidate });
     }
     [HttpPut()]
     [Authorize(Role.Business, AuthenticationSchemes = AuthScheme.UpdateScheme)]
@@ -87,7 +87,7 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
         CancellationToken token)
     {
         await _sender.Send(new UpdateBusinessStateCommandRequest(businessId, IsValid), token);
-        return Ok(new {Message = "کسب و کار با موفقیت تایید شد"});
+        return Ok(new { Message = BusinessSuccessMessage.Validated });
     }
 
     [HttpGet]

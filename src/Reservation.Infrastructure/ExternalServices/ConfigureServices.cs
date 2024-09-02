@@ -13,7 +13,7 @@ public static class ConfigureServices
 
                 // DI Token Validators
                 services.AddScoped<ITempTokenValidatorService, TempTokenValidatorService>();
-                services.AddScoped<IBearerTokenValidatorService, UserTokenValidatorService>();
+                services.AddTransient<IBearerTokenValidatorService, UserTokenValidatorService>();
 
                 // DI Job
                 services.AddSingleton<IPayingReserveTimeJob, PayingReserveTimeJob>();
