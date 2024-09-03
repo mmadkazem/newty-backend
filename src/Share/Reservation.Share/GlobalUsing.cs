@@ -5,6 +5,5 @@ global using System.Security.Cryptography;
 global using Microsoft.AspNetCore.Builder;
 global using Reservation.Share.Exceptions;
 global using Microsoft.AspNetCore.Http;
-global using Liaro.Share.Exceptions;
 global using System.Text.Json;
 global using System.Text;

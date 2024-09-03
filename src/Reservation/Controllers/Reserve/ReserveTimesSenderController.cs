@@ -1,5 +1,3 @@
-using Reservation.Application.ReserveTimes.Queries.GetReserveSenderTime;
-
 namespace Reservation.Controllers.Reserve;
 
 

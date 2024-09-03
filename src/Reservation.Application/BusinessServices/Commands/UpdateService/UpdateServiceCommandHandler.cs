@@ -9,6 +9,8 @@ public sealed class UpdateServiceCommandHandler(IUnitOfWork uow) : IRequestHandl
         var service = await _uow.Services.FindAsync(request.Id, cancellationToken)
             ?? throw new ServiceNotFoundException();
 
+        service.Business.IsValidate();
+
         if (service.Name != request.Name && !await _uow.Services.AnyAsync(request.Name, cancellationToken))
         {
             throw new ServiceAlreadyExistException();
@@ -16,7 +18,7 @@ public sealed class UpdateServiceCommandHandler(IUnitOfWork uow) : IRequestHandl
 
         if (service.BusinessId != request.BusinessId)
         {
-            throw new DoNotAccessToRemoveItemException("سرویس");
+            throw new DoNotAccessToChangeItemException("خدمات");
         }
 
         service.Name = request.Name;

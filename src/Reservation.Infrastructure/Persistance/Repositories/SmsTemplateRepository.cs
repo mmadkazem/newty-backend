@@ -18,6 +18,7 @@ public sealed class SmsTemplateRepository(NewtyDbContext context)
 
     public async Task<SmsTemplate> FindAsync(Guid id, CancellationToken cancellationToken)
         => await _context.SmsTemplates.AsQueryable()
+                                        .Include(s => s.Business)
                                         .FirstOrDefaultAsync(s => s.Id == id, cancellationToken);
 
     public async Task<IResponse> Get(Guid id, CancellationToken cancellationToken)

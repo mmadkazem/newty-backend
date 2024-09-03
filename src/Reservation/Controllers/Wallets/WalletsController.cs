@@ -48,6 +48,7 @@ public sealed class WalletsController(ISender sender) : ControllerBase
     public async Task<IActionResult> PutWithdrawBusiness(decimal amount,
         CancellationToken token)
     {
+        // TODO: Validate Business for using in service
         var request = WithdrawBusinessWalletCommandRequest.Create(User.UserId(), amount);
         await _sender.Send(request, token);
         return Ok(new { Message = WalletSuccessMessage.Withdraw });
@@ -58,6 +59,7 @@ public sealed class WalletsController(ISender sender) : ControllerBase
     public async Task<IActionResult> PutWithdrawUsers(decimal amount,
         CancellationToken token)
     {
+        // TODO: Validate User for using in service
         var request = WithdrawUserWalletCommandRequest.Create(User.UserId(), amount);
         await _sender.Send(request, token);
         return Ok(new { Message = WalletSuccessMessage.Withdraw });

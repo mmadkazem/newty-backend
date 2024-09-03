@@ -10,6 +10,8 @@ public sealed class CreateSmsCreditCommandHandler(IUnitOfWork uow)
         var business = await _uow.Businesses.FindAsyncIncludeSMSCredit(request.BusinessId, cancellationToken)
             ?? throw new BusinessNotFoundException();
 
+        business.IsValidate();
+
         if (business.SmsCredit is not null)
         {
             throw new SmsCreditAlreadyExistException();

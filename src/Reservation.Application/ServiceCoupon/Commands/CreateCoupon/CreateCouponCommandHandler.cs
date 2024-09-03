@@ -11,7 +11,7 @@ public sealed class CreateCouponCommandHandler(IUnitOfWork uow) : IRequestHandle
 
         if (service.BusinessId != request.BusinessId)
         {
-            throw new DoNotAccessToRemoveItemException("سرویس");
+            throw new DoNotAccessToChangeItemException("سرویس");
         }
 
         Coupon coupon = new()

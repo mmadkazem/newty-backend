@@ -13,6 +13,7 @@ public sealed class FoundUserWalletCommandHandler
         var userRequestPay = await _uow.UserRequestPays.FindAsync(request.RequestPayId, cancellationToken)
             ?? throw new UserRequestPayNotFoundException();
 
+        userRequestPay.User.IsValidate();
 
         var result = await _checkPaymentIsVerificationService.Verification(request.Authorizy, userRequestPay.Amount);
         if (!(result.Result == PaymentResult.Verified))

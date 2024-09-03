@@ -10,9 +10,11 @@ public sealed class UpdateSmsTemplateCommandHandler(IUnitOfWork uow)
         var smsTemplate = await _uow.SmsTemplates.FindAsync(request.Id, cancellationToken)
             ?? throw new SmsTemplateNotFoundException();
 
+        smsTemplate.Business.IsValidate();
+
         if (smsTemplate.BusinessId != request.BusinessId)
         {
-            throw new DoNotAccessToRemoveItemException("تمپلیت پیامک");
+            throw new DoNotAccessToChangeItemException("تمپلیت پیامک");
         }
 
         smsTemplate.Name = request.Name;

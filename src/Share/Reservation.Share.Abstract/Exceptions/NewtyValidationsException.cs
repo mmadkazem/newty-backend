@@ -5,7 +5,7 @@ namespace Reservation.Share.Abstract.Exceptions;
 public class NewtyValidationsException : Exception
 {
     public NewtyValidationsException()
-        : base("One or more validation failures have occurred.")
+        : base("یک یا چند نقص اعتبار سنجی رخ داده است.")
     {
         Errors = new Dictionary<string, string[]>();
     }

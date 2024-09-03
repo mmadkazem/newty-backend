@@ -10,8 +10,8 @@ public sealed class WalletRepository(NewtyDbContext context) : IWalletRepository
 
     public async Task<Wallet> FindAsyncByBusinessId(Guid businessId, CancellationToken cancellationToken)
         => await _context.Businesses.AsQueryable()
-                                .Select(u => u.Wallet)
-                                .FirstOrDefaultAsync(b => b.Id == businessId, cancellationToken);
+                                    .Select(u => u.Wallet)
+                                    .FirstOrDefaultAsync(b => b.Id == businessId, cancellationToken);
 
     public async Task<Wallet> FindAsyncByUserId(Guid userId, CancellationToken cancellationToken)
         => await _context.Users.AsQueryable()

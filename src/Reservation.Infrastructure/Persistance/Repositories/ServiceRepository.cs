@@ -16,6 +16,7 @@ public sealed class ServiceRepository(NewtyDbContext context) : IServiceReposito
 
     public async Task<BusinessService> FindAsync(Guid id, CancellationToken cancellationToken)
         => await _context.Services.AsQueryable()
+                                    .Include(s => s.Business)
                                     .FirstOrDefaultAsync(b => b.Id == id, cancellationToken);
 
     public async Task<BusinessService> FindAsyncIncludeArtist(Guid serviceId, CancellationToken cancellationToken)

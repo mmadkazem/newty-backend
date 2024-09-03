@@ -10,10 +10,19 @@ public class User : BaseClass<Guid>
     // User City
     public City City { get; set; }
 
-    // // User Wallet
+    //  User Wallet
     public Wallet Wallet { get; set; }
 
-    // // Business
+    // Business
     public ICollection<Business> Businesses { get; set; }
+
+    // Validate User for using system
+    public void IsValidate()
+    {
+        if (!IsActive)
+        {
+            throw new AccountNotActiveException();
+        }
+    }
 
 }

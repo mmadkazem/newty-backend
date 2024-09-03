@@ -8,6 +8,7 @@ public sealed class CreatePostCommandHandler(IUnitOfWork uow) : IRequestHandler<
     {
         var business = await _uow.Businesses.FindAsync(request.BusinessId, cancellationToken)
             ?? throw new BusinessNotFoundException();
+        business.IsValidate();
 
         Post post = new()
         {

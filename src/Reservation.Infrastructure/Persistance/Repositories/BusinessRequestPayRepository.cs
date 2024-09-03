@@ -13,7 +13,8 @@ public sealed class BusinessRequestPayRepository(NewtyDbContext context)
 
     public async Task<BusinessRequestPay> FindAsync(Guid id, CancellationToken cancellationToken)
         => await _context.BusinessRequestPays.AsQueryable()
-                                                .FirstOrDefaultAsync(r => r.Id == id && !r.IsPay, cancellationToken);
+                                            .Include(b => b.Business)
+                                            .FirstOrDefaultAsync(r => r.Id == id && !r.IsPay, cancellationToken);
 
     public async Task<IResponse> Get(Guid id, CancellationToken cancellationToken)
         => await _context.BusinessRequestPays.AsQueryable()

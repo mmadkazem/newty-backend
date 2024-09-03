@@ -9,8 +9,20 @@ public sealed class AddServiceCommandHandler(IUnitOfWork uow) : IRequestHandler<
         var service = await _uow.Services.FindAsync(request.ServiceId, cancellationToken)
             ?? throw new ServiceNotFoundException();
 
-        Artist artist = await _uow.Artists.FindAsync(request.ArtistId, cancellationToken)
+        service.Business.IsValidate();
+
+        var artist = await _uow.Artists.FindAsync(request.ArtistId, cancellationToken)
             ?? throw new ArtistNotFoundException();
+
+        if (service.BusinessId != request.BusinessId)
+        {
+            throw new DoNotAccessToChangeItemException("خدمات");
+        }
+
+        if (artist.BusinessId != request.BusinessId)
+        {
+            throw new DoNotAccessToChangeItemException("آرتیست");
+        }
 
         artist.Services.Add(service);
         await _uow.SaveChangeAsync(cancellationToken);

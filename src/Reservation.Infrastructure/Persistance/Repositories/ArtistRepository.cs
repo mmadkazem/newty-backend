@@ -20,6 +20,7 @@ public sealed class ArtistRepository(NewtyDbContext context) : IArtistRepository
 
     public async Task<Artist> FindAsync(Guid artistId, CancellationToken cancellationToken)
         => await _context.Artists.AsQueryable()
+                                    .Include(a => a.Business)
                                     .Where(b => b.Id == artistId)
                                     .FirstOrDefaultAsync(cancellationToken);
 

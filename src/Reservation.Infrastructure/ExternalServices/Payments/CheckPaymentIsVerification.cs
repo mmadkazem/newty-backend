@@ -21,18 +21,13 @@ public sealed class CheckPaymentIsVerificationService : ICheckPaymentIsVerificat
             MerchantId = merchantId
         }, Payment.Mode.sandbox);
 
-        switch (result.Status)
+        return result.Status switch
         {
-            case 101:
-                return new(result.ExtraDetail, PaymentResult.Verified, result.RefId);
-            case -54:
-                return new(result.ExtraDetail, PaymentResult.InvalidAuthority, result.RefId);
-            case -55:
-                return new(result.ExtraDetail, PaymentResult.NotFound, result.RefId);
-            case -51:
-                return new(result.ExtraDetail, PaymentResult.Fail, result.RefId);
-            default:
-                return new("خطا ی غیر منتظره رخ داده است", PaymentResult.Error, 0);
-        }
+            101 => new(result.ExtraDetail, PaymentResult.Verified, result.RefId),
+            -54 => new(result.ExtraDetail, PaymentResult.InvalidAuthority, result.RefId),
+            -55 => new(result.ExtraDetail, PaymentResult.NotFound, result.RefId),
+            -51 => new(result.ExtraDetail, PaymentResult.Fail, result.RefId),
+            _ => new("خطا ی غیر منتظره رخ داده است", PaymentResult.Error, 0),
+        };
     }
 }

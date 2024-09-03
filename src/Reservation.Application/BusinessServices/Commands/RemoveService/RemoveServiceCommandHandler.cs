@@ -9,9 +9,11 @@ public sealed class RemoveServiceCommandHandler(IUnitOfWork uow) : IRequestHandl
         var service = await _uow.Services.FindAsync(request.Id, cancellationToken)
             ?? throw new ServiceNotFoundException();
 
+        service.Business.IsValidate();
+
         if (service.BusinessId != request.BusinessId)
         {
-            throw new DoNotAccessToRemoveItemException("سرویس");
+            throw new DoNotAccessToChangeItemException("خدمات");
         }
 
         _uow.Services.Remove(service);

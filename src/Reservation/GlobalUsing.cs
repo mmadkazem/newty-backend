@@ -17,6 +17,7 @@ global using Reservation.Application.ReserveTimes.Commands.UpdateStateReserveTim
 global using Reservation.Application.Businesses.Queries.GetBusinessesWaitingValid;
 global using Reservation.Application.ReserveTimes.Queries.GetBusinessReserveTime;
 global using Reservation.Application.Businesses.Commands.AddCategoriesToBusiness;
+global using Reservation.Application.ReserveTimes.Queries.GetReserveSenderTime;
 global using Reservation.Application.Categories.Queries.GetCategoryBusinesses;
 global using Reservation.Application.ReserveTimes.Queries.GetUserReserveTime;
 global using Reservation.Application.BusinessServices.Commands.UpdateService;

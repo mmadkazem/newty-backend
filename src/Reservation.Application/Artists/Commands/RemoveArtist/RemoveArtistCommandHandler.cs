@@ -9,9 +9,11 @@ public sealed class RemoveArtistCommandHandler(IUnitOfWork uow) : IRequestHandle
         var artist = await _uow.Artists.FindAsync(request.Id, cancellationToken)
             ?? throw new ArtistNotFoundException();
 
+        artist.Business.IsValidate();
+
         if (artist.BusinessId != request.BusinessId)
         {
-            throw new DoNotAccessToRemoveItemException("آرتیست");
+            throw new DoNotAccessToChangeItemException("آرتیست");
         }
 
         _uow.Artists.Remove(artist);

@@ -30,7 +30,7 @@ public sealed class ArtistsController(ISender sender) : ControllerBase
     public async Task<IActionResult> Post(Guid artistId, Guid serviceId,
         CancellationToken token)
     {
-        await _sender.Send(new AddServiceCommandRequest(artistId, serviceId), token);
+        await _sender.Send(new AddServiceCommandRequest(artistId, serviceId, User.UserId()), token);
         return Ok(new { Message = ArtistSuccessMessage.ServiceAdded });
     }
 

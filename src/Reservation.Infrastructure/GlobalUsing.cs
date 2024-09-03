@@ -20,6 +20,7 @@ global using Reservation.Application.Categories.Queries.SearchCategory;
 global using Reservation.Infrastructure.Persistance.SeedData.TestData;
 global using Reservation.Application.Categories.Queries.GetCategories;
 global using Reservation.Infrastructure.ExternalServices.SmsProvider;
+global using Reservation.Application.SmsCredits.Queries.GetSmsCredit;
 global using Reservation.Application.Categories.Queries.GetCategory;
 global using Reservation.Application.Businesses.Queries.GetBusiness;
 global using Reservation.Application.Wallets.Queries.GetUserWallet;

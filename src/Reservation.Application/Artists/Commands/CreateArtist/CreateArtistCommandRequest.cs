@@ -14,7 +14,7 @@ public record CreateArtistCommandRequest
         => new(model.Name, model.CoverImagePath, model.Description, businessId, model.Services);
 }
 
-public record CreateArtistDTO
+public readonly record struct CreateArtistDTO
 (
     string Name,
     string CoverImagePath,

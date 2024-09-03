@@ -1,8 +1,3 @@
-
-
-
-using Reservation.Application.SmsCredits.Queries.GetSmsCredit;
-
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 
@@ -16,7 +11,8 @@ public sealed class SmsCreditRepository(NewtyDbContext context)
 
     public async Task<SmsCredit> FindAsync(Guid businessId, CancellationToken cancellationToken)
         => await _context.SmsCredits.AsQueryable()
-                                        .FirstOrDefaultAsync(b => b.BusinessId == businessId, cancellationToken);
+                                    .Include(s => s.Business)
+                                    .FirstOrDefaultAsync(b => b.BusinessId == businessId, cancellationToken);
 
     public async Task<IResponse> Get(Guid businessId, CancellationToken cancellationToken)
         => await _context.SmsCredits.AsQueryable()
