@@ -12,6 +12,11 @@ public sealed class GetPostsQueryHandler(IUnitOfWork uow, IObjectStorageProvider
         {
             return new Response(true, responses);
         }
+        foreach (var response in responses)
+        {
+            var url = await _objectStorage.GetUrl(response.CoverImagePath);
+            response.CoverImagePath = url;
+        }
 
         foreach (var response in responses)
         {
