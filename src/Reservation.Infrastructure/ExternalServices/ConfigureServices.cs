@@ -5,11 +5,11 @@ public static class ConfigureServices
         public static IServiceCollection RegisterExternalServices(this IServiceCollection services, IConfiguration configuration)
         {
                 // DI Services
-                services.AddTransient<ICheckPaymentIsVerificationService, CheckPaymentIsVerificationService>();
-                services.AddTransient<ITokenFactoryService, TokenFactoryService>();
-                services.AddTransient<IUploadImageProvider, UploadImageProvider>();
-                services.AddTransient<ISmsProvider, KavenegarProvider>();
-                services.AddTransient<ICacheProvider, CacheProvider>();
+                services.AddScoped<ICheckPaymentIsVerificationService, CheckPaymentIsVerificationService>();
+                services.AddScoped<ITokenFactoryService, TokenFactoryService>();
+                services.AddScoped<IUploadImageProvider, UploadImageProvider>();
+                services.AddScoped<ISmsProvider, KavenegarProvider>();
+                services.AddScoped<ICacheProvider, CacheProvider>();
 
                 // DI Token Validators
                 services.AddScoped<ITempTokenValidatorService, TempTokenValidatorService>();
@@ -17,8 +17,10 @@ public static class ConfigureServices
 
                 // DI Job
                 services.AddSingleton<IPayingReserveTimeJob, PayingReserveTimeJob>();
-                services.AddTransient<IFinishReserveTimeJob, FinishReserveTimeJob>();
-                services.AddTransient<ISendSMSToUserVIPJob, SendSMSToUserVIPJob>();
+                services.AddScoped<IFinishReserveTimeJob, FinishReserveTimeJob>();
+                services.AddScoped<ISendSMSToUserVIPJob, SendSMSToUserVIPJob>();
+                services.AddScoped<PayingReserveTimeExecution>();
+                services.AddScoped<FinishReserveTimeService>();
 
                 // DI Options
                 services.Configure<TokenOption>(configuration);

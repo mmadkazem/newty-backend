@@ -1,8 +1,7 @@
-
 namespace Reservation.Application.ReserveTimes.Queries.GetReserveSenderTime;
 
 
-public sealed record GetReserveTimeSenderByIdQueryRequest(Guid Id, Guid BusinessSenderId)
+public sealed record GetReserveTimeSenderByIdQueryRequest(Guid Id)
     : IRequest<IResponse>;
 
 public sealed class GetReserveSenderTimeByIdQueryHandler(IUnitOfWork uow)

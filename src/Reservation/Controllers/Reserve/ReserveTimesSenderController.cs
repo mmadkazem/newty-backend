@@ -3,12 +3,12 @@ namespace Reservation.Controllers.Reserve;
 
 [ApiController]
 [Route("api/[controller]")]
+[Authorize(Role.Business)]
 public class ReserveTimesSenderController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;
 
     [HttpPost]
-    [Authorize(Role.Business)]
     public async Task<IActionResult> Post([FromBody] CreateReserveTimeSenderDTO model,
         CancellationToken token)
     {
@@ -18,7 +18,6 @@ public class ReserveTimesSenderController(ISender sender) : ControllerBase
     }
 
     [HttpPut("{id:guid}/State/{state}")]
-    [Authorize(Role.Business)]
     public async Task<IActionResult> Put(Guid id, ReserveState state,
         CancellationToken token)
     {
@@ -28,7 +27,6 @@ public class ReserveTimesSenderController(ISender sender) : ControllerBase
     }
 
     [HttpGet("Finished/{finished:bool}/Page/{page:int}/Size/{size:int}")]
-    [Authorize(Role.Business)]
     [ProducesResponseType(typeof(Response<GetReserveTimeBusinessSenderQueryResponse>), 200)]
     public async Task<IActionResult> GetUserReserveTime(bool finished, int page, int size,
         CancellationToken token)
@@ -38,7 +36,6 @@ public class ReserveTimesSenderController(ISender sender) : ControllerBase
     }
 
     [HttpGet("State/{state}/Page/{page:int}/Size/{size:int}")]
-    [Authorize(Role.Business)]
     [ProducesResponseType(typeof(Response<GetReserveTimeBusinessSenderQueryResponse>), 200)]
     public async Task<IActionResult> GetBusinessReserveTimeByState(ReserveState state, int page, int size,
         CancellationToken token)
@@ -48,12 +45,11 @@ public class ReserveTimesSenderController(ISender sender) : ControllerBase
     }
 
     [HttpGet("{id:guid}")]
-    [Authorize(Role.BusinessUser)]
     [ProducesResponseType(typeof(GetReserveTimeSenderByIdQueryResponse), 200)]
-    public async Task<IActionResult> Get([AsParameters] GetReserveTimeSenderByIdQueryRequest request,
+    public async Task<IActionResult> Get(Guid id,
         CancellationToken token)
     {
-        var result = await _sender.Send(request, token);
+        var result = await _sender.Send(new GetReserveTimeSenderByIdQueryRequest(id), token);
         return Ok(result);
     }
 

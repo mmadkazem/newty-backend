@@ -45,7 +45,7 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
     }
 
     [HttpPost("Points")]
-    [Authorize(Role.BusinessUser)]
+    [Authorize(Roles = Role.BusinessUser)]
     public async Task<IActionResult> Post([FromBody] AddBusinessPointDTO model,
         CancellationToken token)
     {

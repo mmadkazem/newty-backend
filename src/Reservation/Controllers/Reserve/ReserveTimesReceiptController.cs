@@ -62,7 +62,7 @@ public sealed class ReserveTimesReceiptController(ISender sender) : ControllerBa
     public async Task<IActionResult> GetUserReserveTime(bool finished, int page, int size,
         CancellationToken token)
     {
-        var results = await _sender.Send( new GetUserReserveTimeQueryRequest(page, size, User.UserId(), finished), token);
+        var results = await _sender.Send(new GetUserReserveTimeQueryRequest(page, size, User.UserId(), finished), token);
         return Ok(results);
     }
 
@@ -77,12 +77,12 @@ public sealed class ReserveTimesReceiptController(ISender sender) : ControllerBa
     }
 
     [HttpGet("{id:guid}")]
-    [Authorize(Role.BusinessUser)]
+    [Authorize(Role.Business)]
     [ProducesResponseType(typeof(GetReserveTimeDetailQueryResponse), 200)]
-    public async Task<IActionResult> Get([AsParameters] GetReserveTimeByIdReceiptQueryRequest request,
+    public async Task<IActionResult> Get(Guid id,
         CancellationToken token)
     {
-        var result = await _sender.Send(request, token);
+        var result = await _sender.Send(new GetReserveTimeByIdReceiptQueryRequest(id), token);
         return Ok(result);
     }
 }
