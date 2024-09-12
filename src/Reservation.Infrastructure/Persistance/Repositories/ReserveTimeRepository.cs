@@ -56,6 +56,7 @@ public sealed class ReserveTimeRepository(NewtyDbContext context)
                                             c.TotalPrice,
                                             c.UserId,
                                             c.State.ToString(),
+                                            c.Finished,
                                             c.ReserveItems.Select(r => new ReserveItemsResponse
                                                             (
                                                                 r.Id,
@@ -79,6 +80,7 @@ public sealed class ReserveTimeRepository(NewtyDbContext context)
                                             c.TotalPrice,
                                             c.BusinessReceiptId,
                                             c.State.ToString(),
+                                            c.Finished,
                                             c.ReserveItems.Select(r => new ReserveItemsResponse
                                                             (
                                                                 r.Id,

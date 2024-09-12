@@ -8,6 +8,7 @@ public record GetReserveTimeDetailQueryResponse
     int TotalPrice,
     Guid? UserId,
     string State,
+    bool Finished,
     IEnumerable<ReserveItemsResponse> ReserveItems
 ) : IResponse;
 
@@ -37,6 +38,7 @@ public record GetReserveTimeSenderByIdQueryResponse
     int TotalPrice,
     Guid BusinessReceiptId,
     string State,
+    bool Finished,
     IEnumerable<ReserveItemsResponse> ReserveItems
 ) : IResponse;
 
