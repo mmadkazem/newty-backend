@@ -1,32 +1,31 @@
 namespace Reservation.Infrastructure.ExternalServices.Job;
 
 
-public sealed class FinishReserveTimeJob(IBackgroundJobClient client, IServiceScopeFactory scopeFactory)
+public sealed class FinishReserveTimeJob(IBackgroundJobClient client, IConfiguration configuration)
     : IFinishReserveTimeJob
 {
+    private readonly IConfiguration _configuration = configuration;
     private readonly IBackgroundJobClient _client = client;
-    private readonly IServiceScopeFactory _scopeFactory = scopeFactory;
-
 
     public void Execute(Guid reserveTimeId, DateTimeOffset date)
     {
-        _client.Schedule<FinishReserveTimeService>(s => s.Execute(reserveTimeId, _scopeFactory), date);
+        _client.Schedule<FinishReserveTimeService>(s => s.Execute(reserveTimeId, _configuration), date);
     }
 }
 
 public sealed class FinishReserveTimeService
 {
 
-    public void Execute(Guid reserveTimeId, IServiceScopeFactory _scopeFactory)
+    public void Execute(Guid reserveTimeId, IConfiguration configuration)
     {
-        using var serviceScope = _scopeFactory.CreateScope();
-        using var _context = serviceScope.ServiceProvider.GetService<NewtyDbContext>();
+        var connectionString = configuration.GetConnectionString("NewtyDb");
+        var option = new DbContextOptionsBuilder<NewtyDbContext>()
+                            .UseNpgsql(connectionString)
+                            .Options;
 
-        var reserveTime = _context.ReserveTimesReceipt.AsQueryable()
-                                        .FirstOrDefault(r => r.Id == reserveTimeId);
+        using NewtyDbContext _context = new(option);
 
-        reserveTime.Finished = true;
-
-        _context.SaveChanges();
+        _context.ReserveTimesReceipt.Where(t => t.Id == reserveTimeId)
+                                    .ExecuteUpdateAsync(s => s.SetProperty(r => r.Finished, true));
     }
 }

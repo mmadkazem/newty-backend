@@ -6,7 +6,7 @@ public sealed record GetBusinessQueryRequest(Guid BusinessId) : IRequest<IRespon
 public sealed record GetBusinessQueryResponse
 (
     Guid Id, string PhoneNumber, string Name, string CoverImagePath,
-    string ParvaneKasbImagePath, string Description, string Address, string City,
+    string ParvaneKasbImagePath, string Description, string Address, CityResponse City,
     IEnumerable<DayOfWeek> Holidays, Time StartHoursOfWork, Time EndHoursOfWork,
     bool IsCancelReserveTime, string State
 ) : IResponse;

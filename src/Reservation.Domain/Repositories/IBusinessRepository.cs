@@ -15,4 +15,5 @@ public interface IBusinessRepository
     Task<IResponse> Get(Guid businessId, CancellationToken cancellationToken);
     Task<IEnumerable<IResponse>> GetWaitingValidBusiness(int page, int size, CancellationToken cancellationToken);
     Task<IResponse> GetBusinessById(Guid businessId, CancellationToken cancellationToken);
+    Task Active(Guid id, CancellationToken cancellationToken);
 }

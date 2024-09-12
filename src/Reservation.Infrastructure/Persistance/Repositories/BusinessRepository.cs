@@ -1,7 +1,3 @@
-using Reservation.Application.Businesses.Queries.GetBusinessById;
-using Reservation.Application.Businesses.Queries.GetBusinessesWaitingValid;
-using Reservation.Application.Common.DTOs;
-
 namespace Reservation.Infrastructure.Persistance.Repositories;
 
 
@@ -9,6 +5,10 @@ public sealed class BusinessRepository(NewtyDbContext context)
     : IBusinessRepository
 {
     private readonly NewtyDbContext _context = context;
+
+    public async Task Active(Guid id, CancellationToken cancellationToken)
+        => await _context.Businesses.Where(u => u.Id == id)
+                                    .ExecuteUpdateAsync(s => s.SetProperty(u => u.IsActive, true), cancellationToken);
 
     public void Add(Business business)
         => _context.Businesses.Add(business);
@@ -60,7 +60,7 @@ public sealed class BusinessRepository(NewtyDbContext context)
                                         b.ParvaneKasbImagePath,
                                         b.Description,
                                         b.Address,
-                                        b.City.FaName,
+                                        new(b.City.Id, b.City.FaName, b.City.Alternatives, b.City.Key),
                                         b.Holidays,
                                         new Time(b.StartHoursOfWor.Hours, b.StartHoursOfWor.Minutes),
                                         new Time(b.EndHoursOfWor.Hours, b.EndHoursOfWor.Minutes),

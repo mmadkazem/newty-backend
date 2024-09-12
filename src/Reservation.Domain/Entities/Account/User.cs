@@ -15,14 +15,4 @@ public class User : BaseClass<Guid>
 
     // Business
     public ICollection<Business> Businesses { get; set; }
-
-    // Validate User for using system
-    public void IsValidate()
-    {
-        if (!IsActive)
-        {
-            throw new AccountNotActiveException();
-        }
-    }
-
 }

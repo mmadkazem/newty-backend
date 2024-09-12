@@ -16,11 +16,11 @@ public class ReserveTimeReceipt : BaseClass<Guid>
 
     // User Reserve Time
     public User User { get; set; }
-    public Guid UserId { get; set; }
+    public Guid? UserId { get; set; }
 
     // Business Sender Reserve Time
     public Business BusinessSender { get; set; }
-    public Guid BusinessSenderId { get; set; }
+    public Guid? BusinessSenderId { get; set; }
 
     // Transactions
     public Transaction TransactionSender { get; set; }

@@ -100,8 +100,6 @@ public sealed class CreateReserveTimeSenderCommandHandler(IUnitOfWork uow) : IRe
             State = ReserveState.Waiting
         };
 
-
-
         ReserveTimeReceipt reserveTimeReceipt = new()
         {
             TotalPrice = totalPrice,

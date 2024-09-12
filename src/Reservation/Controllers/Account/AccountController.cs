@@ -47,7 +47,7 @@ public sealed class AccountController(ISender sender) : ControllerBase
     }
 
     [HttpPut]
-    [Authorize(Role.User)]
+    [Authorize(Role.User, AuthenticationSchemes = AuthScheme.InvalidScheme)]
     public async Task<IActionResult> UpdateUser([FromBody] UpdateUserDTO model,
         CancellationToken token)
     {
@@ -56,7 +56,7 @@ public sealed class AccountController(ISender sender) : ControllerBase
     }
 
     [HttpGet]
-    [Authorize]
+    [Authorize(AuthenticationSchemes = AuthScheme.InvalidScheme)]
     public async Task<IActionResult> Logout(CancellationToken token)
     {
         await _sender.Send(new LogoutQueryRequest(User.UserId()), token);
@@ -74,7 +74,7 @@ public sealed class AccountController(ISender sender) : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Role.User)]
+    [Authorize(Role.User, AuthenticationSchemes = AuthScheme.InvalidScheme)]
     [ProducesResponseType(typeof(GetUserInfoQueryResponse), 200)]
     public async Task<IActionResult> GetInformation(CancellationToken token)
     {

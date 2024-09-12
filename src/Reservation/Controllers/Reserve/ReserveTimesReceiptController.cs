@@ -17,11 +17,11 @@ public sealed class ReserveTimesReceiptController(ISender sender) : ControllerBa
     }
 
     [HttpPut("{id:guid}/State/{state}")]
-    [Authorize(Role.BusinessUser)]
+    [Authorize(Roles = Role.BusinessUser)]
     public async Task<IActionResult> Put(Guid id, ReserveState state,
         CancellationToken token)
     {
-        var request = new UpdateStateReserveTimeReceiptCommandRequest(id, state, User.Roles());
+        var request = new UpdateStateReserveTimeReceiptCommandRequest(id, state, User.Roles(), User.UserId());
         var result = await _sender.Send(request, token);
         return Ok(result);
     }

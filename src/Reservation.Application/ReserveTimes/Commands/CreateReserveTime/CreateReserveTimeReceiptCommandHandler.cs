@@ -25,8 +25,8 @@ public sealed class CreateReserveTimeReceiptCommandHandler(IUnitOfWork uow)
             throw new BusinessHolidayException();
         }
 
-        var startDate = request.DateTime;
-        var endDate = request.DateTime;
+        var startDate = request.DateTime.ToLocalTime();
+        var endDate = request.DateTime.ToLocalTime();
         int totalPrice = 0;
         List<ReserveItem> reserveItems = [];
         foreach (var artistService in request.ArtistServices)
@@ -41,14 +41,14 @@ public sealed class CreateReserveTimeReceiptCommandHandler(IUnitOfWork uow)
 
             ReserveItem item = new()
             {
-                StartDate = endDate,
+                StartDate = endDate.ToLocalTime(),
                 Service = service,
                 Price = service.Price
             };
 
             endDate += service.Time.ToTimeSpan();
             totalPrice += service.Price;
-            item.EndDate = endDate;
+            item.EndDate = endDate.ToLocalTime();
 
             reserveItems.Add(item);
         }

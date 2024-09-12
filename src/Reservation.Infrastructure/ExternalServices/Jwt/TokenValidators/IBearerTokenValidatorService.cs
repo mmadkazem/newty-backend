@@ -5,14 +5,10 @@ public interface IBearerTokenValidatorService
     Task ValidateAsync(TokenValidatedContext context);
 }
 
-public sealed class UserTokenValidatorService : IBearerTokenValidatorService
+public sealed class BearerTokenValidatorService(IServiceScopeFactory scopeFactory)
+    : IBearerTokenValidatorService
 {
-    private readonly IServiceScopeFactory _scopeFactory;
-
-    public UserTokenValidatorService(IServiceScopeFactory scopeFactory)
-    {
-        _scopeFactory = scopeFactory;
-    }
+    private readonly IServiceScopeFactory _scopeFactory = scopeFactory;
 
     public async Task ValidateAsync(TokenValidatedContext context)
     {
@@ -29,7 +25,7 @@ public sealed class UserTokenValidatorService : IBearerTokenValidatorService
             return;
         }
 
-        var idString = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier).Value;
+        var idString = claimsIdentity.FindFirst("Id").Value;
         if (!Guid.TryParse(idString, out Guid id))
         {
             context.Fail("این توکن صادر شده ما نیست. هیچ شناسه کاربری ندارد.");
@@ -44,7 +40,7 @@ public sealed class UserTokenValidatorService : IBearerTokenValidatorService
             var user = await _context.Users.AsQueryable().FirstOrDefaultAsync(u => u.Id == id);
             if (user is null || !user.IsActive)
             {
-                // user has changed his/her password/roles/stat/IsActive
+                // user has changed his/her IsActive
                 context.Fail("این توکن منقضی شده است. لطفا دوباره وارد شوید.");
                 return;
             }

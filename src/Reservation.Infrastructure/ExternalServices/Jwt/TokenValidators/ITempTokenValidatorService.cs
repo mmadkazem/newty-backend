@@ -3,14 +3,14 @@ namespace Reservation.Infrastructure.ExternalServices.Jwt.TokenValidators;
 
 public interface ITempTokenValidatorService
 {
-    void ValidateAsync(TokenValidatedContext context);
+    Task ValidateAsync(TokenValidatedContext context);
 }
 
 public sealed class TempTokenValidatorService(IUnitOfWork uow) : ITempTokenValidatorService
 {
     private readonly IUnitOfWork _uow = uow;
 
-    public void ValidateAsync(TokenValidatedContext context)
+    public async Task ValidateAsync(TokenValidatedContext context)
     {
         var claimsIdentity = context.Principal.Identity as ClaimsIdentity;
         if (claimsIdentity?.Claims == null || !claimsIdentity.Claims.Any())
@@ -32,5 +32,6 @@ public sealed class TempTokenValidatorService(IUnitOfWork uow) : ITempTokenValid
             context.Fail("This Token not valid");
             return;
         }
+        await Task.CompletedTask;
     }
 }

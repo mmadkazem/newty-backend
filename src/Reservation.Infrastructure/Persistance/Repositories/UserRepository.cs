@@ -3,6 +3,11 @@ namespace Reservation.Infrastructure.Persistance.Repositories;
 public sealed class UserRepository(NewtyDbContext context) : IUserRepository
 {
     private readonly NewtyDbContext _context = context;
+
+    public async Task Active(Guid id, CancellationToken cancellationToken = default)
+        => await _context.Users.Where(u => u.Id == id)
+                                .ExecuteUpdateAsync(s => s.SetProperty(u => u.IsActive, true), cancellationToken);
+
     public void Add(User user)
         => _context.Users.Add(user);
 
@@ -33,7 +38,7 @@ public sealed class UserRepository(NewtyDbContext context) : IUserRepository
                                     u.Id,
                                     u.PhoneNumber,
                                     u.FullName,
-                                    u.City.FaName
+                                    new(u.City.Id, u.City.FaName, u.City.Alternatives, u.City.Key)
                                 ))
                                 .FirstOrDefaultAsync(cancellationToken);
 }

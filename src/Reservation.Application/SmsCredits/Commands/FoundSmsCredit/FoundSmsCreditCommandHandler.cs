@@ -12,8 +12,6 @@ public sealed class FoundSmsCreditCommandHandler(IUnitOfWork uow) : IRequestHand
         var smsCredit = await _uow.SmsCredits.FindAsync(request.BusinessId, cancellationToken)
             ?? throw new SmsCreditNotFoundException();
 
-        smsCredit.Business.IsValidate();
-
         var plan = await _uow.SmsPlans.FindAsync(request.SMSPlanId, cancellationToken)
             ?? throw new SmsPlanNotFoundException();
 

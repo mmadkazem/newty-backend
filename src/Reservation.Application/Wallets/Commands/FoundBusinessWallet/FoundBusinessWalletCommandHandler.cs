@@ -13,8 +13,6 @@ public sealed class FoundBusinessWalletCommandHandler
         var businessRequestPay = await _uow.BusinessRequestPays.FindAsync(request.RequestPayId, cancellationToken)
             ?? throw new BusinessRequestPayNotFoundException();
 
-        businessRequestPay.Business.IsValidate();
-
         var result = await _checkPaymentIsVerificationService.Verification(request.Authorizy, businessRequestPay.Amount);
         if (!(result.Result == PaymentResult.Verified))
         {

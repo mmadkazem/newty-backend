@@ -54,19 +54,6 @@ public class Business : BaseClass<Guid>
 
     // Business Category
     public ICollection<Category> Categories { get; set; } = [];
-
-    // Validate Business for Using system
-    public void IsValidate()
-    {
-        if (State != BusinessState.Valid)
-        {
-            throw new BusinessInValidException();
-        }
-        if (!IsActive)
-        {
-            throw new AccountNotActiveException();
-        }
-    }
 }
 
 

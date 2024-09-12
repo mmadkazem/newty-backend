@@ -18,7 +18,6 @@ public sealed class PayingReserveTimeJob(IServiceScopeFactory scopeFactory) : IP
         using var serviceScope = _scopeFactory.CreateScope();
         using var _context = serviceScope.ServiceProvider.GetService<NewtyDbContext>();
         var count = 0;
-
         #region Get Admin Information
         Env.Load();
         var adminPhonNumber = Env.GetString("ADMIN_PHONE_NUMBER");
@@ -29,7 +28,6 @@ public sealed class PayingReserveTimeJob(IServiceScopeFactory scopeFactory) : IP
 
         var transferFee = _context.TransferFees.FirstOrDefault();
         #endregion
-        // var WalletAdmin
         while (true)
         {
             var businessId = _context.Businesses.AsQueryable()
@@ -60,7 +58,7 @@ public sealed class PayingReserveTimeJob(IServiceScopeFactory scopeFactory) : IP
 
                 if (reserveTimes.Count == 0)
                 {
-                    return;
+                    break;
                 }
 
                 foreach (var reserveTime in reserveTimes)

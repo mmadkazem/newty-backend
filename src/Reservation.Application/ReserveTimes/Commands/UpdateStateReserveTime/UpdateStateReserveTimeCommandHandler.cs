@@ -11,6 +11,12 @@ public sealed class UpdateStateReserveTimeReceiptCommandHandler(IUnitOfWork uow,
         var reserveTime = await _uow.ReserveTimes.FindAsyncIncludeTransaction(request.Id, cancellationToken)
             ?? throw new ReserveTimeNotFoundException();
 
+        if ((reserveTime.User.Id != request.CallId && Role.User == request.Role) ||
+            (reserveTime.BusinessReceipt.Id != request.CallId && Role.Business == request.Role))
+        {
+            throw new DotAccessReserveTimeException();
+        }
+
         if (request.State == ReserveState.Cancelled)
         {
             if (DateTime.Now.AddDays(1).Day <= reserveTime.TotalStartDate.Day)

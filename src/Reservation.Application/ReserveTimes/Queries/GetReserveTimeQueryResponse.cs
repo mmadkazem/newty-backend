@@ -6,7 +6,7 @@ public record GetReserveTimeDetailQueryResponse
     DateTime TotalStartDate,
     DateTime TotalEndDate,
     int TotalPrice,
-    Guid UserId,
+    Guid? UserId,
     string State,
     IEnumerable<ReserveItemsResponse> ReserveItems
 ) : IResponse;

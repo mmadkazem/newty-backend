@@ -9,8 +9,6 @@ public sealed class RemovePostCommandHandler(IUnitOfWork uow) : IRequestHandler<
         var post = await _uow.Posts.FindAsync(request.Id, cancellationToken)
             ?? throw new PostNotFoundException();
 
-        post.Business.IsValidate();
-
         if (post.BusinessId != request.BusinessId)
         {
             throw new DoNotAccessToChangeItemException("پست");

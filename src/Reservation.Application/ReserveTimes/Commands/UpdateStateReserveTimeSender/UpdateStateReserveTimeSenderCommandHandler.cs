@@ -11,6 +11,12 @@ public sealed class UpdateStateReserveTimeSenderCommandHandler(IUnitOfWork uow, 
         var reserveTime = await _uow.ReserveTimes.FindAsyncIncludeTransaction(request.Id, cancellationToken)
             ?? throw new ReserveTimeNotFoundException();
 
+        if (reserveTime.BusinessSenderId != request.BusinessId &&
+            reserveTime.BusinessReceiptId != request.BusinessId)
+        {
+            throw new DotAccessReserveTimeException();
+        }
+
         if (request.State == ReserveState.Cancelled)
         {
             if (DateTime.Now.AddDays(1).Day <= reserveTime.TotalStartDate.Day)
@@ -40,7 +46,7 @@ public sealed class UpdateStateReserveTimeSenderCommandHandler(IUnitOfWork uow, 
                 throw new BusinessNotAccessStateIsConfirmedException();
             }
 
-            var businessSenderWallet = await _uow.Wallets.FindAsyncByUserId(reserveTime.BusinessSenderId, cancellationToken)
+            var businessSenderWallet = await _uow.Wallets.FindAsyncByUserId(reserveTime.BusinessSender.Id, cancellationToken)
                 ?? throw new WalletNotFoundException();
 
             var businessReceiptWallet = await _uow.Wallets.FindAsyncByBusinessId(reserveTime.BusinessReceiptId, cancellationToken)

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 using Reservation.Infrastructure.Persistance.Context;
@@ -12,9 +13,11 @@ using Reservation.Infrastructure.Persistance.Context;
 namespace Reservation.Infrastructure.Persistance.Migrations
 {
     [DbContext(typeof(NewtyDbContext))]
-    partial class NewtyDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240911142757_FixTimeSpan")]
+    partial class FixTimeSpan
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -103,8 +106,8 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("a4703501-88ea-4103-8b6a-4db21e3f8cbf"),
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 919, DateTimeKind.Local).AddTicks(6192),
+                            Id = new Guid("6aeb4860-2e49-44bf-a4e0-aa36aac1dfbb"),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(789),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FullName = "Admin",
                             IsActive = false,
@@ -185,7 +188,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         new
                         {
                             Id = new Guid("e2635bc0-c7f5-47cf-88c6-dc9cf3c125a0"),
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(3004),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(7384),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             IsDeleted = false,
                             ModifiedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
@@ -603,7 +606,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 1,
                             Alternatives = new List<string> { "tehran" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 919, DateTimeKind.Local).AddTicks(9723),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(3997),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "تهران",
                             IsDeleted = false,
@@ -614,7 +617,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 2,
                             Alternatives = new List<string> { "ahwaz", "ahvaz" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(184),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(4467),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "اهواز",
                             IsDeleted = false,
@@ -625,7 +628,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 3,
                             Alternatives = new List<string> { "shiraz" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(207),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(4491),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "شیراز",
                             IsDeleted = false,
@@ -636,7 +639,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 4,
                             Alternatives = new List<string> { "mashhad" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(223),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(4507),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "مشهد",
                             IsDeleted = false,
@@ -647,7 +650,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 5,
                             Alternatives = new List<string> { "bandar abbas" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(240),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(4523),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "بندر عباس",
                             IsDeleted = false,
@@ -658,7 +661,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 6,
                             Alternatives = new List<string> { "isfahan", "esfahan" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(261),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(4543),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "اصفهان",
                             IsDeleted = false,
@@ -669,7 +672,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 7,
                             Alternatives = new List<string> { "tabriz" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(277),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(4562),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "تبریز",
                             IsDeleted = false,
@@ -680,7 +683,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 8,
                             Alternatives = new List<string> { "kish" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(292),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(4708),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "کیش",
                             IsDeleted = false,
@@ -691,7 +694,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 9,
                             Alternatives = new List<string> { "abadan" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(307),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(4724),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "آبادان",
                             IsDeleted = false,
@@ -702,7 +705,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 10,
                             Alternatives = new List<string> { "arak" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(323),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(4740),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "اراک",
                             IsDeleted = false,
@@ -713,7 +716,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 11,
                             Alternatives = new List<string> { "ardabil" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(338),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(4755),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "اردبیل",
                             IsDeleted = false,
@@ -724,7 +727,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 12,
                             Alternatives = new List<string> { "orumiyeh" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(353),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(4769),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "ارومیه",
                             IsDeleted = false,
@@ -735,7 +738,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 13,
                             Alternatives = new List<string> { "omIdieh" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(499),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(4783),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "امیدیه",
                             IsDeleted = false,
@@ -746,7 +749,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 14,
                             Alternatives = new List<string> { "iranshahr" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(514),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(4797),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "ایران شهر",
                             IsDeleted = false,
@@ -757,7 +760,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 15,
                             Alternatives = new List<string> { "ilam" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(530),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(4813),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "ایلام",
                             IsDeleted = false,
@@ -768,7 +771,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 16,
                             Alternatives = new List<string> { "bojnourd" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(544),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(4828),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "بجنورد",
                             IsDeleted = false,
@@ -779,7 +782,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 17,
                             Alternatives = new List<string> { "bam" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(559),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(4842),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "بم",
                             IsDeleted = false,
@@ -790,7 +793,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 18,
                             Alternatives = new List<string> { "bandar lengeh" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(574),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(4858),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "بندر لنگه",
                             IsDeleted = false,
@@ -801,7 +804,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 19,
                             Alternatives = new List<string> { "bushehr", "booshehr" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(590),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(4872),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "بوشهر",
                             IsDeleted = false,
@@ -812,7 +815,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 20,
                             Alternatives = new List<string> { "birjand" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(606),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(4888),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "بیرجند",
                             IsDeleted = false,
@@ -823,7 +826,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 21,
                             Alternatives = new List<string> { "pars-abad" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(621),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(4902),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "پارس آباد",
                             IsDeleted = false,
@@ -834,7 +837,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 22,
                             Alternatives = new List<string> { "jask" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(635),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(4917),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "جاسک",
                             IsDeleted = false,
@@ -845,7 +848,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 23,
                             Alternatives = new List<string> { "jahrom" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(650),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(4931),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "جهرم",
                             IsDeleted = false,
@@ -856,7 +859,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 24,
                             Alternatives = new List<string> { "jiroft" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(664),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(4945),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "جیرفت",
                             IsDeleted = false,
@@ -867,7 +870,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 25,
                             Alternatives = new List<string> { "chabahar" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(747),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(4959),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "چابهار",
                             IsDeleted = false,
@@ -878,7 +881,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 26,
                             Alternatives = new List<string> { "khark" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(762),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(4973),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "خارک",
                             IsDeleted = false,
@@ -889,7 +892,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 27,
                             Alternatives = new List<string> { "khorramabad" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(785),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(4995),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "خرم آباد",
                             IsDeleted = false,
@@ -900,7 +903,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 28,
                             Alternatives = new List<string> { "khoy" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(801),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(5010),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "خوی",
                             IsDeleted = false,
@@ -911,7 +914,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 29,
                             Alternatives = new List<string> { "dezful" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(816),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(5025),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "دزفول",
                             IsDeleted = false,
@@ -922,7 +925,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 30,
                             Alternatives = new List<string> { "ramsar" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(830),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(5039),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "رامسر",
                             IsDeleted = false,
@@ -933,7 +936,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 31,
                             Alternatives = new List<string> { "rasht" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(844),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(5053),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "رشت",
                             IsDeleted = false,
@@ -944,7 +947,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 32,
                             Alternatives = new List<string> { "rafsanjan" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(859),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(5067),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "رفسنجان",
                             IsDeleted = false,
@@ -955,7 +958,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 33,
                             Alternatives = new List<string> { "zabol" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(873),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(5082),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "زابل",
                             IsDeleted = false,
@@ -966,7 +969,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 34,
                             Alternatives = new List<string> { "zahedan" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(888),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(5096),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "زاهدان",
                             IsDeleted = false,
@@ -977,7 +980,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 35,
                             Alternatives = new List<string> { "zanjan" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(903),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(5110),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "زنجان",
                             IsDeleted = false,
@@ -988,7 +991,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 36,
                             Alternatives = new List<string> { "sari" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(917),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(5124),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "ساری",
                             IsDeleted = false,
@@ -999,7 +1002,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 37,
                             Alternatives = new List<string> { "sabzevar" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(931),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(5138),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "سبزوار",
                             IsDeleted = false,
@@ -1010,7 +1013,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 38,
                             Alternatives = new List<string> { "semnan" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(945),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(5152),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "سمنان",
                             IsDeleted = false,
@@ -1021,7 +1024,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 39,
                             Alternatives = new List<string> { "sanandaj" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(959),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(5166),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "سنندج",
                             IsDeleted = false,
@@ -1032,7 +1035,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 40,
                             Alternatives = new List<string> { "maragheh" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(973),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(5180),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "مراغه",
                             IsDeleted = false,
@@ -1043,7 +1046,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 41,
                             Alternatives = new List<string> { "syrjan" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(987),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(5193),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "سیرجان",
                             IsDeleted = false,
@@ -1054,7 +1057,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 42,
                             Alternatives = new List<string> { "shahroud" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(1001),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(5207),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "شاهرود",
                             IsDeleted = false,
@@ -1065,7 +1068,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 43,
                             Alternatives = new List<string> { "shahrekord" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(1015),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(5221),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "شهرکرد",
                             IsDeleted = false,
@@ -1076,7 +1079,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 44,
                             Alternatives = new List<string> { "tabas" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(1030),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(5235),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "طبس",
                             IsDeleted = false,
@@ -1087,7 +1090,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 45,
                             Alternatives = new List<string> { "asalouyeh" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(1044),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(5249),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "عسلویه",
                             IsDeleted = false,
@@ -1098,7 +1101,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 46,
                             Alternatives = new List<string> { "omidieh" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(1058),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(5263),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "امیدیه",
                             IsDeleted = false,
@@ -1109,7 +1112,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 47,
                             Alternatives = new List<string> { "qeshm" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(1073),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(5278),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "قشم",
                             IsDeleted = false,
@@ -1120,7 +1123,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 48,
                             Alternatives = new List<string> { "qom", "ghom" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(1087),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(5292),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "قم",
                             IsDeleted = false,
@@ -1131,7 +1134,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 49,
                             Alternatives = new List<string> { "kashan" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(1103),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(5309),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "کاشان",
                             IsDeleted = false,
@@ -1142,7 +1145,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 50,
                             Alternatives = new List<string> { "karaj" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(1118),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(5322),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "کرج",
                             IsDeleted = false,
@@ -1153,7 +1156,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 51,
                             Alternatives = new List<string> { "kerman" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(1132),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(5336),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "کرمان",
                             IsDeleted = false,
@@ -1164,7 +1167,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 52,
                             Alternatives = new List<string> { "kermanshah" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(1146),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(5351),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "کرمانشاه",
                             IsDeleted = false,
@@ -1175,7 +1178,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 53,
                             Alternatives = new List<string> { "kolaleh" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(1160),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(5366),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "کولاله",
                             IsDeleted = false,
@@ -1186,7 +1189,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 54,
                             Alternatives = new List<string> { "gachsaran" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(1175),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(5380),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "گچساران",
                             IsDeleted = false,
@@ -1197,7 +1200,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 55,
                             Alternatives = new List<string> { "gorgan" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(1196),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(5402),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "گرگان",
                             IsDeleted = false,
@@ -1208,7 +1211,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 56,
                             Alternatives = new List<string> { "lar" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(1210),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(5416),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "لار",
                             IsDeleted = false,
@@ -1219,7 +1222,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 57,
                             Alternatives = new List<string> { "lamard" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(1225),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(5430),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "لامراد",
                             IsDeleted = false,
@@ -1230,7 +1233,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 58,
                             Alternatives = new List<string> { "makou" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(1239),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(5444),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "ماکو",
                             IsDeleted = false,
@@ -1241,7 +1244,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 59,
                             Alternatives = new List<string> { "mahshahr" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(1253),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(5458),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "ماهشار",
                             IsDeleted = false,
@@ -1252,7 +1255,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 60,
                             Alternatives = new List<string> { "noshahr" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(1268),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(5472),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "نوشهر",
                             IsDeleted = false,
@@ -1263,7 +1266,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 61,
                             Alternatives = new List<string> { "hamedan" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(1282),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(5486),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "همدان",
                             IsDeleted = false,
@@ -1274,7 +1277,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 62,
                             Alternatives = new List<string> { "yasouj" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(1296),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(5499),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "یاسوج",
                             IsDeleted = false,
@@ -1285,7 +1288,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                         {
                             Id = 63,
                             Alternatives = new List<string> { "yazd" },
-                            CreatedOn = new DateTime(2024, 9, 11, 18, 51, 18, 920, DateTimeKind.Local).AddTicks(1310),
+                            CreatedOn = new DateTime(2024, 9, 11, 17, 57, 57, 115, DateTimeKind.Local).AddTicks(5513),
                             DeletedOn = new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
                             FaName = "یزد",
                             IsDeleted = false,
@@ -1480,7 +1483,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                     b.Property<Guid>("BusinessReceiptId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("BusinessSenderId")
+                    b.Property<Guid>("BusinessSenderId")
                         .HasColumnType("uuid");
 
                     b.Property<DateTime>("CreatedOn")
@@ -1519,7 +1522,7 @@ namespace Reservation.Infrastructure.Persistance.Migrations
                     b.Property<Guid>("TransactionSenderId")
                         .HasColumnType("uuid");
 
-                    b.Property<Guid?>("UserId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uuid");
 
                     b.HasKey("Id");
@@ -1883,7 +1886,9 @@ namespace Reservation.Infrastructure.Persistance.Migrations
 
                     b.HasOne("Reservation.Domain.Entities.Businesses.Business", "BusinessSender")
                         .WithMany()
-                        .HasForeignKey("BusinessSenderId");
+                        .HasForeignKey("BusinessSenderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.HasOne("Reservation.Domain.Entities.Wallets.Transaction", "TransactionReceipt")
                         .WithMany()
@@ -1899,7 +1904,9 @@ namespace Reservation.Infrastructure.Persistance.Migrations
 
                     b.HasOne("Reservation.Domain.Entities.Account.User", "User")
                         .WithMany()
-                        .HasForeignKey("UserId");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("BusinessReceipt");
 

@@ -4,7 +4,7 @@ namespace Reservation.Application.ReserveTimes.Exceptions;
 public sealed class BusinessTimeConflictException : NewtyBadRequestBaseException
 {
     public BusinessTimeConflictException()
-        : base("این وقت این کسب و کار پر است دارد لطفا وقت دیگری را وارد کنید") { }
+        : base("این وقت پر است لطفا وقت دیگری را انتخاب کنید") { }
 }
 
 public sealed class UserTimeConflictException : NewtyBadRequestBaseException

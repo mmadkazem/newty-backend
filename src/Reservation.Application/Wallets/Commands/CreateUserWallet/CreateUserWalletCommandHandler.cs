@@ -9,8 +9,6 @@ public sealed class CreateUserWalletCommandHandler(IUnitOfWork uow) : IRequestHa
         var user = await _uow.Users.FindAsync(request.UserId, cancellationToken)
             ?? throw new UserNotFoundException();
 
-        user.IsValidate();
-
         user.Wallet = new();
 
         await _uow.SaveChangeAsync(cancellationToken);

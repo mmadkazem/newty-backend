@@ -9,8 +9,6 @@ public class CreateSmsTemplateCommandHandler(IUnitOfWork uow) : IRequestHandler<
         var business = await _uow.Businesses.FindAsync(request.BusinessId, cancellationToken)
             ?? throw new BusinessNotFoundException();
 
-        business.IsValidate();
-
         SmsTemplate smsTemplate = new()
         {
             Name = request.Name,

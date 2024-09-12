@@ -55,7 +55,7 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
     }
 
     [HttpPut("Validate")]
-    [Authorize(Role.Business)]
+    [Authorize(Role.Business, AuthenticationSchemes = AuthScheme.InvalidScheme)]
     public async Task<IActionResult> Validate([FromBody] ValidateBusinessDTO model,
         CancellationToken token)
     {
@@ -63,8 +63,8 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
         await _sender.Send(request, token);
         return Ok(new { Message = BusinessSuccessMessage.WaitingValidate });
     }
-    [HttpPut()]
-    [Authorize(Role.Business)]
+    [HttpPut]
+    [Authorize(Role.Business, AuthenticationSchemes = AuthScheme.InvalidScheme)]
     public async Task<IActionResult> Put([FromBody] UpdateBusinessDTO model,
         CancellationToken token)
     {
@@ -73,7 +73,7 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
         return Ok(new { Message = BusinessSuccessMessage.Updated });
     }
     [HttpPatch]
-    [Authorize(Role.Business)]
+    [Authorize(Role.Business, AuthenticationSchemes = AuthScheme.InvalidScheme)]
     public async Task<IActionResult> Patch(bool isCancelReserveTime,
         CancellationToken token)
     {
@@ -91,7 +91,7 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
     }
 
     [HttpGet]
-    [Authorize(Role.Business)]
+    [Authorize(Role.Business, AuthenticationSchemes = AuthScheme.InvalidScheme)]
     [ProducesResponseType(typeof(GetBusinessQueryResponse), 200)]
     public async Task<IActionResult> Get(CancellationToken token)
     {

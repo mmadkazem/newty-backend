@@ -9,8 +9,6 @@ public sealed class RemoveSmsTemplateCommandHandler(IUnitOfWork uow) : IRequestH
         var smsTemplate = await _uow.SmsTemplates.FindAsync(request.Id, cancellationToken)
             ?? throw new SmsTemplateNotFoundException();
 
-        smsTemplate.Business.IsValidate();
-
         if (smsTemplate.BusinessId != request.BusinessId)
         {
             throw new DoNotAccessToChangeItemException("تمپلیت پیامک");

@@ -1,4 +1,4 @@
 namespace Reservation.Application.ReserveTimes.Exceptions;
 
 public class BusinessNotAccessStateIsConfirmedException()
-    : NewtyBadRequestBaseException("شما نمی توانید تایید کنید");
+    : NewtyForbiddenBaseException("شما دسترسی به تایید این وقت ندارید");

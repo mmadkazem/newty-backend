@@ -8,5 +8,6 @@ public interface IUserRepository
     Task<bool> AnyAsync(Guid userId, CancellationToken cancellationToken = default);
     Task<User> FindAsyncByNumber(string phoneNumber, CancellationToken cancellationToken = default);
     Task<User> FindAsync(Guid id, CancellationToken cancellationToken = default);
-    Task<IResponse> Get(Guid id, CancellationToken cancellationToken);
+    Task<IResponse> Get(Guid id, CancellationToken cancellationToken = default);
+    Task Active(Guid id, CancellationToken cancellationToken = default);
 }

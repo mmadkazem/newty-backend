@@ -87,8 +87,7 @@ public static class ConfigureServices
                     OnTokenValidated = context =>
                     {
                         var tokenValidatorService = context.HttpContext.RequestServices.GetRequiredService<IBearerTokenValidatorService>();
-                        tokenValidatorService.ValidateAsync(context);
-                        return Task.CompletedTask;
+                        return tokenValidatorService.ValidateAsync(context);
                     },
                     OnMessageReceived = context =>
                     {
@@ -128,8 +127,7 @@ public static class ConfigureServices
                     OnTokenValidated = context =>
                     {
                         var tokenValidatorService = context.HttpContext.RequestServices.GetRequiredService<ITempTokenValidatorService>();
-                        tokenValidatorService.ValidateAsync(context);
-                        return Task.CompletedTask;
+                        return tokenValidatorService.ValidateAsync(context);
                     },
                     OnMessageReceived = context =>
                     {
@@ -143,7 +141,6 @@ public static class ConfigureServices
                     }
                 };
             })
-
             .AddJwtBearer(AuthScheme.RefreshTokenScheme, options =>
             {
                 options.RequireHttpsMetadata = false;
@@ -160,7 +157,7 @@ public static class ConfigureServices
                     ClockSkew = TimeSpan.Zero // tolerance for the expiration date
                 };
             })
-            .AddJwtBearer(AuthScheme.UpdateScheme, options =>
+            .AddJwtBearer(AuthScheme.InvalidScheme, options =>
             {
                 options.RequireHttpsMetadata = false;
                 options.SaveToken = true;
@@ -189,8 +186,6 @@ public static class ConfigureServices
                     policy
                         .WithOrigins("http://localhost:3006", "https://newty.liara.run")
                         .WithMethods("POST", "GET", "PUT", "DELETE", "PATCH")
-                        // .AllowAnyOrigin()
-                        // .AllowAnyMethod()
                         .AllowAnyHeader();
                 });
         });

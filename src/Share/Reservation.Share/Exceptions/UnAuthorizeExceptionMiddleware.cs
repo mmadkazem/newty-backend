@@ -1,7 +1,8 @@
+
 namespace Reservation.Share.Exceptions;
 
 
-public sealed class ForbiddenExceptionMiddleware : IMiddleware
+public sealed class UnAuthorizeExceptionMiddleware : IMiddleware
 {
     public async Task InvokeAsync(HttpContext context, RequestDelegate next)
     {
@@ -9,9 +10,9 @@ public sealed class ForbiddenExceptionMiddleware : IMiddleware
         {
             await next(context);
         }
-        catch (NewtyForbiddenBaseException ex)
+        catch (NewtyUnAuthorizeBaseException ex)
         {
-            context.Response.StatusCode = 403;
+            context.Response.StatusCode = 401;
             context.Response.Headers.Add("content-type", "application/json");
             var errorCode = ToUnderscoreCase(ex.GetType().Name.Replace("Exception", string.Empty));
             var json = JsonSerializer.Serialize(new { ErrorCode = errorCode, ex.Message });
