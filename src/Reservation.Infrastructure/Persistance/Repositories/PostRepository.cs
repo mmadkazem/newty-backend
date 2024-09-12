@@ -26,8 +26,8 @@ public sealed class PostRepository(NewtyDbContext context) : IPostRepository
                                 (
                                     p.Id,
                                     p.Title,
-                                    p.Description,
-                                    p.CoverImagePath
+                                    p.CoverImagePath,
+                                    p.Description
                                 ))
                                 .FirstOrDefaultAsync(cancellationToken);
 

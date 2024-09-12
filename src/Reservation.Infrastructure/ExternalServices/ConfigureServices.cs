@@ -7,7 +7,7 @@ public static class ConfigureServices
                 // DI Services
                 services.AddScoped<ICheckPaymentIsVerificationService, CheckPaymentIsVerificationService>();
                 services.AddScoped<ITokenFactoryService, TokenFactoryService>();
-                services.AddScoped<IUploadImageProvider, UploadImageProvider>();
+                services.AddScoped<IObjectStorageProvider, ObjectStorageProvider>();
                 services.AddScoped<ISmsProvider, KavenegarProvider>();
                 services.AddScoped<ICacheProvider, CacheProvider>();
 

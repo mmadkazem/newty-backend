@@ -8,9 +8,9 @@ public record UploadImageCommandRequest(IFormFile File, Guid SubjectId) : IReque
 
 public record UploadImageDTO(IFormFile File);
 
-public class UploadImageCommandHandler(IUploadImageProvider uploadImage) : IRequestHandler<UploadImageCommandRequest, string>
+public class UploadImageCommandHandler(IObjectStorageProvider uploadImage) : IRequestHandler<UploadImageCommandRequest, string>
 {
-    private readonly IUploadImageProvider _uploadImage = uploadImage;
+    private readonly IObjectStorageProvider _uploadImage = uploadImage;
 
     public async Task<string> Handle(UploadImageCommandRequest request, CancellationToken cancellationToken)
         => await _uploadImage.Insert(request.File, request.SubjectId)

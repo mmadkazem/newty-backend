@@ -1,6 +1,6 @@
 namespace Reservation.Infrastructure.ExternalServices.UploadImageProviders;
 
-public sealed class UploadImageProvider : IUploadImageProvider
+public sealed class ObjectStorageProvider : IObjectStorageProvider
 {
 
     public async Task<string> GetUrl(string objectKey)

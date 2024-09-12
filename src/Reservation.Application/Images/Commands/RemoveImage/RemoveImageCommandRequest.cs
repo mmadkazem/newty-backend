@@ -7,9 +7,9 @@ public record RemoveImageCommandRequest(string ObjectKey, Guid SubjectId) : IReq
         => new(objectKey, subjectId);
 }
 
-public sealed class RemoveImageCommandHandler(IUploadImageProvider uploadImage) : IRequestHandler<RemoveImageCommandRequest, string>
+public sealed class RemoveImageCommandHandler(IObjectStorageProvider uploadImage) : IRequestHandler<RemoveImageCommandRequest, string>
 {
-    private readonly IUploadImageProvider _uploadImage = uploadImage;
+    private readonly IObjectStorageProvider _uploadImage = uploadImage;
 
     public async Task<string> Handle(RemoveImageCommandRequest request, CancellationToken cancellationToken)
     {
