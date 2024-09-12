@@ -2,21 +2,22 @@ namespace Reservation.Infrastructure.ExternalServices.Job;
 
 
 
-public sealed class PayingReserveTimeJob(IServiceScopeFactory scopeFactory) : IPayingReserveTimeJob
+public sealed class PayingReserveTimeJob(IRecurringJobManager recurring) : IPayingReserveTimeJob
 {
-    private readonly IServiceScopeFactory _scopeFactory = scopeFactory;
+    private readonly IRecurringJobManager _recurring = recurring;
 
     public void Execute()
     {
-        using var serviceScope = _scopeFactory.CreateScope();
-        var recurring = serviceScope.ServiceProvider.GetService<IRecurringJobManager>();
-        recurring.AddOrUpdate("PayingReserveTime", () => PayingReserveTime(), Cron.Daily(1, 0));
+        _recurring.AddOrUpdate<PayingReserveTimeExecution>("PayingReserveTime", e => e.PayingReserveTime(), Cron.Daily());
     }
+}
+
+public sealed class PayingReserveTimeExecution(NewtyDbContext context)
+{
+    private readonly NewtyDbContext _context = context;
 
     public void PayingReserveTime()
     {
-        using var serviceScope = _scopeFactory.CreateScope();
-        using var _context = serviceScope.ServiceProvider.GetService<NewtyDbContext>();
         var count = 0;
         #region Get Admin Information
         Env.Load();
