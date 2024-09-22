@@ -18,5 +18,6 @@ public interface IUnitOfWork
     ISmsPlanRepository SmsPlans { get; }
     ITransferFeeRepository TransferFees { get; }
     ICouponRepository Coupons { get; }
+    IBusinessRequestWithdrawRepository BusinessRequestWithdraws { get; }
     Task SaveChangeAsync(CancellationToken cancellationToken = default);
 }

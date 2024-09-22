@@ -3,12 +3,12 @@ namespace Reservation.Controllers.SmsPlans;
 
 [ApiController]
 [Route("api/[controller]")]
-[Authorize(Role.Admin)]
 public sealed class SmsPlansController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;
 
     [HttpPost]
+    [Authorize(Role.Admin)]
     public async Task<IActionResult> Post([FromBody] CreateSmsPlanCommandRequest request,
         CancellationToken token)
     {
@@ -17,6 +17,7 @@ public sealed class SmsPlansController(ISender sender) : ControllerBase
     }
 
     [HttpPut("{id:guid}")]
+    [Authorize(Role.Admin)]
     public async Task<IActionResult> Put(Guid id, [FromBody] UpdateSmsPlanDTO model,
         CancellationToken token)
     {
@@ -26,6 +27,7 @@ public sealed class SmsPlansController(ISender sender) : ControllerBase
     }
 
     [HttpDelete("{id:guid}")]
+    [Authorize(Role.Admin)]
     public async Task<IActionResult> Delete(Guid id,
         CancellationToken token)
     {

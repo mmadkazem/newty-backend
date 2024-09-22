@@ -6,6 +6,7 @@ public static class ConfigureServices
     public static IServiceCollection RegisterPersistanceServices(this IServiceCollection services, IConfiguration configuration)
     {
         // DI Repositories
+        services.AddTransient<IBusinessRequestWithdrawRepository, BusinessRequestWithdrawRepository>();
         services.AddTransient<IBusinessRequestPayRepository, BusinessRequestPayRepository>();
         services.AddTransient<IUserRequestPayRepository, UserRequestPayRepository>();
         services.AddTransient<ITransferFeeRepository, TransferFeeRepository>();

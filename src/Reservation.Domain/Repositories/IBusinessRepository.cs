@@ -5,15 +5,16 @@ public interface IBusinessRepository
 {
     void Add(Business business);
     void AddUserVIP(UserVIP userVIP);
-    Task<Business> FindAsyncByPhoneNumber(string phoneNumber, CancellationToken cancellationToken = default);
-    Task<Business> FindAsync(Guid id, CancellationToken cancellationToken = default);
-    Task<Business> FindAsyncIncludeSMSCredit(Guid id, CancellationToken cancellationToken = default);
-    Task<bool> AnyAsync(string phoneNumber, CancellationToken cancellationToken = default);
-    Task<bool> AnyAsync(Guid businessId, CancellationToken cancellationToken = default);
-    Task<IEnumerable<IResponse>> Search(int page, int size, string key, string city, CancellationToken cancellationToken = default);
-    Task<Business> FindAsyncByIncludePoints(Guid businessId, CancellationToken cancellationToken);
-    Task<IResponse> Get(Guid businessId, CancellationToken cancellationToken);
-    Task<IEnumerable<IResponse>> GetWaitingValidBusiness(int page, int size, CancellationToken cancellationToken);
-    Task<IResponse> GetBusinessById(Guid businessId, CancellationToken cancellationToken);
-    Task Active(Guid id, CancellationToken cancellationToken);
+    Task<Business> FindAsyncByPhoneNumber(string phoneNumber, CancellationToken token = default);
+    Task<Business> FindAsync(Guid id, CancellationToken token = default);
+    Task<Business> FindAsyncIncludeSMSCredit(Guid id, CancellationToken token = default);
+    Task<bool> AnyAsync(string phoneNumber, CancellationToken token = default);
+    Task<bool> AnyAsync(Guid businessId, CancellationToken token = default);
+    Task<IEnumerable<IResponse>> Search(int page, int size, string key, string city, CancellationToken token = default);
+    Task<Business> FindAsyncByIncludePoints(Guid businessId, CancellationToken token = default);
+    Task<IResponse> Get(Guid businessId, CancellationToken token = default);
+    Task<IEnumerable<IResponse>> GetWaitingValidBusiness(int page, int size, CancellationToken token = default);
+    Task<IResponse> GetBusinessById(Guid businessId, CancellationToken token = default);
+    Task Active(Guid id, CancellationToken token = default);
+    Task<Business> FindAsyncIncludeWallet(Guid businessId, CancellationToken token = default);
 }

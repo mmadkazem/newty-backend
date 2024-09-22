@@ -47,6 +47,12 @@ public sealed class BusinessRepository(NewtyDbContext context)
                                     .Where(b => b.Id == id)
                                     .FirstOrDefaultAsync(cancellationToken);
 
+    public async Task<Business> FindAsyncIncludeWallet(Guid businessId, CancellationToken token = default)
+        => await _context.Businesses.AsQueryable()
+                                    .Include(b => b.Wallet)
+                                    .Where(b => b.Id == businessId)
+                                    .FirstOrDefaultAsync(token);
+
     public async Task<IResponse> Get(Guid businessId, CancellationToken cancellationToken)
         => await _context.Businesses.AsQueryable()
                                     .AsNoTracking()

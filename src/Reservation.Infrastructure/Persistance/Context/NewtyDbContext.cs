@@ -38,6 +38,7 @@ public sealed class NewtyDbContext : DbContext
     // Finance
     public DbSet<BusinessRequestPay> BusinessRequestPays { get; set; }
     public DbSet<UserRequestPay> UserRequestPays { get; set; }
+    public DbSet<BusinessRequestWithdraw> BusinessRequestWithdraws { get; set; }
 
     // Wallet
     public DbSet<Wallet> Wallets { get; set; }

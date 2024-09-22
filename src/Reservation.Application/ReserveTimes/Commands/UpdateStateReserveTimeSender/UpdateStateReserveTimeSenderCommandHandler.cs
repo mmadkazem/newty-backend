@@ -11,6 +11,9 @@ public sealed class UpdateStateReserveTimeSenderCommandHandler(IUnitOfWork uow, 
         var reserveTime = await _uow.ReserveTimes.FindAsyncIncludeTransaction(request.Id, cancellationToken)
             ?? throw new ReserveTimeNotFoundException();
 
+        var reserveTimeSender = await _uow.ReserveTimes.FindAsyncReserveTimeSender(request.Id, cancellationToken)
+            ?? throw new ReserveTimeNotFoundException();
+
         if (reserveTime.BusinessSenderId != request.BusinessId &&
             reserveTime.BusinessReceiptId != request.BusinessId)
         {
@@ -32,7 +35,12 @@ public sealed class UpdateStateReserveTimeSenderCommandHandler(IUnitOfWork uow, 
             reserveTime.State = ReserveState.Cancelled;
             reserveTime.TransactionReceipt.State = TransactionState.Cancelled;
             reserveTime.TransactionSender.State = TransactionState.Cancelled;
+            reserveTime.Finished = true;
             reserveTime.ModifiedOn = DateTime.Now;
+
+            reserveTimeSender.State = ReserveState.Cancelled;
+            reserveTimeSender.Finished = true;
+            reserveTimeSender.ModifiedOn = DateTime.Now;
 
             await _uow.SaveChangeAsync(cancellationToken);
 
@@ -67,6 +75,9 @@ public sealed class UpdateStateReserveTimeSenderCommandHandler(IUnitOfWork uow, 
             reserveTime.TransactionReceipt.State = TransactionState.Confirmed;
             reserveTime.TransactionSender.State = TransactionState.Confirmed;
             reserveTime.ModifiedOn = DateTime.Now;
+
+            reserveTimeSender.State = ReserveState.Confirmed;
+            reserveTimeSender.ModifiedOn = DateTime.Now;
 
             await _uow.SaveChangeAsync(cancellationToken);
             _finishReserveTimeJob.Execute(reserveTime.Id, reserveTime.TotalEndDate.AddMinutes(2));

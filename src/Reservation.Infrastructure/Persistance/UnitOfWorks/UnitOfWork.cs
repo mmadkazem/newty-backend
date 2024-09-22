@@ -17,7 +17,8 @@ public sealed class UnitOfWork(
     ISmsTemplateRepository smsTemplates,
     ISmsPlanRepository smsPlans,
     ITransferFeeRepository transferFees,
-    ICouponRepository coupons) : IUnitOfWork
+    ICouponRepository coupons,
+    IBusinessRequestWithdrawRepository businessRequestWithdraws) : IUnitOfWork
 {
     private readonly NewtyDbContext _context = context;
 
@@ -81,6 +82,10 @@ public sealed class UnitOfWork(
     private readonly ICouponRepository _coupons = coupons;
     public ICouponRepository Coupons
         => _coupons;
+
+    private readonly IBusinessRequestWithdrawRepository _businessRequestWithdraws = businessRequestWithdraws;
+    public IBusinessRequestWithdrawRepository BusinessRequestWithdraws
+        => _businessRequestWithdraws;
 
     public async Task SaveChangeAsync(CancellationToken cancellationToken)
         => await _context.SaveChangesAsync(cancellationToken);

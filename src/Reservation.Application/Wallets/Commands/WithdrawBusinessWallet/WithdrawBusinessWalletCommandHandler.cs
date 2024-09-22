@@ -13,8 +13,20 @@ public sealed class WithdrawBusinessWalletCommandHandler(IUnitOfWork uow) : IReq
         {
             throw new BalanceInsufficientException();
         }
+        if (wallet.BlockCreditInWithdraw > 0)
+        {
+            throw new RequestWithdrawIsExistException();
+        }
+
         wallet.Credit -= request.Amount;
-        wallet.Transactions.Add(new() { Amount = request.Amount, Type = TransactionType.Withdraw});
+        wallet.BlockCreditInWithdraw += request.Amount;
+        // wallet.Transactions.Add(new() { Amount = request.Amount, Type = TransactionType.Withdraw});
+        BusinessRequestWithdraw requestWithdraw = new()
+        {
+            BusinessId = request.BusinessId,
+            Amount = request.Amount
+        };
+        _uow.BusinessRequestWithdraws.Add(requestWithdraw);
 
         await _uow.SaveChangeAsync(cancellationToken);
     }

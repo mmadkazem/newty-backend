@@ -1,7 +1,7 @@
+global using Reservation.Application.Finances.BusinessRequestWithdraws.Queries.GetBusinessRequestWithdraw;
 global using Reservation.Application.Finances.BusinessRequestPays.Queries.GetBusinessRequestPays;
 global using Reservation.Application.Finances.BusinessRequestPays.Queries.GetBusinessRequestPay;
 global using Reservation.Application.Finances.UserRequestPays.Queries.GetUserRequestPays;
-global using Reservation.Infrastructure.ExternalServices.Jwt.TokenValidators.Exceptions;
 global using Reservation.Application.Finances.UserRequestPays.Queries.GetUserRequestPay;
 global using Reservation.Application.BusinessServices.Queries.GetServicesByBusinessId;
 global using Reservation.Application.Businesses.Queries.GetBusinessesWaitingValid;
