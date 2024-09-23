@@ -26,5 +26,6 @@ public static class SoftDeleteConfiguration
         modelBuilder.Entity<TransferFee>().HasQueryFilter(f => !f.IsDeleted);
         modelBuilder.Entity<SmsPlan>().HasQueryFilter(f => !f.IsDeleted);
         modelBuilder.Entity<Coupon>().HasQueryFilter(f => !f.IsDeleted);
+        modelBuilder.Entity<BusinessRequestWithdraw>().HasQueryFilter(f => !f.IsDeleted);
     }
 }
