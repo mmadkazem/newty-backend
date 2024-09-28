@@ -1,5 +1,3 @@
-using Reservation.Application.Businesses.Commands.ValidateBusiness;
-
 namespace Reservation.Controllers.Businesses;
 
 [ApiController]
@@ -18,10 +16,10 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
 
     [HttpPost("SendSMS")]
     [Authorize(Role.Business)]
-    public async Task<IActionResult> SendSMS(DateTime sendDate, Guid templateId,
+    public async Task<IActionResult> SendSMS(DateTime sendDate, Guid templateId, List<string> phoneNumebnrs,
         CancellationToken token)
     {
-        await _sender.Send(new SendSMSUserVIPCommandRequest(User.UserId(), templateId, sendDate), token);
+        await _sender.Send(new SendSMSUserVIPCommandRequest(User.UserId(), templateId, sendDate, phoneNumebnrs), token);
         return Accepted(new { Message = BusinessSuccessMessage.SendedSms });
     }
 

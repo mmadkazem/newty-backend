@@ -4,5 +4,5 @@ namespace Reservation.Application.ExternalServices.Job;
 
 public interface ISendSMSToUserVIPJob
 {
-    void Send(Guid businessId, DateTime sendDate, string message);
+    void Send(Guid businessId, DateTime sendDate, string message, List<string> receptorNumbers);
 }

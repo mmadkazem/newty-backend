@@ -37,6 +37,7 @@ global using Reservation.Application.Artists.Queries.GetArtistByBusinessId;
 global using Reservation.Application.Wallets.Commands.CreateBusinessWallet;
 global using Reservation.Application.Wallets.Commands.FoundBusinessWallet;
 global using Reservation.Application.Businesses.Commands.RegisterBusiness;
+global using Reservation.Application.Businesses.Commands.ValidateBusiness;
 global using Reservation.Application.SmsTemplates.Queries.GetSmsTemplates;
 global using Reservation.Application.Businesses.Commands.AddBusinessPoint;
 global using Reservation.Application.Account.Queries.LoginByRefreshToken;

@@ -1,7 +1,7 @@
 namespace Reservation.Application.Businesses.Commands.SendSMSUserVIP;
 
 
-public sealed record SendSMSUserVIPCommandRequest(Guid BusinessId, Guid SmsTemplateId, DateTime SendDate) : IRequest;
+public sealed record SendSMSUserVIPCommandRequest(Guid BusinessId, Guid SmsTemplateId, DateTime SendDate, List<string> PhoneNumebrs) : IRequest;
 
 public sealed class SendSMSUserVIPCommandHandler(IUnitOfWork uow, ISendSMSToUserVIPJob sendSMSToUserVIPJob) : IRequestHandler<SendSMSUserVIPCommandRequest>
 {
@@ -16,6 +16,6 @@ public sealed class SendSMSUserVIPCommandHandler(IUnitOfWork uow, ISendSMSToUser
         var template = await _uow.SmsTemplates.FindAsync(request.SmsTemplateId, cancellationToken)
             ?? throw new SmsTemplateNotFoundException();
 
-        _sendSMSToUserVIPJob.Send(business.Id, request.SendDate, template.Description);
+        _sendSMSToUserVIPJob.Send(business.Id, request.SendDate, template.Description, request.PhoneNumebrs);
     }
 }
