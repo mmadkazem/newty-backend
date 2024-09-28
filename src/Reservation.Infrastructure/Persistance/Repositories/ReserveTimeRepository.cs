@@ -57,6 +57,7 @@ public sealed class ReserveTimeRepository(NewtyDbContext context)
                                             c.UserId,
                                             c.State.ToString(),
                                             c.Finished,
+                                            c.BusinessReceipt.IsCancelReserveTime,
                                             c.ReserveItems.Select(r => new ReserveItemsResponse
                                                             (
                                                                 r.Id,
@@ -81,6 +82,7 @@ public sealed class ReserveTimeRepository(NewtyDbContext context)
                                             c.BusinessReceiptId,
                                             c.State.ToString(),
                                             c.Finished,
+                                            c.BusinessReceipt.IsCancelReserveTime,
                                             c.ReserveItems.Select(r => new ReserveItemsResponse
                                                             (
                                                                 r.Id,
@@ -101,7 +103,8 @@ public sealed class ReserveTimeRepository(NewtyDbContext context)
                                             c.Id,
                                             c.TotalStartDate,
                                             c.TotalEndDate,
-                                            c.User.FullName
+                                            c.User.FullName,
+                                            c.BusinessReceipt.IsCancelReserveTime
                                         ))
                                         .Skip((page - 1) * size)
                                         .Take(size)
@@ -118,7 +121,8 @@ public sealed class ReserveTimeRepository(NewtyDbContext context)
                                             c.TotalEndDate,
                                             c.BusinessReceipt.Name,
                                             c.BusinessReceipt.Address,
-                                            c.BusinessReceipt.CoverImagePath
+                                            c.BusinessReceipt.CoverImagePath,
+                                            c.BusinessReceipt.IsCancelReserveTime
                                         ))
                                         .Skip((page - 1) * size)
                                         .Take(size)
@@ -135,7 +139,8 @@ public sealed class ReserveTimeRepository(NewtyDbContext context)
                                             c.TotalEndDate,
                                             c.BusinessReceipt.Name,
                                             c.BusinessReceipt.Address,
-                                            c.BusinessReceipt.CoverImagePath
+                                            c.BusinessReceipt.CoverImagePath,
+                                            c.BusinessReceipt.IsCancelReserveTime
                                         ))
                                         .Skip((page - 1) * size)
                                         .Take(size)
@@ -152,7 +157,8 @@ public sealed class ReserveTimeRepository(NewtyDbContext context)
                                             c.TotalEndDate,
                                             c.BusinessReceipt.Name,
                                             c.BusinessReceipt.Address,
-                                            c.BusinessReceipt.CoverImagePath
+                                            c.BusinessReceipt.CoverImagePath,
+                                            c.BusinessReceipt.IsCancelReserveTime
                                         ))
                                         .Skip((page - 1) * size)
                                         .Take(size)
@@ -169,7 +175,8 @@ public sealed class ReserveTimeRepository(NewtyDbContext context)
                                             c.TotalEndDate,
                                             c.BusinessReceipt.Name,
                                             c.BusinessReceipt.Address,
-                                            c.BusinessReceipt.CoverImagePath
+                                            c.BusinessReceipt.CoverImagePath,
+                                            c.BusinessReceipt.IsCancelReserveTime
                                         ))
                                         .Skip((page - 1) * size)
                                         .Take(size)
@@ -186,7 +193,8 @@ public sealed class ReserveTimeRepository(NewtyDbContext context)
                                             c.TotalEndDate,
                                             c.BusinessReceipt.Name,
                                             c.BusinessReceipt.Address,
-                                            c.BusinessReceipt.CoverImagePath
+                                            c.BusinessReceipt.CoverImagePath,
+                                            c.BusinessReceipt.IsCancelReserveTime
                                         ))
                                         .Skip((page - 1) * size)
                                         .Take(size)

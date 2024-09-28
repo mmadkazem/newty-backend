@@ -9,6 +9,7 @@ public record GetReserveTimeDetailQueryResponse
     Guid? UserId,
     string State,
     bool Finished,
+    bool BusinessTimeCancellation,
     IEnumerable<ReserveItemsResponse> ReserveItems
 ) : IResponse;
 
@@ -19,7 +20,8 @@ public sealed record GetReserveTimeUserQueryResponse
     DateTime TotalEndDate,
     string BusinessName,
     string BusinessAddress,
-    string BusinessCoverImagePath
+    string BusinessCoverImagePath,
+    bool BusinessTimeCancellation
 ) : IResponse;
 
 public sealed record GetReserveTimeBusinessReceiptQueryResponse
@@ -27,7 +29,8 @@ public sealed record GetReserveTimeBusinessReceiptQueryResponse
     Guid Id,
     DateTime TotalStartDate,
     DateTime TotalEndDate,
-    string UserFullName
+    string UserFullName,
+    bool BusinessTimeCancellation
 ) : IResponse;
 
 public record GetReserveTimeSenderByIdQueryResponse
@@ -39,6 +42,7 @@ public record GetReserveTimeSenderByIdQueryResponse
     Guid BusinessReceiptId,
     string State,
     bool Finished,
+    bool BusinessTimeCancellation,
     IEnumerable<ReserveItemsResponse> ReserveItems
 ) : IResponse;
 
@@ -49,7 +53,8 @@ public sealed record GetReserveTimeBusinessSenderQueryResponse
     DateTime TotalEndDate,
     string BusinessName,
     string BusinessAddress,
-    string BusinessCoverImagePath
+    string BusinessCoverImagePath,
+    bool BusinessTimeCancellation
 ) : IResponse;
 
 public record ReserveItemsResponse
