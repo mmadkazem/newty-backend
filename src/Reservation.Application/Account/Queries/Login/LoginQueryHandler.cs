@@ -30,7 +30,8 @@ public sealed class LoginQueryHandler(IUnitOfWork uow,
                         FullName = userLogin.Name,
                         PhoneNumber = userLogin.PhoneNumber,
                         Role = Role.User,
-                        IsActive = true
+                        IsActive = true,
+                        Wallet = new()
                     };
                     _uow.Users.Add(finalUser);
                     await _uow.SaveChangeAsync(cancellationToken);
@@ -67,7 +68,7 @@ public sealed class LoginQueryHandler(IUnitOfWork uow,
                         Name = businessLogin.Name,
                         City = city,
                         PhoneNumber = businessLogin.PhoneNumber,
-                        IsActive = true
+                        IsActive = true,
                     };
                     _uow.Businesses.Add(finalBusiness);
                     await _uow.SaveChangeAsync(cancellationToken);

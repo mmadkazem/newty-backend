@@ -1,5 +1,3 @@
-using Npgsql.Internal;
-
 namespace Reservation.Controllers.Wallets;
 
 
@@ -9,38 +7,20 @@ public sealed class WalletsController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;
 
-    [HttpPost("Businesses")]
-    [Authorize(Role.Business)]
-    public async Task<IActionResult> PostBusiness(CancellationToken token)
-    {
-        await _sender.Send(new CreateBusinessWalletCommandRequest(User.UserId()), token);
-        return Ok(new { Message = WalletSuccessMessage.Created });
-    }
-
-    [HttpPost("Users")]
-    [Authorize(Roles = Role.User)]
-    public async Task<IActionResult> PostUsers(CancellationToken token)
-    {
-        await _sender.Send(new CreateUserWalletCommandRequest(User.UserId()), token);
-        return Ok(new { Message = WalletSuccessMessage.Created });
-    }
-
-    [HttpPut("Users/Found")]
-    [Authorize(Role.User)]
-    public async Task<IActionResult> PutFoundUsers(FoundUserWalletCommandRequest request,
+    [HttpPut("Users/RequestPay/{requestPayId:guid}")]
+    public async Task<IActionResult> PutFoundUsers(Guid requestPayId, string authorizy,
         CancellationToken token)
     {
-        await _sender.Send(request, token);
-        return Ok(new { Message = WalletSuccessMessage.Founded });
+        var result = await _sender.Send(new FoundUserWalletCommandRequest(requestPayId, authorizy), token);
+        return Redirect(result);
     }
 
-    [HttpPut("Businesses/Found")]
-    [Authorize(Role.Business)]
-    public async Task<IActionResult> PutFoundBusiness(FoundBusinessWalletCommandRequest request,
+    [HttpPut("Businesses/RequestPay/{requestPayId:guid}")]
+    public async Task<IActionResult> PutFoundBusiness(Guid requestPayId, string authorizy,
         CancellationToken token)
     {
-        await _sender.Send(request, token);
-        return Ok(new { Message = WalletSuccessMessage.Founded });
+        var result = await _sender.Send(new FoundBusinessWalletCommandRequest(requestPayId, authorizy), token);
+        return Redirect(result);
     }
 
     [HttpPut("Businesses/Withdraw")]
@@ -52,17 +32,6 @@ public sealed class WalletsController(ISender sender) : ControllerBase
         await _sender.Send(request, token);
         return Ok(new { Message = WalletSuccessMessage.Withdraw });
     }
-
-    // [HttpPut("Users/Withdraw")]
-    // [Authorize(Role.User)]
-    // public async Task<IActionResult> PutWithdrawUsers(decimal amount,
-    //     CancellationToken token)
-    // {
-    //     // TODO: Validate User for using in service
-    //     var request = WithdrawUserWalletCommandRequest.Create(User.UserId(), amount);
-    //     await _sender.Send(request, token);
-    //     return Ok(new { Message = WalletSuccessMessage.Withdraw });
-    // }
 
     [HttpGet("Users")]
     [Authorize(Role.User)]

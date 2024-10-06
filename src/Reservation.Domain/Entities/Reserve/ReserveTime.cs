@@ -7,6 +7,7 @@ public class ReserveTimeReceipt : BaseClass<Guid>
     public DateTime TotalEndDate { get; set; }
     public int TotalPrice { get; set; }
     public ReserveState State { get; set; }
+    public PaymentType Type { get; set; }
     public bool Finished { get; set; } = false;
     public bool IsPay { get; set; } = false;
 
@@ -28,6 +29,9 @@ public class ReserveTimeReceipt : BaseClass<Guid>
 
     public Transaction TransactionReceipt { get; set; }
     public Guid TransactionReceiptId { get; set; }
+
+    public UserRequestPay UserRequestPay { get; set; }
+    public Guid? UserRequestPayId { get; set; }
 
     // Reserve Item
     public ICollection<ReserveItem> ReserveItems { get; set; }

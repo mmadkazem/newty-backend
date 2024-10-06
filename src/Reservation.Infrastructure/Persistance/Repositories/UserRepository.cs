@@ -29,9 +29,14 @@ public sealed class UserRepository(NewtyDbContext context) : IUserRepository
                                 .Where(u => u.PhoneNumber == phoneNumber)
                                 .FirstOrDefaultAsync(cancellationToken);
 
+    public async Task<User> FindAsyncIncludeWallet(Guid userId, CancellationToken cancellationToken)
+        => await _context.Users.AsQueryable()
+                                .Include(u => u.Wallet)
+                                .Where(u => u.Id == userId)
+                                .FirstOrDefaultAsync(cancellationToken);
+
     public async Task<IResponse> Get(Guid id, CancellationToken cancellationToken)
         => await _context.Users.AsQueryable()
-                                .AsNoTracking()
                                 .Where(u => u.Id == id)
                                 .Select(u => new GetUserInfoQueryResponse
                                 (

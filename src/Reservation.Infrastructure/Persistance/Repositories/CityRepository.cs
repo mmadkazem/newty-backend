@@ -26,7 +26,6 @@ public class CityRepository(NewtyDbContext context) : ICityRepository
 
     public async Task<IEnumerable<IResponse>> GetAll(CancellationToken cancellationToken)
         => await _context.Cities.AsQueryable()
-                                .AsNoTracking()
                                 .Select(c => new GetCitiesQueryResponse
                                 (
                                     c.Id,

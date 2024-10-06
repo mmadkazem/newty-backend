@@ -17,11 +17,13 @@ public enum TransactionType
     Withdraw = 0,
     Charge = 1,
     ReserveTimeSender = 2,
-    ReserveTimeReceipt = 3
+    ReserveTimeReceipt = 3,
+    SmsPlan = 4
 }
 
 public enum TransactionState
 {
+    Created = -1,
     Waiting = 0,
     Confirmed = 1,
     Cancelled = 2

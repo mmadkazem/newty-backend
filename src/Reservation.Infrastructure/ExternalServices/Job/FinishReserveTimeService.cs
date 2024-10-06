@@ -6,7 +6,7 @@ public sealed class FinishReserveTimeJob(IBackgroundJobClient client)
 {
     private readonly IBackgroundJobClient _client = client;
 
-    public void Execute(Guid reserveTimeId, DateTimeOffset date)
+    public void Execute(Guid reserveTimeId, DateTime date)
     {
         _client.Schedule<FinishReserveTimeService>(s => s.Execute(reserveTimeId), date);
     }

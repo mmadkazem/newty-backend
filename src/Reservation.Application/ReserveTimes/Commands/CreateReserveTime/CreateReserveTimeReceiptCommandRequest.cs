@@ -1,6 +1,6 @@
 namespace Reservation.Application.ReserveTimes.Commands.CreateReserveTime;
 
-public record CreateReserveTimeReceiptCommandRequest
+public sealed record CreateReserveTimeReceiptCommandRequest
 (
     Guid UserId, Guid BusinessId,
     DateTime DateTime,
@@ -10,7 +10,7 @@ public record CreateReserveTimeReceiptCommandRequest
     public static CreateReserveTimeReceiptCommandRequest Create(Guid userId, CreateReserveTimeReceiptDTO model)
         => new(userId, model.BusinessId, model.DateTime, model.ArtistServices);
 }
-public record ArtistService(Guid ArtistId, Guid ServiceId);
+public sealed record ArtistService(Guid ArtistId, Guid ServiceId);
 public record CreateReserveTimeReceiptDTO
 (
     Guid BusinessId,

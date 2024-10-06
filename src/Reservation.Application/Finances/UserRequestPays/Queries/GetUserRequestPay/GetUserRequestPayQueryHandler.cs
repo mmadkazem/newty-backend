@@ -6,6 +6,6 @@ public class GetUserRequestPayQueryHandler(IUnitOfWork uow) : IRequestHandler<Ge
     private readonly IUnitOfWork _uow = uow;
 
     public async Task<IResponse> Handle(GetUserRequestPayQueryRequest request, CancellationToken cancellationToken)
-        => await _uow.UserRequestPays.Get(request.Id, cancellationToken)
+        => await _uow.UserRequestPays.Get(request.Id, request.UserId, cancellationToken)
             ?? throw new UserRequestPayNotFoundException();
 }

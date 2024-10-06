@@ -1,5 +1,7 @@
 namespace Reservation.Application.ReserveTimes.Commands.CreateReserveTimeSender;
 
+
+
 public sealed class CreateReserveTimeSenderCommandHandler(IUnitOfWork uow) : IRequestHandler<CreateReserveTimeSenderCommandRequest>
 {
     private readonly IUnitOfWork _uow = uow;
@@ -7,7 +9,7 @@ public sealed class CreateReserveTimeSenderCommandHandler(IUnitOfWork uow) : IRe
     public async Task Handle(CreateReserveTimeSenderCommandRequest request, CancellationToken cancellationToken)
     {
         var businessReceipt = await _uow.Businesses.FindAsync(request.BusinessReceiptId, cancellationToken)
-            ?? throw new UserNotFoundException();
+            ?? throw new BusinessNotFoundException();
 
         var userReserveTime = new TimeSpan(request.DateTime.Hour, request.DateTime.Minute, request.DateTime.Second);
 
@@ -79,7 +81,7 @@ public sealed class CreateReserveTimeSenderCommandHandler(IUnitOfWork uow) : IRe
                 {
                     if (item.StartDate <= endDate && startDate <= item.EndDate)
                     {
-                        throw new UserTimeConflictException();
+                        throw new BusinessTimeConflictException();
                     }
                 }
             }

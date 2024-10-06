@@ -22,7 +22,6 @@ public class CategoryRepository(NewtyDbContext context) : ICategoryRepository
 
     public async Task<IEnumerable<IResponse>> GetSubCategoryByCategoryId(int id, CancellationToken cancellationToken = default)
         => await _context.Categories.AsQueryable()
-                                    .AsNoTracking()
                                     .Where(c => c.ParentCategory.Id == id)
                                     .Select(c => new GetCategoryQueryResponse
                                     (
@@ -37,7 +36,6 @@ public class CategoryRepository(NewtyDbContext context) : ICategoryRepository
 
     public async Task<IEnumerable<IResponse>> GetCategories(CancellationToken cancellationToken = default)
         => await _context.Categories.AsQueryable()
-                                        .AsNoTracking()
                                         .Select(c => new GetCategoriesQueryResponse
                                         (
                                             c.Id,
@@ -50,7 +48,6 @@ public class CategoryRepository(NewtyDbContext context) : ICategoryRepository
 
     public async Task<IResponse> GetCategory(int id, CancellationToken cancellationToken = default)
         => await _context.Categories.AsQueryable()
-                                    .AsNoTracking()
                                     .Where(c => c.Id == id)
                                     .Select(c => new GetCategoryQueryResponse
                                     (
@@ -64,7 +61,6 @@ public class CategoryRepository(NewtyDbContext context) : ICategoryRepository
 
     public async Task<IEnumerable<IResponse>> GetMainCategory(CancellationToken cancellationToken = default)
         => await _context.Categories.AsQueryable()
-                                    .AsNoTracking()
                                     .Where(c => c.ParentCategory == null)
                                     .Select(c => new GetMainCategoryQueryResponse
                                     (
@@ -77,7 +73,6 @@ public class CategoryRepository(NewtyDbContext context) : ICategoryRepository
 
     public async Task<IEnumerable<IResponse>> GetBusiness(int categoryId, int page, int size, string city, CancellationToken cancellationToken)
         => await _context.Businesses.AsQueryable()
-                                    .AsNoTracking()
                                     .OrderBy(c => c.Points.Average(p => p.Rate))
                                     .Where(b => b.Categories.Any(c => c.Id == categoryId) && b.City.FaName == city)
                                     .Select(b => new GetCategoryBusinessesQueryResponse
@@ -95,7 +90,6 @@ public class CategoryRepository(NewtyDbContext context) : ICategoryRepository
 
     public async Task<IEnumerable<IResponse>> Search(string key, CancellationToken cancellationToken)
         => await _context.Categories.AsQueryable()
-                                    .AsNoTracking()
                                     .Where(b => b.Title.Contains(key))
                                     .Select(b => new SearchCategoryQueryResponse
                                     (

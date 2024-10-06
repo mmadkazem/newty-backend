@@ -6,8 +6,10 @@ public sealed class CreateReserveTimeReceiptCommandValidator : AbstractValidator
     public CreateReserveTimeReceiptCommandValidator(IUnitOfWork uow)
     {
         _uow = uow;
+
         RuleFor(r => r.UserId)
             .MustAsync(AnyAsyncUser).WithMessage("کاربری با این اطلاعات وجود ندارد");
+
         RuleFor(r => r.BusinessId)
             .MustAsync(AnyAsyncBusiness).WithMessage("کسب و کاری با این اطلاعات وجود ندارد");
     }

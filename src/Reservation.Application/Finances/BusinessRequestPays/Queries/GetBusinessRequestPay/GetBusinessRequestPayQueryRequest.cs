@@ -10,5 +10,5 @@ public record GetBusinessRequestPayQueryResponse
     bool IsPay,
     int Amount,
     string Authorizy,
-    int RefId
+    ulong RefId
 ) : IResponse;

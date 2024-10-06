@@ -21,7 +21,6 @@ public sealed class SmsPlanRepository(NewtyDbContext context) : ISmsPlanReposito
 
     public async Task<IEnumerable<IResponse>> Get(int page, int size, CancellationToken cancellationToken = default)
         => await _context.SmsPlans.AsQueryable()
-                                .AsNoTracking()
                                 .OrderBy(s => s.Price)
                                 .Select(s => new GetSmsPlansQueryResponse
                                 (

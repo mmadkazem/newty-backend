@@ -23,7 +23,6 @@ public sealed class SmsTemplateRepository(NewtyDbContext context)
 
     public async Task<IResponse> Get(Guid id, CancellationToken cancellationToken)
         => await _context.SmsTemplates.AsQueryable()
-                                        .AsNoTracking()
                                         .Where(s => s.Id == id)
                                         .Select(s => new GetSmsTemplateQueryResponse
                                         (
@@ -36,7 +35,6 @@ public sealed class SmsTemplateRepository(NewtyDbContext context)
 
     public async Task<IEnumerable<IResponse>> Gets(Guid businessId, CancellationToken cancellationToken)
         => await _context.SmsTemplates.AsQueryable()
-                                        .AsNoTracking()
                                         .Where(s => s.Business.Id == businessId)
                                         .Select(s => new GetSmsTemplatesQueryResponse
                                         (

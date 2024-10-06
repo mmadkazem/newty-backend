@@ -8,11 +8,11 @@ public sealed class BusinessRequestPaysController(ISender sender) : ControllerBa
     private readonly ISender _sender = sender;
 
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] CreateBusinessRequestPayCommandRequest request,
+    public async Task<IActionResult> Post(int amount,
         CancellationToken token)
     {
-        await _sender.Send(request, token);
-        return Ok();
+        var result = await _sender.Send(new CreateBusinessRequestPayCommandRequest(User.UserId(), amount), token);
+        return Ok(result);
     }
 
     [HttpGet("{id:guid}")]

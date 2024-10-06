@@ -1,7 +1,7 @@
 namespace Reservation.Application.Finances.UserRequestPays.Queries.GetUserRequestPay;
 
 
-public record GetUserRequestPayQueryRequest(Guid Id) : IRequest<IResponse>;
+public record GetUserRequestPayQueryRequest(Guid Id, Guid UserId) : IRequest<IResponse>;
 
 public record GetUserRequestPayQueryResponse
 (
@@ -10,5 +10,5 @@ public record GetUserRequestPayQueryResponse
     bool IsPay,
     int Amount,
     string Authorizy,
-    int RefId
+    ulong RefId
 ) : IResponse;

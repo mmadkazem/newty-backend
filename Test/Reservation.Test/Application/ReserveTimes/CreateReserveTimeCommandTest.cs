@@ -1,101 +1,197 @@
 namespace Reservation.Test.Application.ReserveTimes;
 
-
-public sealed class CreateReserveTimeReceiptCommandTest
+public class CreateReserveTimeReceiptCommandHandlerTests
 {
-    async Task Act(CreateReserveTimeReceiptCommandRequest request)
-        => await _handler.Handle(request, CancellationToken.None);
-
-    [Fact]
-    public async void HandelAsync_Throw_UserNotFoundException_When_There_Is_No_Business_Found_With_This_Information()
-    {
-        // ARRANGE
-        var request = new CreateReserveTimeReceiptCommandRequest(Guid.NewGuid(), Guid.NewGuid(), DateTime.Now, []);
-        _uow.Businesses.FindAsync(Arg.Any<Guid>()).Returns(default(Business));
-
-        // ACT
-        var exception = await Record.ExceptionAsync(async () => await Act(request));
-
-        // ASSERT
-        exception.ShouldNotBeNull();
-        exception.ShouldBeOfType<BusinessNotFoundException>();
-    }
-
-    [Fact]
-    public async void HandelAsync_Throw_BusinessClosedException_When_The_Business_Is_Closed()
-    {
-        // ARRANGE
-        var request = new CreateReserveTimeReceiptCommandRequest(Guid.NewGuid(), Guid.NewGuid(), DateTime.Now, []);
-        _uow.Businesses.FindAsync(Arg.Any<Guid>()).Returns(new Business() { IsClose = true });
-
-        // ACT
-        var exception = await Record.ExceptionAsync(async () => await Act(request));
-
-        // ASSERT
-        exception.ShouldNotBeNull();
-        exception.ShouldBeOfType<BusinessClosedException>();
-    }
-
-    [Fact]
-    public async void HandelAsync_Throw_ThisTimeIsNotInTheWorkingTimeException_When_This_Time_Is_Not_In_The_Working_Time_Frame_Of_The_Business_Start_Hours_Of_Work()
-    {
-        // ARRANGE
-        var now = DateTime.Now;
-        var request = new CreateReserveTimeReceiptCommandRequest(Guid.NewGuid(), Guid.NewGuid(), DateTime.Now.AddMinutes(-30), []);
-        _uow.Businesses.FindAsync(Arg.Any<Guid>()).Returns(new Business() { StartHoursOfWor = new TimeSpan(now.Hour, now.Minute, now.Second) });
-
-        // ACT
-        var exception = await Record.ExceptionAsync(async () => await Act(request));
-
-        // ASSERT
-        exception.ShouldNotBeNull();
-        exception.ShouldBeOfType<ThisTimeIsNotInTheWorkingTimeException>();
-    }
-
-    [Fact]
-    public async void HandelAsync_Throw_BusinessHolidayException_When_This_Time_Is_Not_In_The_Working_Time_Frame_Of_The_Business_Start_Hours_Of_Work()
-    {
-        // ARRANGE
-        var now = DateTime.Now;
-        var request = new CreateReserveTimeReceiptCommandRequest(Guid.NewGuid(), Guid.NewGuid(), DateTime.Now.AddMinutes(30), []);
-        _uow.Businesses.FindAsync(Arg.Any<Guid>()).Returns(new Business() { EndHoursOfWor = new TimeSpan(now.Hour, now.Minute, now.Second) });
-
-        // ACT
-        var exception = await Record.ExceptionAsync(async () => await Act(request));
-
-        // ASSERT
-        exception.ShouldNotBeNull();
-        exception.ShouldBeOfType<ThisTimeIsNotInTheWorkingTimeException>();
-    }
-
-    [Fact]
-    public async void HandelAsync_Throw_ThisTimeIsNotInTheWorkingTimeException_When_This_Time_Is_On_A_Business_Holiday()
-    {
-        // ARRANGE
-        var date = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 12, 0, 0);
-        var business = new Business()
-        {
-            StartHoursOfWor = new TimeSpan(7 , 0 , 0),
-            EndHoursOfWor = new TimeSpan(22, 0, 0),
-            Holidays = [DateTime.Now.DayOfWeek]
-        };
-        var request = new CreateReserveTimeReceiptCommandRequest(Guid.NewGuid(), Guid.NewGuid(), date, []);
-        _uow.Businesses.FindAsync(Arg.Any<Guid>()).Returns(business);
-
-        // ACT
-        var exception = await Record.ExceptionAsync(async () => await Act(request));
-
-        // ASSERT
-        exception.ShouldNotBeNull();
-        exception.ShouldBeOfType<BusinessHolidayException>();
-    }
-    #region ARRANGE
-    private readonly IUnitOfWork _uow;
+    private readonly IUnitOfWork _uowMock;
     private readonly IRequestHandler<CreateReserveTimeReceiptCommandRequest> _handler;
-    public CreateReserveTimeReceiptCommandTest()
+
+    public CreateReserveTimeReceiptCommandHandlerTests()
     {
-        _uow = Substitute.For<IUnitOfWork>();
-        _handler = new CreateReserveTimeReceiptCommandHandler(_uow);
+        _uowMock = Substitute.For<IUnitOfWork>();
+        _handler = new CreateReserveTimeReceiptCommandHandler(_uowMock);
     }
-    #endregion
+    [Fact]
+    public async Task Handle_ShouldThrowBusinessNotFoundException_WhenBusinessDoesNotExist()
+    {
+        // Arrange
+        var command = new CreateReserveTimeReceiptCommandRequest(Guid.NewGuid(), Guid.NewGuid(), DateTime.Now, new List<ArtistService>());
+        _uowMock.Businesses.FindAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+            .Returns(default(Business));
+
+        // Act
+        var act = async () => await _handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        await act.Should().ThrowAsync<BusinessNotFoundException>();
+    }
+
+    [Fact]
+    public async Task Handle_ShouldThrowBusinessClosedException_WhenBusinessIsClosed()
+    {
+        // Arrange
+        var business = new Business { IsClose = true };
+        var command = new CreateReserveTimeReceiptCommandRequest(Guid.NewGuid(), Guid.NewGuid(), DateTime.Now, new List<ArtistService>());
+        _uowMock.Businesses.FindAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(business));
+
+        // Act
+        var act = async () => await _handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        await act.Should().ThrowAsync<BusinessClosedException>();
+    }
+
+    [Fact]
+    public async Task Handle_ShouldThrowThisTimeIsNotInTheWorkingTimeException_WhenTimeNotInWorkingHours()
+    {
+        // Arrange
+        var business = new Business
+        {
+            IsClose = false,
+            StartHoursOfWor = new TimeSpan(7, 0, 0),
+            EndHoursOfWor = new TimeSpan(17, 0, 0)
+        };
+        var command = new CreateReserveTimeReceiptCommandRequest(Guid.NewGuid(), Guid.NewGuid(), new DateTime(2024, 10, 1, 18, 0, 0), new List<ArtistService>());
+        _uowMock.Businesses.FindAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(business));
+
+        // Act
+        var act = async () => await _handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        await act.Should().ThrowAsync<ThisTimeIsNotInTheWorkingTimeException>();
+    }
+
+    [Fact]
+    public async Task Handle_ShouldThrowBusinessHolidayException_WhenDateIsOnBusinessHoliday()
+    {
+        // Arrange
+        var business = new Business
+        {
+            IsClose = false,
+            Holidays = [DayOfWeek.Monday, DayOfWeek.Saturday, DayOfWeek.Friday, DayOfWeek.Sunday, DayOfWeek.Thursday, DayOfWeek.Tuesday, DayOfWeek.Wednesday],
+            StartHoursOfWor = new(0, 0, 0),
+            EndHoursOfWor = new(24, 0, 0)
+        };
+        var command = new CreateReserveTimeReceiptCommandRequest(Guid.NewGuid(), Guid.NewGuid(), new DateTime(2024, 10, 1), []);
+        _uowMock.Businesses.FindAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(business));
+
+        // Act
+        var act = async () => await _handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        await act.Should().ThrowAsync<BusinessHolidayException>();
+    }
+
+    [Fact]
+    public async Task Handle_ShouldThrowServiceNotFoundException_WhenServiceDoesNotExist()
+    {
+        // Arrange
+        var business = new Business { IsClose = false, StartHoursOfWor = new(0, 0, 0), EndHoursOfWor = new(24, 0, 0) };
+        var artistService = new ArtistService(Guid.NewGuid(), Guid.NewGuid());
+        var command = new CreateReserveTimeReceiptCommandRequest(Guid.NewGuid(), Guid.NewGuid(), DateTime.Now, new List<ArtistService> { artistService });
+
+        _uowMock.Businesses.FindAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(business));
+
+        _uowMock.Services.FindAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+            .Returns(default(BusinessService));
+
+        // Act
+        var act = async () => await _handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        await act.Should().ThrowAsync<ServiceNotFoundException>();
+    }
+
+    [Fact]
+    public async Task Handle_ShouldThrowArtistNotFoundException_WhenArtistDoesNotMatchService()
+    {
+        // Arrange
+        var business = new Business { IsClose = false, StartHoursOfWor = new(0, 0, 0), EndHoursOfWor = new(24, 0, 0) };
+        var artistService = new ArtistService(Guid.NewGuid(), Guid.NewGuid());
+        var command = new CreateReserveTimeReceiptCommandRequest(Guid.NewGuid(), Guid.NewGuid(), DateTime.Now, new List<ArtistService> { artistService });
+
+        var service = new BusinessService { Id = artistService.ServiceId, Artist = new Artist { Id = Guid.NewGuid() } };
+
+        _uowMock.Businesses.FindAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(business));
+
+        _uowMock.Services.FindAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(service));
+
+        // Act
+        var act = async () => await _handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        await act.Should().ThrowAsync<ArtistNotFoundException>();
+    }
+
+    [Fact]
+    public async Task Handle_ShouldThrowBalanceInsufficientException_WhenUserHasInsufficientBalance()
+    {
+        // Arrange
+        var business = new Business { IsClose = false, StartHoursOfWor = new(0, 0, 0), EndHoursOfWor = new(24, 0, 0) };
+        var artistService = new ArtistService(Guid.NewGuid(), Guid.NewGuid());
+        var command = new CreateReserveTimeReceiptCommandRequest(Guid.NewGuid(), Guid.NewGuid(), DateTime.Now, [artistService]);
+        var userWallet = new Wallet { Credit = 0 };
+        var user = new User { Wallet = userWallet };
+        var service = new BusinessService { Id = artistService.ServiceId, Artist = new Artist { Id = artistService.ArtistId }, Price = 100, Time = new TimeOnly(0, 30) };
+
+        _uowMock.Businesses.FindAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(business));
+
+        _uowMock.Users.FindAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(user));
+
+        _uowMock.Services.FindAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(service));
+
+        _uowMock.Wallets.FindAsyncByUserId(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(userWallet));
+
+        _uowMock.Wallets.FindAsyncByBusinessId(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(new Wallet { Credit = 1000 }));
+        // Act
+        var act = async () => await _handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        await act.Should().ThrowAsync<BalanceInsufficientException>();
+    }
+
+    [Fact]
+    public async Task Handle_ShouldCompleteReservationSuccessfully_WhenAllConditionsMet()
+    {
+        // Arrange
+        var business = new Business { IsClose = false, StartHoursOfWor = new(0, 0, 0), EndHoursOfWor = new(24, 0, 0) };
+        var user = new User { };
+        var artistService = new ArtistService(Guid.NewGuid(), Guid.NewGuid());
+        var command = new CreateReserveTimeReceiptCommandRequest(Guid.NewGuid(), Guid.NewGuid(), DateTime.Now, [artistService]);
+        var userWallet = new Wallet { Credit = 500 };
+        var service = new BusinessService { Id = artistService.ServiceId, Artist = new Artist { Id = artistService.ArtistId }, Price = 100, Time = new TimeOnly(0, 30) };
+
+        _uowMock.Businesses.FindAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(business));
+
+        _uowMock.Users.FindAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(user));
+
+        _uowMock.Services.FindAsync(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(service));
+
+        _uowMock.Wallets.FindAsyncByUserId(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(userWallet));
+
+        _uowMock.Wallets.FindAsyncByBusinessId(Arg.Any<Guid>(), Arg.Any<CancellationToken>())
+            .Returns(Task.FromResult(new Wallet { Credit = 1000 }));
+
+        // Act
+        var act = async () => await _handler.Handle(command, CancellationToken.None);
+
+        // Assert
+        await act.Should().NotThrowAsync();
+        userWallet.Credit.Should().Be(400);  // Ensure the user's credit is reduced correctly
+    }
+
 }

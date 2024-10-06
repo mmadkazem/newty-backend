@@ -12,29 +12,28 @@ public sealed class UserRequestPayRepository(NewtyDbContext context) : IUserRequ
     public void Remove(UserRequestPay userRequestPay)
         => _context.UserRequestPays.Remove(userRequestPay);
 
-    public async Task<UserRequestPay> FindAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<UserRequestPay> FindAsync(Guid id, string authorizy, CancellationToken cancellationToken)
         => await _context.UserRequestPays.AsQueryable()
                                         .Include(u => u.User)
-                                        .FirstOrDefaultAsync(r => r.Id == id && !r.IsPay, cancellationToken);
+                                        .Where(r => r.Id == id && r.Authority == authorizy && !r.IsPay)
+                                        .FirstOrDefaultAsync(cancellationToken);
 
-    public async Task<IResponse> Get(Guid id, CancellationToken cancellationToken)
+    public async Task<IResponse> Get(Guid id, Guid userId, CancellationToken cancellationToken)
         => await _context.UserRequestPays.AsQueryable()
-                                .AsNoTracking()
-                                .Where(b => b.Id == id)
+                                .Where(b => b.Id == id && b.UserId == userId)
                                 .Select(b => new GetUserRequestPayQueryResponse
                                 (
                                     b.Id,
                                     b.PayDate,
                                     b.IsPay,
                                     b.Amount,
-                                    b.Authorizy,
+                                    b.Authority,
                                     b.RefId
                                 ))
                                 .FirstOrDefaultAsync(cancellationToken);
 
     public async Task<IEnumerable<IResponse>> Gets(int page, int size, Guid userId, CancellationToken cancellationToken)
         => await _context.UserRequestPays.AsQueryable()
-                                .AsNoTracking()
                                 .Where(b => b.UserId == userId)
                                 .Select(b => new GetUserRequestPaysQueryResponse
                                 (

@@ -19,5 +19,8 @@ public sealed class ReserveTimeReceiptConfiguration : IEntityTypeConfiguration<R
 
         builder.Property(t => t.UserId)
             .IsRequired(false);
+
+        builder.Property(t => t.UserRequestPayId)
+            .IsRequired(false);
     }
 }

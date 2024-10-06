@@ -9,18 +9,18 @@ public class UserRequestPaysController(ISender sender) : ControllerBase
     private readonly ISender _sender = sender;
 
     [HttpPost]
-    public async Task<IActionResult> Post([FromBody] CreateUserRequestPayCommandRequest request,
+    public async Task<IActionResult> Post(int amount,
         CancellationToken token)
     {
-        await _sender.Send(request, token);
-        return Ok();
+        var result = await _sender.Send(new CreateUserRequestPayCommandRequest(User.UserId(), amount), token);
+        return Ok(result);
     }
 
     [HttpGet("{Id:guid}")]
     public async Task<IActionResult> Get(Guid Id,
         CancellationToken token)
     {
-        var result = await _sender.Send(new GetUserRequestPayQueryRequest(Id), token);
+        var result = await _sender.Send(new GetUserRequestPayQueryRequest(User.UserId(), Id), token);
         return Ok(result);
     }
 

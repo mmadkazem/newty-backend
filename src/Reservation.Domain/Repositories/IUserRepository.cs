@@ -10,4 +10,5 @@ public interface IUserRepository
     Task<User> FindAsync(Guid id, CancellationToken cancellationToken = default);
     Task<IResponse> Get(Guid id, CancellationToken cancellationToken = default);
     Task Active(Guid id, CancellationToken cancellationToken = default);
+    Task<User> FindAsyncIncludeWallet(Guid userId, CancellationToken cancellationToken);
 }

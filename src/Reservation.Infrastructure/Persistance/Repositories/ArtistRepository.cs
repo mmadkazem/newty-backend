@@ -32,7 +32,6 @@ public sealed class ArtistRepository(NewtyDbContext context) : IArtistRepository
 
     public async Task<IResponse> Get(Guid artistId, CancellationToken cancellationToken = default)
         => await _context.Artists.AsQueryable()
-                                    .AsNoTracking()
                                     .Where(c => c.Id == artistId)
                                     .Select(c => new GetArtistQueryResponse
                                     (
@@ -45,18 +44,16 @@ public sealed class ArtistRepository(NewtyDbContext context) : IArtistRepository
                                     .FirstOrDefaultAsync(cancellationToken);
 
     public async Task<IEnumerable<IResponse>> GetArtistByBusinessId(Guid businessId, CancellationToken cancellationToken)
-        => await _context.Businesses.AsQueryable()
-                                    .AsNoTracking()
-                                    .Include(a => a.Artists)
+        => await _context.Artists.AsQueryable()
                                     .AsSplitQuery()
-                                    .Where(c => c.Id == businessId)
-                                    .Select(c => c.Artists.Select(s => new GetArtistByBusinessIdQueryResponse
-                                                            (
-                                                                s.Id,
-                                                                s.Name,
-                                                                s.CoverImagePath,
-                                                                s.Active
-                                                            )).ToList()
-                                    ).FirstOrDefaultAsync(cancellationToken);
+                                    .Where(c => c.BusinessId == businessId)
+                                    .Select(s => new GetArtistByBusinessIdQueryResponse
+                                    (
+                                        s.Id,
+                                        s.Name,
+                                        s.CoverImagePath,
+                                        s.Active
+                                    )
+                                    ).ToListAsync(cancellationToken);
 
 }

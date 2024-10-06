@@ -6,14 +6,34 @@ public sealed class ReserveTimesReceiptController(ISender sender) : ControllerBa
 {
     private readonly ISender _sender = sender;
 
-    [HttpPost]
+    [HttpPost("Wallet")]
     [Authorize(Role.User)]
-    public async Task<IActionResult> Post([FromBody] CreateReserveTimeReceiptDTO model,
+    public async Task<IActionResult> PostWithWallet([FromBody] CreateReserveTimeReceiptDTO model,
         CancellationToken token)
     {
         var request = CreateReserveTimeReceiptCommandRequest.Create(User.UserId(), model);
         await _sender.Send(request, token);
         return Ok(new { Message = ReserveTimeSuccessMessage.Created });
+    }
+
+    [HttpPost("Direct")]
+    [Authorize(Role.User)]
+    [ProducesResponseType<string>(200)]
+    public async Task<IActionResult> PostWithDirect([FromBody] CreateReserveTimeWithDirectPaymentDTO model,
+        CancellationToken token)
+    {
+        var request = CreateReserveTimeWithDirectPaymentCommandRequest.Create(User.UserId(), model);
+        var result = await _sender.Send(request, token);
+        return Ok(result);
+    }
+
+    [HttpPut("{id:guid}/Verify")]
+    [ProducesResponseType<string>(200)]
+    public async Task<IActionResult> Verify(Guid id, string authority,
+        CancellationToken token)
+    {
+        var result = await _sender.Send(new VerifyReserveTimeCommandRequest(id, authority), token);
+        return Redirect(result);
     }
 
     [HttpPut("{id:guid}/State/{state}")]

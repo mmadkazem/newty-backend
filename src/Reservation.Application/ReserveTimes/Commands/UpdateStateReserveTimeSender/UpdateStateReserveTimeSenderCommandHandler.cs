@@ -22,7 +22,7 @@ public sealed class UpdateStateReserveTimeSenderCommandHandler(IUnitOfWork uow, 
 
         if (request.State == ReserveState.Cancelled)
         {
-            if (DateTime.Now.AddDays(1).Day <= reserveTime.TotalStartDate.Day)
+            if (DateTime.Now.AddDays(1) >= reserveTime.TotalStartDate)
             {
                 throw new TimePassedCannotCancelException();
             }

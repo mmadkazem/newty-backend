@@ -28,9 +28,6 @@ public sealed class ServiceRepository(NewtyDbContext context) : IServiceReposito
 
     public async Task<IEnumerable<IResponse>> GetArtistServices(Guid artistId, CancellationToken cancellationToken)
         => await _context.Artists.AsQueryable()
-                                    .AsNoTracking()
-                                    .Include(a => a.Services)
-                                    .AsSplitQuery()
                                     .Where(c => c.Id == artistId)
                                     .Select(c => c.Services.Select(s => new GetArtistServicesQueryResponse
                                                             (
@@ -45,7 +42,6 @@ public sealed class ServiceRepository(NewtyDbContext context) : IServiceReposito
     public async Task<IEnumerable<IResponse>> GetServiceByBusinessId(int page, int size, Guid businessId, CancellationToken cancellationToken)
         => await _context.Services.AsQueryable()
                                     .Where(c => c.BusinessId == businessId)
-                                    .AsNoTracking()
                                     .Select(c => new GetServicesByBusinessIdQueryResponse
                                     (
                                         c.Id,

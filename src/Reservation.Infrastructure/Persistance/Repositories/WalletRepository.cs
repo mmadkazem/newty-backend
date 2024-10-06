@@ -20,6 +20,11 @@ public sealed class WalletRepository(NewtyDbContext context) : IWalletRepository
                                 .Select(u => u.Wallet)
                                 .FirstOrDefaultAsync(cancellationToken);
 
+    public async Task<Wallet> FindAsyncAdminWallet(CancellationToken cancellationToken = default)
+        => await _context.Users.AsQueryable()
+                                .Where(u => u.Role == Role.Admin)
+                                .Select(u => u.Wallet)
+                                .FirstOrDefaultAsync(cancellationToken);
     public async Task<Guid> FindAsyncUserWalletId(Guid userId, CancellationToken cancellationToken)
         => await _context.Users.AsQueryable()
                                 .Where(u => u.Id == userId)
@@ -34,7 +39,6 @@ public sealed class WalletRepository(NewtyDbContext context) : IWalletRepository
 
     public async Task<IResponse> GetUserWallet(Guid userId, CancellationToken cancellationToken)
         => await _context.Users.AsQueryable()
-                                .AsNoTracking()
                                 .Where(u => u.Id == userId)
                                 .Select(u => new GetUserWalletQueryResponse
                                 (
@@ -44,7 +48,6 @@ public sealed class WalletRepository(NewtyDbContext context) : IWalletRepository
 
     public async Task<IEnumerable<IResponse>> GetTransactions(int page, int size, Guid walletId, CancellationToken cancellationToken)
         => await _context.Transactions.AsQueryable()
-                                    .AsNoTracking()
                                     .Where(w => w.Wallet.Id == walletId)
                                     .Select(w => new GetWalletTransactionsQueryResponse
                                     (
@@ -60,11 +63,11 @@ public sealed class WalletRepository(NewtyDbContext context) : IWalletRepository
 
     public async Task<IResponse> GetBusinessWallet(Guid businessId, CancellationToken cancellationToken)
         => await _context.Businesses.AsQueryable()
-                                .AsNoTracking()
                                 .Where(b => b.Id == businessId)
                                 .Select(b => new GetBusinessWalletQueryResponse
                                 (
                                     b.Wallet.Id,
                                     b.Wallet.Credit
                                 )).FirstOrDefaultAsync(cancellationToken);
+
 }

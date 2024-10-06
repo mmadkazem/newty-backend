@@ -20,6 +20,8 @@ public sealed class ValidateBusinessCommandHandler(IUnitOfWork uow) : IRequestHa
         business.ParvaneKasbImagePath = request.ParvaneKasbImagePath;
         business.ModifiedOn = DateTime.Now;
         business.State = BusinessState.Waiting;
+        business.Wallet = new();
+        business.SmsCredit = new();
 
         await _uow.SaveChangeAsync(cancellationToken);
     }

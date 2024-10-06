@@ -11,14 +11,14 @@ public sealed class BusinessRequestPayRepository(NewtyDbContext context)
     public void Remove(BusinessRequestPay businessRequestPay)
         => _context.BusinessRequestPays.Remove(businessRequestPay);
 
-    public async Task<BusinessRequestPay> FindAsync(Guid id, CancellationToken cancellationToken)
+    public async Task<BusinessRequestPay> FindAsync(Guid id, string authorizy, CancellationToken cancellationToken)
         => await _context.BusinessRequestPays.AsQueryable()
-                                            .Include(b => b.Business)
-                                            .FirstOrDefaultAsync(r => r.Id == id && !r.IsPay, cancellationToken);
+                                .Include(b => b.Business)
+                                .Where(r => r.Id == id && r.Authorizy == authorizy && !r.IsPay)
+                                .FirstOrDefaultAsync(cancellationToken);
 
     public async Task<IResponse> Get(Guid id, CancellationToken cancellationToken)
         => await _context.BusinessRequestPays.AsQueryable()
-                                .AsNoTracking()
                                 .Where(b => b.Id == id)
                                 .Select(b => new GetBusinessRequestPayQueryResponse
                                 (
@@ -33,7 +33,6 @@ public sealed class BusinessRequestPayRepository(NewtyDbContext context)
 
     public async Task<IEnumerable<IResponse>> GetByBusinessId(int page, int size, Guid businessId, CancellationToken cancellationToken)
         => await _context.BusinessRequestPays.AsQueryable()
-                                .AsNoTracking()
                                 .Where(b => b.BusinessId == businessId)
                                 .Select(b => new GetBusinessRequestPaysQueryResponse
                                 (

@@ -16,7 +16,6 @@ public sealed class SmsCreditRepository(NewtyDbContext context)
 
     public async Task<IResponse> Get(Guid businessId, CancellationToken cancellationToken)
         => await _context.SmsCredits.AsQueryable()
-                                    .AsNoTracking()
                                     .Where(s => s.BusinessId == businessId)
                                     .Select(s => new GetSmsCreditQueryResponse(s.SmsCount))
                                     .FirstOrDefaultAsync(cancellationToken);

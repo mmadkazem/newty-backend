@@ -8,13 +8,6 @@ public sealed class SmsCreditController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;
 
-    [HttpPost]
-    public async Task<IActionResult> Post(CancellationToken token)
-    {
-        await _sender.Send(new CreateSmsCreditCommandRequest(User.UserId()), token);
-        return Ok(new { Message = SmsCreditSuccessMessage.Created });
-    }
-
     [HttpPut("Found")]
     public async Task<IActionResult> Put(Guid SMSPlanId,
         CancellationToken token)

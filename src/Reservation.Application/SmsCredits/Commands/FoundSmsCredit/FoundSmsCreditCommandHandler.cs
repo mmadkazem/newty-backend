@@ -23,6 +23,15 @@ public sealed class FoundSmsCreditCommandHandler(IUnitOfWork uow) : IRequestHand
         smsCredit.SmsCount += plan.SmsCount;
         smsCredit.ModifiedOn = DateTime.Now;
 
+        Transaction transaction = new()
+        {
+            Amount = plan.Price,
+            State = TransactionState.Confirmed,
+            Type = TransactionType.SmsPlan,
+            Wallet = wallet,
+        };
+
+        wallet.Transactions.Add(transaction);
         await _uow.SaveChangeAsync(cancellationToken);
     }
 }

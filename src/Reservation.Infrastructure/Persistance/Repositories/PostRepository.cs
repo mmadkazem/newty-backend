@@ -20,7 +20,6 @@ public sealed class PostRepository(NewtyDbContext context) : IPostRepository
 
     public async Task<IResponse> Get(Guid id, CancellationToken cancellationToken)
         => await _context.Posts.AsQueryable()
-                                .AsNoTracking()
                                 .Where(p => p.Id == id)
                                 .Select(p => new GetPostQueryResponse
                                 (
@@ -33,7 +32,6 @@ public sealed class PostRepository(NewtyDbContext context) : IPostRepository
 
     public async Task<IEnumerable<IResponse>> GetPosts(int page, int size, Guid businessId, CancellationToken cancellationToken)
         => await _context.Posts.AsQueryable()
-                                .AsNoTracking()
                                 .Where(p => p.BusinessId == businessId)
                                 .Select(p => new GetPostsQueryResponse
                                 (

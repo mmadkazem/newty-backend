@@ -1,3 +1,7 @@
+using Reservation.Infrastructure.ExternalServices.Payments.Options;
+using Zarinpal.AspNetCore.Consts;
+using Zarinpal.AspNetCore.Extensions;
+
 namespace Reservation.Infrastructure.ExternalServices;
 
 public static class ConfigureServices
@@ -5,9 +9,9 @@ public static class ConfigureServices
         public static IServiceCollection RegisterExternalServices(this IServiceCollection services, IConfiguration configuration)
         {
                 // DI Services
-                services.AddScoped<ICheckPaymentIsVerificationService, CheckPaymentIsVerificationService>();
                 services.AddScoped<ITokenFactoryService, TokenFactoryService>();
                 services.AddScoped<IObjectStorageProvider, ObjectStorageProvider>();
+                services.AddScoped<IPaymentProvider, PaymentProvider>();
                 services.AddScoped<ISmsProvider, KavenegarProvider>();
                 services.AddScoped<ICacheProvider, CacheProvider>();
 
@@ -41,6 +45,20 @@ public static class ConfigureServices
                 services.AddHangfireServer();
 #pragma warning restore CS0618 // Type or member is obsolete
                 #endregion
+
+                // DI Zarinpal
+                services.Configure<ZarinpalOption>(configuration);
+                services.Configure<PaymentUrlOption>(configuration);
+                var zarinpalOption = configuration.GetSection("ZarinpalOption").Get<ZarinpalOption>()!;
+                services.AddZarinpal(options =>
+                {
+                        options.MerchantId = zarinpalOption.MerchantId;
+                        options.ZarinpalMode = ZarinpalMode.Sandbox;
+                        options.Currency = ZarinpalCurrency.IRT;
+                });
+
+                services.AddScoped<IPaymentUrlGeneratorService, PaymentUrlGeneratorService>();
+
                 return services;
         }
         public static WebApplication UseJob(this WebApplication app)

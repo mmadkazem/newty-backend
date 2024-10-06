@@ -55,7 +55,6 @@ public sealed class BusinessRepository(NewtyDbContext context)
 
     public async Task<IResponse> Get(Guid businessId, CancellationToken cancellationToken)
         => await _context.Businesses.AsQueryable()
-                                    .AsNoTracking()
                                     .Where(b => b.Id == businessId)
                                     .Select(b => new GetBusinessQueryResponse
                                     (
@@ -76,7 +75,6 @@ public sealed class BusinessRepository(NewtyDbContext context)
 
     public async Task<IResponse> GetBusinessById(Guid businessId, CancellationToken cancellationToken)
         => await _context.Businesses.AsQueryable()
-                                    .AsNoTracking()
                                     .Where(b => b.Id == businessId)
                                     .Select(b => new GetBusinessByIdQueryResponse
                                     (
@@ -87,7 +85,6 @@ public sealed class BusinessRepository(NewtyDbContext context)
                                     )).FirstOrDefaultAsync(cancellationToken);
     public async Task<IEnumerable<IResponse>> GetWaitingValidBusiness(int page, int size, CancellationToken cancellationToken)
         => await _context.Businesses.AsQueryable()
-                                    .AsNoTracking()
                                     .Where(b => b.State == BusinessState.Waiting)
                                     .Select(b => new GetBusinessesWaitingValidItemQueryResponse
                                     (
@@ -111,7 +108,6 @@ public sealed class BusinessRepository(NewtyDbContext context)
 
     public async Task<IEnumerable<IResponse>> Search(int page, int size, string key, string city, CancellationToken cancellationToken = default)
         => await _context.Businesses.AsQueryable()
-                                    .AsNoTracking()
                                     .Where(b => b.City.FaName == city && (b.Address.Contains(key) || b.Name.Contains(key)))
                                     .Select(b => new SearchBusinessQueryResponse
                                     (
