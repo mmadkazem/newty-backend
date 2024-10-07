@@ -159,8 +159,16 @@ public sealed class UpdateStateReserveTimeReceiptCommandHandler(IUnitOfWork uow,
         }
         else
         {
-            await ProcessNonDirectPaymentConfirmation(reserveTime, userWallet, businessWallet, cancellationToken);
+            ProcessNonDirectPaymentConfirmation(reserveTime, userWallet, businessWallet, cancellationToken);
         }
+
+        // Add normal user to business
+        reserveTime.BusinessReceipt.UsersNormal.Add(reserveTime.User);
+
+        await _uow.SaveChangeAsync(cancellationToken);
+
+        // Add finish reserve time job
+        _finishReserveTimeJob.Execute(reserveTime.Id, reserveTime.TotalEndDate.AddMinutes(1));
 
         return new(ReserveTimeSuccessMessage.UpdatedConfirmState);
     }
@@ -188,13 +196,12 @@ public sealed class UpdateStateReserveTimeReceiptCommandHandler(IUnitOfWork uow,
         adminWallet.Credit += feeAmount;
 
         MarkPaymentComplete(reserveTime);
-        await _uow.SaveChangeAsync(cancellationToken);
     }
 
     /// <summary>
     /// Handles non-direct payment confirmation, deducting from the user's wallet and transferring to the business.
     /// </summary>
-    private async Task ProcessNonDirectPaymentConfirmation(ReserveTimeReceipt reserveTime, Wallet userWallet, Wallet businessWallet, CancellationToken cancellationToken)
+    private void ProcessNonDirectPaymentConfirmation(ReserveTimeReceipt reserveTime, Wallet userWallet, Wallet businessWallet, CancellationToken cancellationToken)
     {
         if (userWallet.Credit < reserveTime.TransactionReceipt.Amount)
         {
@@ -205,8 +212,6 @@ public sealed class UpdateStateReserveTimeReceiptCommandHandler(IUnitOfWork uow,
         businessWallet.Credit += reserveTime.TransactionReceipt.Amount;
 
         MarkPaymentComplete(reserveTime);
-        await _uow.SaveChangeAsync(cancellationToken);
-        _finishReserveTimeJob.Execute(reserveTime.Id, reserveTime.TotalEndDate.AddMinutes(2));
     }
 
     /// <summary>

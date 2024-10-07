@@ -32,7 +32,7 @@ public sealed class CreateReserveTimeReceiptCommandHandler(IUnitOfWork uow)
         // 8. Add the new reserve time to the database
         _uow.ReserveTimes.Add(reserveTime);
 
-        // 9. Save changes in the database
+        // 10. Save changes in the database
         await _uow.SaveChangeAsync(cancellationToken);
     }
 

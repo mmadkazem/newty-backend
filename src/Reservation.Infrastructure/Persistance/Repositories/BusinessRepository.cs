@@ -83,6 +83,35 @@ public sealed class BusinessRepository(NewtyDbContext context)
                                         b.Address,
                                         b.CoverImagePath
                                     )).FirstOrDefaultAsync(cancellationToken);
+
+    public async Task<IEnumerable<IResponse>> GetNormalUser(Guid businessId, int page, int size, CancellationToken cancellationToken)
+        => await _context.Businesses.AsQueryable()
+                                    .Where(b => b.Id == businessId)
+                                    .SelectMany(b => b.UsersNormal
+                                        .Skip((page - 1) * size)
+                                        .Take(size)
+                                        .Select(u => new GetNormalUserQueryResponse
+                                        (
+                                            u.Id,
+                                            u.FullName,
+                                            u.PhoneNumber
+                                        )))
+                                    .ToListAsync(cancellationToken);
+
+    public async Task<IEnumerable<IResponse>> GetVIPUser(Guid businessId, int page, int size, CancellationToken cancellationToken)
+        => await _context.Businesses.AsQueryable()
+                                    .Where(b => b.Id == businessId)
+                                    .SelectMany(b => b.UsersVIP
+                                        .Skip((page - 1) * size)
+                                        .Take(size)
+                                        .Select(u => new GetVIPUserQueryResponse
+                                        (
+                                            u.Id,
+                                            u.User.FullName,
+                                            u.User.PhoneNumber
+                                        )))
+                                    .ToListAsync(cancellationToken);
+
     public async Task<IEnumerable<IResponse>> GetWaitingValidBusiness(int page, int size, CancellationToken cancellationToken)
         => await _context.Businesses.AsQueryable()
                                     .Where(b => b.State == BusinessState.Waiting)

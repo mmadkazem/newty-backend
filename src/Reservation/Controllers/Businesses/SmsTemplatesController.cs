@@ -7,11 +7,11 @@ public sealed class SmsTemplatesController(ISender sender) : ControllerBase
 {
     private readonly ISender _sender = sender;
 
-    [HttpPost("Businesses/{BusinessId:guid}")]
-    public async Task<IActionResult> Post(Guid BusinessId, CreateSmsTemplateDTO model,
+    [HttpPost("Businesses")]
+    public async Task<IActionResult> Post(CreateSmsTemplateDTO model,
         CancellationToken token)
     {
-        var request = CreateSmsTemplateCommandRequest.Create(BusinessId, model);
+        var request = CreateSmsTemplateCommandRequest.Create(User.UserId(), model);
         await _sender.Send(request, token);
         return Ok(new { Message = SmsTemplateSuccessMessage.Created });
     }
@@ -33,12 +33,11 @@ public sealed class SmsTemplatesController(ISender sender) : ControllerBase
         return Ok(new { Message = SmsTemplateSuccessMessage.Removed });
     }
 
-    [HttpGet("Businesses/{businessId:guid}")]
-    [ProducesResponseType(typeof(GetSmsTemplatesQueryResponse), 200)]
-    public async Task<IActionResult> GetAll(Guid businessId,
-        CancellationToken token)
+    [HttpGet("Businesses")]
+    [ProducesResponseType(typeof(Response<GetSmsTemplatesQueryResponse>), 200)]
+    public async Task<IActionResult> GetAll(CancellationToken token)
     {
-        var results = await _sender.Send(new GetSmsTemplatesQueryRequest(businessId), token);
+        var results = await _sender.Send(new GetSmsTemplatesQueryRequest(User.UserId()), token);
         return Ok(results);
     }
 

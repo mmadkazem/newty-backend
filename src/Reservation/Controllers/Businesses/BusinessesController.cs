@@ -125,4 +125,24 @@ public sealed class BusinessesController(ISender sender) : ControllerBase
         var results = await _sender.Send(new SearchBusinessQueryRequest(page, size, key, city), token);
         return Ok(results);
     }
+
+    [HttpGet("VIPUsers/Page/{page:int}/Size/{size:int}")]
+    [Authorize(Role.Business)]
+    [ProducesResponseType(typeof(Response<GetVIPUserQueryResponse>), 200)]
+    public async Task<IActionResult> GetVIPUsers(int page, int size,
+        CancellationToken token)
+    {
+        var result = await _sender.Send(new GetVIPUsersQueryRequest(User.UserId(), page, size), token);
+        return Ok(result);
+    }
+
+    [HttpGet("NormalUsers/Page/{page:int}/Size/{size:int}")]
+    [Authorize(Role.Business)]
+    [ProducesResponseType(typeof(Response<GetNormalUserQueryResponse>), 200)]
+    public async Task<IActionResult> GetNormalUsers(int page, int size,
+        CancellationToken token)
+    {
+        var result = await _sender.Send(new GetNormalUserQueryRequest(User.UserId(), page, size), token);
+        return Ok(result);
+    }
 }

@@ -22,8 +22,8 @@ public class Business : BaseClass<Guid>
     public Wallet Wallet { get; set; }
 
     // User VIP and Normal User
-    public ICollection<UserVIP> UsersVIP { get; set; }
-    public ICollection<User> UsersNormal { get; set; }
+    public ICollection<UserVIP> UsersVIP { get; set; } = [];
+    public ICollection<User> UsersNormal { get; set; } = [];
 
     // Sms Credit for Send sms
     public virtual SmsCredit SmsCredit { get; set; }
